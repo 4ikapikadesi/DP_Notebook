@@ -1,0 +1,73 @@
+; Copyright (c) Lenovo Corporation
+;****************************************************************************
+;
+;	Filename:	ITM.INF
+;
+;	Abstract:	Windows* 2K, XP, 2003 Server INF File to remove the
+;			yellow bang when Intel(R) Turbo Memory is populated
+;			in these operating systems.
+;
+;	Revision:	0.70
+;
+;	Revision Date:	12/13/2007
+;
+;****************************************************************************
+
+
+;***************************************************************************
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=SYSTEM
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%INTEL%
+CatalogFile=itm.cat
+DriverVer=12/13/2007, 1.0.0.2
+
+[SourceDisksNames]
+1 = %ITM_DISK_NAME%,,,
+
+[SourceDisksFiles]
+;itm.inf = 1
+
+[DestinationDirs]
+NO_DRV_Copy = 12
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+%INTEL%=INTEL_SYS,NTx86
+%INTEL64%=INTEL_SYS,NTamd64
+
+[INTEL_SYS.NTx86]
+%PCI\VEN_8086&DEV_444E.DeviceDesc% = NO_DRV, PCI\VEN_8086&DEV_444E
+
+[INTEL_SYS.NTamd64]
+%PCI\VEN_8086&DEV_444E.DeviceDesc% = NO_DRV, PCI\VEN_8086&DEV_444E
+
+;**************************************************************************
+
+[NO_DRV]
+Include=machine.inf
+Needs=NO_DRV
+AddReg=INTEL_SYS_AddReg
+CopyFiles = NO_DRV_Copy
+
+[NO_DRV.Services]
+Include=machine.inf
+Needs=NO_DRV.Services
+
+[INTEL_SYS_AddReg]
+HKLM,"SOFTWARE\INTEL\INVM","Version",0,"1.0.0.2"
+
+[NO_DRV_Copy]
+
+
+[Strings]
+INTEL="Intel"
+INTEL64="Intel "
+ITM_DISK_NAME="ITM"
+PCI\VEN_8086&DEV_444E.DeviceDesc ="Intel(R) Hardware Reserved for Future Use"
+
+;**************************************************************************

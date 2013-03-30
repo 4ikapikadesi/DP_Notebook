@@ -1,0 +1,285 @@
+; scrusb2a.inf
+; Copyright (c) 2000 - 2005 OMNIKEY AG
+
+[Version]
+Signature=$CHICAGO$
+Class=SmartCardReader
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%Provider%
+DriverVer=03/03/2005,1.1.0.29
+CatalogFile=scrusb2a.cat
+
+[SourceDisksNames]
+1=%DiskDescription%,,
+
+[SourceDisksFiles]
+scrusb2b.sy_=1,,
+scrusb2a.sys=1,,
+chksvrn.dll=1,,
+
+[DestinationDirs]
+DefaultDestDir = 10,system32\drivers
+scrusb2a.Install.CopyFiles=10,system32\drivers
+scrusb2a.Install.NT.CopyFiles=10,system32\drivers
+scrusb2a.Install.NT.W2kTools=11
+
+[Manufacturer]
+%Manufacturer%=FUJITSU
+
+; =================== Class section =======================
+
+[ClassInstall]
+Addreg=SmartCardReaderClassReg
+
+[ClassInstall32]
+Addreg=SmartCardReaderClassReg
+
+[SmartCardReaderClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-25
+
+
+; ===================== PnP IDs ===========================
+
+[ControlFlags]
+ExcludeFromSelect.NT = USB\VID_0BF8&PID_1005&Mi_01
+ExcludeFromSelect.NT = USB\VID_0BF8&PID_1006
+ExcludeFromSelect.NT = USB\VID_0BF8&PID_100B
+
+
+
+[FUJITSU]
+; DisplayName       	Section           DeviceId
+; -----------       	-------           --------
+%VID1PID1ReaderDescription% =  kbd.Install, USB\VID_0BF8&PID_1005&Mi_01
+%VID1PID2ReaderDescription% =  scr.Install, USB\VID_0BF8&PID_1006
+%VID1PID3ReaderDescription% =  class2.Install, USB\VID_0BF8&PID_100B
+
+
+
+
+
+
+
+
+
+; =================== Win9x specific ======================
+
+[kbd.Install]
+AddReg    = kbd.Install.AddReg
+CopyFiles = scrusb2a.Install.CopyFiles
+
+[kbd.Install.HW]
+AddReg    = kbd.Install.AddReg.HW
+
+[scr.Install]
+AddReg    = scr.Install.AddReg
+CopyFiles = scrusb2a.Install.CopyFiles
+
+[scr.Install.HW]
+AddReg    = scr.Install.AddReg.HW
+
+[class2.Install]
+AddReg    = class2.Install.AddReg
+CopyFiles = scrusb2a.Install.CopyFiles
+
+[class2.Install.HW]
+AddReg    = class2.Install.AddReg.HW
+
+
+
+
+
+
+
+
+
+
+
+[kbd.Install.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,scrusb2b.sys
+HKLM,"\Software\Microsoft\Cryptography\Calais\Readers",,,
+
+[scr.Install.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,scrusb2b.sys
+HKLM,"\Software\Microsoft\Cryptography\Calais\Readers",,,
+
+[class2.Install.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,scrusb2b.sys
+HKLM,"\Software\Microsoft\Cryptography\Calais\Readers",,,
+
+
+
+
+
+
+
+
+
+
+
+
+[scrusb2a.Install.CopyFiles]
+scrusb2b.sys,scrusb2b.sy_
+
+
+
+
+
+
+
+; ================== Win2000 specific =====================
+
+[kbd.Install.NT]
+AddReg    = scrusb2a.Install.NT.AddReg
+CopyFiles = scrusb2a.Install.NT.CopyFiles,scrusb2a.Install.NT.W2kTools
+
+[kbd.Install.NT.HW]
+AddReg    = kbd.Install.AddReg.HW
+
+[kbd.Install.NT.Services]
+AddService = scrusb2a, 2, kbd.Service.NT,scrusb2a.EventLog.NT
+
+[scr.Install.NT]
+AddReg    = scrusb2a.Install.NT.AddReg
+CopyFiles = scrusb2a.Install.NT.CopyFiles,scrusb2a.Install.NT.W2kTools
+
+[scr.Install.NT.HW]
+AddReg    = scr.Install.AddReg.HW
+
+[scr.Install.NT.Services]
+AddService = scrusb2a, 2, scr.Service.NT,scrusb2a.EventLog.NT
+
+[class2.Install.NT]
+AddReg    = scrusb2a.Install.NT.AddReg
+CopyFiles = scrusb2a.Install.NT.CopyFiles,scrusb2a.Install.NT.W2kTools
+
+[class2.Install.NT.HW]
+AddReg    = class2.Install.AddReg.HW
+
+[class2.Install.NT.Services]
+AddService = scrusb2a, 2, class2.Service.NT,scrusb2a.EventLog.NT
+
+
+
+
+
+
+
+
+
+
+
+
+
+[scrusb2a.Install.NT.AddReg]
+HKR,, AdapterType, 0, "0100"
+HKLM,"SYSTEM\CurrentControlSet\Services\SCardSvr",Start,0x00010001,2
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RunOnce",chksvrn,,"rundll32 chksvrn.dll,StartScardsvr"
+HKLM, Software\Microsoft\Cryptography\Calais\Readers,,,
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,DLLName,0,wlnotify.dll
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logon,0,SCardStartCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Logoff,0,SCardStopCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Lock,0,SCardSuspendCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Unlock,0,SCardResumeCertProp
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Enabled,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Impersonate,0x00010001,1
+HKLM, SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify\ScCertProp,Asynchronous,0x00010001,1
+
+[scrusb2a.Install.NT.CopyFiles]
+scrusb2a.sys,,,2
+
+
+
+
+
+
+[scrusb2a.Install.NT.W2kTools]
+chksvrn.dll
+
+
+
+
+[kbd.Service.NT]
+DisplayName     = %VID1PID1ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\scrusb2a.sys
+[scr.Service.NT]
+DisplayName     = %VID1PID2ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\scrusb2a.sys
+[class2.Service.NT]
+DisplayName     = %VID1PID3ReaderDescription%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\scrusb2a.sys
+
+
+
+
+
+
+
+
+[scrusb2a.EventLog.NT]
+AddReg = scrusb2a.AddEventLog.reg
+
+[scrusb2a.AddEventLog.reg]
+HKR,, EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\drivers\scrusb2a.sys"
+HKR,, TypesSupported,   0x00010001, 7
+
+
+
+
+
+; =====================
+; === SmartCard-Reader Keyboard USB 2A ====
+; =====================
+[kbd.Install.AddReg.HW]
+HKR,,"VendorName",,"FSC"
+HKR,,"IfdType",, "SCR Keyboard USB 2A"
+
+
+
+; =====================
+; === SmartCard-Reader USB 2A ====
+; =====================
+[scr.Install.AddReg.HW]
+HKR,,"VendorName",,"FSC"
+HKR,,"IfdType",, "SCR USB 2A"
+
+
+; =====================
+; === SmartCard-Reader USB 2C ====
+; =====================
+[class2.Install.AddReg.HW]
+HKR,,"VendorName",,"FSC"
+HKR,,"IfdType",, "SCR USB 2C"
+
+
+
+
+
+
+
+
+
+
+; ================= Strings =====================
+
+[Strings]
+Provider		= "Fujitsu Siemens Computers GmbH"
+Manufacturer    	= "Fujitsu Siemens Computers GmbH"
+VID1PID1ReaderDescription     = "SmartCard-Reader Keyboard USB 2A"
+VID1PID2ReaderDescription     = "SmartCard-Reader USB 2A"
+VID1PID3ReaderDescription     = "SmartCard-Reader USB 2C"
+DiskDescription         = "SmartCard-Reader PC/SC Driver Disk"
+ClassName 		= "Smart Card Readers"

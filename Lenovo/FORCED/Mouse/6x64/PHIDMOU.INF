@@ -1,0 +1,758 @@
+; Setup INF file for Mouse Suite
+; Copyright (C) 2006-2009, All rights reserved.
+
+[Version]
+Signature    = "$WINDOWS NT$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%Provider%
+CatalogFile  = x64.cat
+DriverVer    = 11/16/2012,%ProductVersion%
+
+[DestinationDirs]
+DefaultDestDir			= 12
+USB.Copy.NT             = 12
+PMouse.Copy.NT.SYS		= 12
+PMouse.Copy.HLP         = 18
+PMouse.Copy.NT.DLL		= 11
+PMouse.Copy             = 11
+
+[ControlFlags]
+;
+; Mark any install sections for drivers that also control the i8042 keyboard port,
+; so that we can warn the user that they may also be affecting their keyboard with
+; a mouse driver change.
+;
+;SharedDriver=PS2Mouse.Inst,%PS2_Inst.SharedDriverMsg%
+
+ExcludeFromSelect.ntamd64=USB\VID_0461&PID_4D03
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_3100
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_3103
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_3105
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_3107
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_3108
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_3109
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_310B
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_310C
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_310D
+ExcludeFromSelect.ntamd64=USB\VID_04B3&PID_3020&MI_01
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6000
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_600C	
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6016
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_600E
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_601D
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6022&MI_01
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6025
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_602F
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6030&MI_02
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6039
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6044
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6045
+ExcludeFromSelect.ntamd64=USB\VID_17EF&PID_6049
+[SourceDisksNames]
+91=%PMouseDisk%,"ms98.cab"
+
+[SourceDisksFiles]
+PELMOUSE.SYS = 91
+PELUSBLF.SYS = 91
+PELVENDR.SYS = 91
+
+
+; Manufacturer Sections
+; ----------------------------------------
+[Manufacturer]
+%Mfg%=PMouse,ntamd64
+
+[PMouse.ntamd64]
+%TravelMouse.Desc%=USB_TMouse.Inst,USB\VID_0461&PID_4D03
+%TravelOptical.Desc%=USB_TravelOptical.Inst,USB\VID_04B3&PID_3107
+%USBWheelOptical.Desc%=USB_WheelOptical.Inst,USB\VID_04B3&PID_310B
+%USBWheelOptical.Desc%=USB_WheelOptical.Inst,USB\VID_04B3&PID_310C
+%USBWheelOptical.Desc%=USB_WheelOptical.Inst,USB\VID_04B3&PID_310D
+%USBScrollPointOpticalMouse.Desc%=USB_SPOptical.Inst,USB\VID_04B3&PID_3105
+%USBScrollPointOptical800dpi.Desc%=USB_SPOptical_II.Inst,USB\VID_04B3&PID_3108
+%USBScrollPointProOptical800dpi.Desc%=USB_SPProOptical.Inst,USB\VID_04B3&PID_3109
+%USBScrollPointProMouse.Desc%=USB_SPPro.Inst,USB\VID_04B3&PID_3103
+%USBScrollPointIIIMouse.Desc%=USB_SPIII.Inst,USB\VID_04B3&PID_3100
+%USB\VID_04B3&PID_3020&MI_01.Desc%=USB_RF3020.Inst,USB\VID_04B3&PID_3020&MI_01
+%USB\VID_17EF&PID_6000.Desc%=USB_LENOVO_USB5.Inst,USB\VID_17EF&PID_6000
+%USB\VID_17EF&PID_600C.Desc%=USB_WheelOptical.Inst,USB\VID_17EF&PID_600C
+%USB\VID_17EF&PID_6016.Desc%=USB_LENOVO_USB5.Inst,USB\VID_17EF&PID_6016
+%USB\VID_17EF&PID_600E.Desc%=USB_WheelOptical.Inst,USB\VID_17EF&PID_600E
+%USB\VID_17EF&PID_601D.Desc%=USB_LENOVO_USB5.Inst,USB\VID_17EF&PID_601D
+%USB\VID_17EF&PID_6022&MI_01.Desc%=USB_Wireless.Inst,USB\VID_17EF&PID_6022&MI_01
+%USB\VID_17EF&PID_6025.Desc%=USB_ThinkPadTravel.Inst,USB\VID_17EF&PID_6025
+%USB\VID_17EF&PID_602F.Desc%=USB_Wireless.Inst,USB\VID_17EF&PID_602F
+%USB\VID_17EF&PID_6030&MI_02.Desc%=USB_Wireless.Inst,USB\VID_17EF&PID_6030&MI_02
+%USB\VID_17EF&PID_6039.Desc%=USB_Wireless.Inst,USB\VID_17EF&PID_6039
+%USB\VID_17EF&PID_6044.Desc%=USB_LENOVO_USB5.Inst,USB\VID_17EF&PID_6044
+%USB\VID_17EF&PID_6045.Desc%=USB_LENOVO_USB5.Inst,USB\VID_17EF&PID_6045
+%USB\VID_17EF&PID_6049.Desc%=USB_SPOptical.Inst,USB\VID_17EF&PID_6049
+;------------------ HID Class Install -------------
+
+;[ClassInstall]
+;Addreg=HIDClassReg
+
+;[HIDClassReg]
+;HKR,,,,%HID.ClassName%
+;HKR,,Icon,,-24
+;HKR,,NoInstallClass,,1
+
+;[ClassInstall32.ntamd64]
+;Addreg=HIDClassReg
+
+;--------------------------------------------------
+;		 USB Mouse Win2000 	
+;--------------------------------------------------
+
+;------------   SPIII   --------------
+[USB_SPIII.Inst.ntamd64]
+AddReg = PMouse.AddReg, SP.AddReg, DefResourceDLL.AddReg, SPIII.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_SPIII.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_SPIII.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   SPOptical   --------------
+[USB_SPOptical.Inst.ntamd64]
+AddReg = PMouse.AddReg, SP.AddReg, DefResourceDLL.AddReg, SPOptical.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_SPOptical.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_SPOptical.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   SPOptical 800dpi  --------------
+[USB_SPOptical_II.Inst.ntamd64]
+AddReg = PMouse.AddReg, SP.AddReg, DefResourceDLL.AddReg, SPOptical_II.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_SPOptical_II.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_SPOptical_II.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   SPPro 800dpi  --------------
+[USB_SPProOptical.Inst.ntamd64]
+AddReg = PMouse.AddReg, SP.AddReg, DefResourceDLL.AddReg, SPProOptical.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_SPProOptical.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_SPProOptical.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   SPPro   --------------
+[USB_SPPro.Inst.ntamd64]
+AddReg = PMouse.AddReg, SP.AddReg, DefResourceDLL.AddReg, SPPro.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_SPPro.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_SPPro.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   TravelMouse   --------------
+[USB_TMouse.Inst.ntamd64]
+AddReg = PMouse.AddReg, Wheel.AddReg, DefResourceDLL.AddReg, TMouse.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_TMouse.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_TMouse.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   TravelMouse 800dpi  --------------
+[USB_TravelOptical.Inst.ntamd64]
+AddReg = PMouse.AddReg, Wheel.AddReg, DefResourceDLL.AddReg, TMouse800dpi.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_TravelOptical.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_TravelOptical.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   Wheel Optical   --------------
+[USB_WheelOptical.Inst.ntamd64]
+AddReg = PMouse.AddReg, Wheel.AddReg, DefResourceDLL.AddReg, WheelMouse.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_WheelOptical.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_WheelOptical.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   RF3020   --------------
+[USB_RF3020.Inst.ntamd64]
+AddReg = PMouse.AddReg, Wheel.AddReg, DefResourceDLL.AddReg, RF3020.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_RF3020.Inst.ntamd64.HW]
+AddReg=USBMouse.Inst.NT.HW.AddReg
+
+[USB_RF3020.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------------   Lenovo USB 5-Button Wheel Mouse   --------------
+[USB_LENOVO_USB5.Inst.ntamd64]
+AddReg = PMouse.AddReg, Wheel.AddReg, DefResourceDLL.AddReg, USB_LENOVO_USB5.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_LENOVO_USB5.Inst.ntamd64.HW]
+AddReg=USBMouseVendr.Inst.NT.HW.AddReg
+
+[USB_LENOVO_USB5.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+AddService = pelvendr,, pelvendr.Service.Inst.NT, pelvendr.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+
+;----------  Lenovo Wireless keyboard & Mouse  ------------
+[USB_Wireless.Inst.ntamd64]
+AddReg = PMouse.AddReg, Wheel.AddReg, DefResourceDLL.AddReg, USB_LENOVO_USB5_NDPI.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+[USB_Wireless.Inst.ntamd64.HW]
+AddReg=USBMouseVendr.Inst.NT.HW.AddReg
+[USB_Wireless.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+AddService = pelvendr,, pelvendr.Service.Inst.NT, pelvendr.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+;------  ThinkPad USB Travel Mouse  --------
+[USB_ThinkPadTravel.Inst.ntamd64]
+AddReg = PMouse.AddReg, Wheel.AddReg, DefResourceDLL.AddReg, TMouse.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT, PMouse.AddUninstReg.USB
+CopyFiles = PMouse.Copy.NT.SYS, PMouse.Copy.HLP, PMouse.Copy.NT.DLL, PMouse.Copy, USB.Copy.NT
+
+[USB_ThinkPadTravel.Inst.ntamd64.HW]
+AddReg=USBMouseVendr.Inst.NT.HW.AddReg
+
+[USB_ThinkPadTravel.Inst.ntamd64.Services]
+AddService = pelusblf,, pelusblf.Service.Inst.NT, pelusblf.EventLog.Inst.NT
+AddService = pelmouse,, pelmouse.Service.Inst.NT, pelmouse.EventLog.Inst.NT
+AddService = pelvendr,, pelvendr.Service.Inst.NT, pelvendr.EventLog.Inst.NT
+Include=input.inf
+Needs=HID_Inst.NT.Services
+
+
+
+;---------------------------------------------------
+; Service
+;---------------------------------------------------
+
+[USBMouse.Inst.NT.HW.AddReg]
+HKR,,"LowerFilters",0x00010000,"Pelusblf","pelmouse"
+
+[USBMouseVendr.Inst.NT.HW.AddReg]
+HKR,,"LowerFilters",0x00010000,"Pelusblf","pelmouse","pelvendr"
+
+;----------------------------------------
+; pelusblf Service Install - Windows NT
+;----------------------------------------
+[pelusblf.Service.Inst.NT]
+DisplayName    = %PELUSBLF.SvcDesc%
+ServiceType    = %SERVICE_KERNEL_DRIVER%
+StartType      = %SERVICE_DEMAND_START%
+ErrorControl   = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\pelusblf.sys
+LoadOrderGroup = extended base
+
+[pelusblf.EventLog.Inst.NT]
+AddReg = pelusblf.EventLog.AddReg.NT
+
+[pelusblf.EventLog.AddReg.NT]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\pelusblf.sys"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+;----------------------------------------
+; PELMouse Service Install - Windows NT
+;----------------------------------------
+[pelmouse.Service.Inst.NT]
+DisplayName    = %PELMOUSE.SvcDesc%
+ServiceType    = %SERVICE_KERNEL_DRIVER%
+StartType      = %SERVICE_DEMAND_START%
+ErrorControl   = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\pelmouse.sys
+LoadOrderGroup = Pointer Port
+
+[pelmouse.EventLog.Inst.NT]
+AddReg = pelmouse.EventLog.AddReg.NT
+
+[pelmouse.EventLog.AddReg.NT]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\pelmouse.sys"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+;----------------------------------------
+; pelVendr Service Install - Windows NT
+;----------------------------------------
+[pelvendr.Service.Inst.NT]
+DisplayName    = %PELVENDR.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\pelvendr.sys
+LoadOrderGroup = extended base
+
+[pelvendr.EventLog.Inst.NT]
+AddReg = pelvendr.EventLog.AddReg.NT
+
+[pelvendr.EventLog.AddReg.NT]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\pelvendr.sys"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+;--------------------------------------
+; Common - AddReg section
+;--------------------------------------
+[PMouse.AddReg]
+HKCU,%ProductKey%"\Productivity Utility","Show Task Bar Icon", %REG_DWORD%, 1
+HKCU,%ProductKey%,"EnableTooltips",%REG_DWORD%, 1
+
+; Extra functions
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Dll Path",0,"pelutil"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Function Entry",0,"OnShortcut"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Setting Entry",0,"DlgShortcutSetting"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Desc Entry",0,"ShortcutGetDescript"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Local Name Entry",0,"ShortcutGetLocalName"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Desc Name",0,"HyperLink"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Call On",%REG_DWORD%,   0
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Flag",%REG_DWORD%,      0
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Dll Path",0,"pelzoom"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Function Entry",0,"OnZooming"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Setting Entry",0,"DlgZoomingSetting"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Desc Entry",0,"ZoomingGetDescript"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Local Name Entry",0,"ZoomingGetLocalName"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Desc Name", 0, "Magnifier"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Call On",%REG_DWORD%,     2
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Flag",%REG_DWORD%,        0
+
+; For Remote Desktop Connect
+; Server
+HKLM,%RemoteDesktopServerKey%,"Name",0,"FSRremoS.EXE"
+HKLM,%RemoteDesktopServerKey%,"Type",0x00010001,3
+; Client
+HKCU,%RemoteDesktopClientKey%,"Name",0,"FSRremoC.DLL"
+
+; Default mouse ID to show in Button page if no devices was found...
+HKLM,%ProductKey%,"DefaultMouseID",0,%DefaultMouseID%
+
+; USB ID Supported
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3100",%REG_DWORD%,0xA1
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3103",%REG_DWORD%,0xA1
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3104",%REG_DWORD%,0xA1
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3105",%REG_DWORD%,0xA1
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3108",%REG_DWORD%,0xA1
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3109",%REG_DWORD%,0xA1
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3107",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_310B",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_310C",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_310D",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_0461&PID_4D03",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_04B3&PID_3020",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_600C",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6000",%REG_DWORD%,0x04
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6016",%REG_DWORD%,0x04
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_600E",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_601D",%REG_DWORD%,0x04
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6022",%REG_DWORD%,0x05
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6025",%REG_DWORD%,0x03
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_602F",%REG_DWORD%,0x05
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6030",%REG_DWORD%,0x05
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6039",%REG_DWORD%,0x05
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6044",%REG_DWORD%,0x04
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6045",%REG_DWORD%,0x04
+HKLM,%ProductKey%"\MouseUID","HID\VID_17EF&PID_6049",%REG_DWORD%,0xA1
+[SP.AddReg]
+; 4D SPMouse only...
+HKLM,%ProductKey%,"MinDblClkSpeed",%REG_DWORD%,0xC8
+HKCU,%ProductKey%"\Wheel","Max Lines",%REG_DWORD%,0x15
+HKCU,%ProductKey%"\Wheel","PageRequire",%REG_DWORD%,0x0A
+HKCU,%ProductKey%"\Wheel","PagePerMickey",%REG_DWORD%,0x07
+;HKCU,%ProductKey%"\Mouse\4DMouse","ProductName",0,%SP4D.Product%
+HKCU,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SP4D.Product%
+HKLM,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SP4D.Product%
+HKCU,%ProductKey%"\Mouse\4DMouse","ID",%REG_DWORD%,0xA1
+HKCU,"Control Panel\desktop","WheelScrollLines",0,"1"
+HKCU,%ProductKey%,"UseComboBox",0,"1"
+HKCU,%ProductKey%,"InfoAddSearchSPString",0,"1"
+
+;TP4 only
+HKLM,%ProductKey%,"ChkTP4",0x00010001,0x01
+HKLM,"Software\Lenovo\TrackPoint","ScrollPointDriverName",0,"\\.\PELPS2M"
+
+[Wheel.AddReg]
+HKLM,%ProductKey%,"MinDblClkSpeed",0x00010001,0xC8
+HKCU,"Control Panel\desktop","WheelScrollLines",0,"3"
+HKCU,%ProductKey%,"UseComboBox",0,"1"
+HKCU,%ProductKey%,"InfoAddSearchSPString",0,"1"
+HKCU,%ProductKey%"\Wheel","Scroll one screen per notch",%REG_DWORD%,     0x00
+HKCU,%ProductKey%"\Wheel","Reverse Scroll Direction",%REG_DWORD%,        0x00
+HKCU,%ProductKey%"\Wheel","Use Shift for Horizontal Scroll",%REG_DWORD%, 0x00
+
+[DefResourceDLL.AddReg]
+; Select Resource Dll for OEM
+HKLM,%ProductKey%,"2DExternalResourceDll",0,%2DExtResDll%
+HKCU,%ProductKey%,"2DExternalResourceDll",0,%2DExtResDll%
+HKLM,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+HKCU,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+HKLM,%ProductKey%\ResourceDLL,"2DExternalResourceDll",0,%2DExtResDll%
+HKCU,%ProductKey%\ResourceDLL,"2DExternalResourceDll",0,%2DExtResDll%
+HKLM,%ProductKey%\ResourceDLL,"3DExternalResourceDll",0,%3DExtResDll%
+HKCU,%ProductKey%\ResourceDLL,"3DExternalResourceDll",0,%3DExtResDll%
+
+
+[PMouse.AddUninstReg.NT]
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%NTServiceRootKey%"\pelmouse",0,0
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%NTServiceRootKey%"\pelusblf",0,0
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%NTServiceRootKey%"\pelvendr",0,0
+HKLM,%UninstallKey%"\DeleteKey",%NTServiceRootKey%"\pelmouse",0,""
+HKLM,%UninstallKey%"\DeleteKey",%NTServiceRootKey%"\pelusblf",0,""
+HKLM,%UninstallKey%"\DeleteKey",%NTServiceRootKey%"\pelvendr",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelmouse.sys",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelmouse.sys,0,"%SYS32_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\pelvendr.sys",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelvendr.sys,0,"%SYS32_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\pelusblf.sys",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelusblf.sys,0,"%SYS32_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\Pmuninnt.exe",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",Pmuninnt.exe,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\Pmouse.inf",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",Phidmou.inf,0,"%INF_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",Phidmou.pnf,0,"%INF_DIR%"
+
+[PMouse.AddUninstReg.USB]
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%TravelMouse.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%TravelOptical.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USBWheelOptical.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USBScrollPointProMouse.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USBScrollPointOpticalMouse.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USBScrollPointOptical800dpi.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USBScrollPointProOptical800dpi.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USBScrollPointIIIMouse.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_04B3&PID_3020&MI_01.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6000.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_600C.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6016.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_600E.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_601D.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6022&MI_01.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6025.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_602F.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6030&MI_02.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6039.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6044.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6045.Desc%,0,"@HID"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%USB\VID_17EF&PID_6049.Desc%,0,"@HID"
+[PMouse.AddUninstReg]
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%ProductKey%,0,0
+HKLM,%UninstallKey%"\DeleteKey",%ProductKey%,0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CURRENT_USER",%ProductKey%"\",0,0
+HKLM,%UninstallKey%"\DeleteKey",%ProductKey%"\",0,HKEY_CURRENT_USER
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%RemoteDesktopServerKey%,0,0
+HKLM,%UninstallKey%"\DeleteKey",%RemoteDesktopServerKey%,0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CURRENT_USER",%RemoteDesktopClientKey%"\",0,0
+HKLM,%UninstallKey%"\DeleteKey",%RemoteDesktopClientKey%"\",0,HKEY_CURRENT_USER
+
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%SystemRunKey%,0,"Mouse Suite 98 Daemon"
+HKLM,%UninstallKey%"\DeleteValue",%SystemRunKey%,0,"Mouse Suite 98 Daemon"
+
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 PPM",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 PPM",0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 BDO",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 BDO",0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 WHEEL",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 WHEEL",0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 CPL_EXT",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 CPL_EXT",0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLXPPMCLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLXPPMCLSID%,0,HKEY_CLASSES_ROOT
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLXBDOCLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLXBDOCLSID%,0,HKEY_CLASSES_ROOT
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLXWHEELCLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLXWHEELCLSID%,0,HKEY_CLASSES_ROOT
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLEXTPAGECLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLEXTPAGECLSID%,0,HKEY_CLASSES_ROOT
+
+HKLM,%UninstallKey%"\DeleteFiles",ms98.cab,0,"%SYS32_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",x64.cat,0,"%SYS32_DIR%"
+
+;Kill Window
+HKLM,%UninstallKey%"\KillWindow\0001",Class,0,"MS98 Daemon"
+HKLM,%UninstallKey%"\KillWindow\0001",Caption,0,"MS98 Daemon"
+HKLM,%UninstallKey%"\KillWindow\0002",Class,0,"Daemon Spy"
+HKLM,%UninstallKey%"\KillWindow\0002",Caption,0,"Daemon Spy"
+HKLM,%UninstallKey%"\KillWindow\0003",Class,0,""
+HKLM,%UninstallKey%"\KillWindow\0003",Caption,0,"FSRREMOS"
+
+[SPIII.AddReg]
+HKLM,%ProductKey%,"4DExternalResourceDll",0,%ExtResDll%
+HKCU,%ProductKey%,"4DExternalResourceDll",0,%ExtResDll%
+HKCU,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_2_ProductName_4D%
+HKLM,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_2_ProductName_4D%
+;HKCU,%ProductKey%"\Mouse\4DMouse","ID",0x00010001,0xA1
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[SPOptical.AddReg]
+HKLM,%ProductKey%,"4DExternalResourceDll",0,%ExtResDll%
+HKCU,%ProductKey%,"4DExternalResourceDll",0,%ExtResDll%
+HKCU,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_1_ProductName_4D%
+HKLM,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_1_ProductName_4D%
+;HKCU,%ProductKey%"\Mouse\4DMouse","ID",0x00010001,0xA1
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[SPOptical_II.AddReg]
+HKLM,%ProductKey%,"4DExternalResourceDll",0,%ExtResDll%
+HKCU,%ProductKey%,"4DExternalResourceDll",0,%ExtResDll%
+HKCU,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_6_ProductName_4D%
+HKLM,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_6_ProductName_4D%
+;HKCU,%ProductKey%"\Mouse\4DMouse","ID",0x00010001,0xA1
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[SPPro.AddReg]
+HKLM,%ProductKey%,"4DExternalResourceDll",0,%4DExtResDll%
+HKCU,%ProductKey%,"4DExternalResourceDll",0,%4DExtResDll%
+HKCU,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_3_ProductName_4D%
+HKLM,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_3_ProductName_4D%
+;HKCU,%ProductKey%"\Mouse\4DMouse","ID",0x00010001,0xA1
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[SPProOptical.AddReg]
+HKLM,%ProductKey%,"4DExternalResourceDll",0,%4DExtResDll%
+HKCU,%ProductKey%,"4DExternalResourceDll",0,%4DExtResDll%
+HKCU,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_7_ProductName_4D%
+HKLM,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SelResDll_7_ProductName_4D%
+;HKCU,%ProductKey%"\Mouse\4DMouse","ID",65537,A1,0,0,0
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[TMouse.AddReg]
+HKLM,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+HKCU,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+HKCU,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_4_ProductName_3D%
+HKLM,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_4_ProductName_3D%
+;HKCU,%ProductKey%"\Mouse\3DMouse","ID",0x00010001,0x03
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[TMouse800dpi.AddReg]
+HKLM,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+HKCU,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+HKCU,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_5_ProductName_3D%
+HKLM,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_5_ProductName_3D%
+;HKCU,%ProductKey%"\Mouse\3DMouse","ID",0x00010001,0x03
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[WheelMouse.AddReg]
+HKLM,%ProductKey%,"3DExternalResourceDll",0,%WheelExtResDll%
+HKCU,%ProductKey%,"3DExternalResourceDll",0,%WheelExtResDll%
+HKCU,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_8_ProductName_3D%
+HKLM,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_8_ProductName_3D%
+;HKCU,%ProductKey%"\Mouse\3DMouse","ID",0x00010001,0x03
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+[RF3020.AddReg]
+HKLM,%ProductKey%,"3DExternalResourceDll",0,%WheelExtResDll%
+HKCU,%ProductKey%,"3DExternalResourceDll",0,%WheelExtResDll%
+HKCU,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_9_ProductName_3D%
+HKLM,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%SelResDll_9_ProductName_3D%
+;HKCU,%ProductKey%"\Mouse\3DMouse","ID",0x00010001,0x03
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+
+HKLM,%UninstallKey%,Parameter,0,"-k"
+
+[USB_LENOVO_USB5.AddReg]
+HKLM,%ProductKey%,"3D5BExternalResourceDll",0,%5BTiltExtResDll%
+HKCU,%ProductKey%,"3D5BExternalResourceDll",0,%5BTiltExtResDll%
+HKCU,%ProductKey%"\Mouse\3D5BMouse","DefaultProductName",0,%SelResDll_10_ProductName_3D%
+HKLM,%ProductKey%"\Mouse\3D5BMouse","DefaultProductName",0,%SelResDll_10_ProductName_3D%
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKCU,%ProductKey%,"DPI-Mode",0x00010001,0x02
+HKCU,%ProductKey%,"DPI-Mode2",0x00010001,0x02
+HKLM,%ProductKey%,"DPI-Mode",0x00010001,0x02
+HKCU,%ProductKey%"\Wheel","TiltWheelMouse",%REG_DWORD%,0x01
+
+
+[USB_LENOVO_USB5_NDPI.AddReg]
+HKLM,%ProductKey%,"3D5BExternalResourceDll",0,%5BTiltExtResDll%
+HKCU,%ProductKey%,"3D5BExternalResourceDll",0,%5BTiltExtResDll%
+HKCU,%ProductKey%"\Mouse\3D5BMouseNDPI","DefaultProductName",0,%SelResDll_10_ProductName_3D%
+HKLM,%ProductKey%"\Mouse\3D5BMouseNDPI","DefaultProductName",0,%SelResDll_10_ProductName_3D%
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKCU,%ProductKey%,"DPI-Mode",0x00010001,0x02
+HKCU,%ProductKey%,"DPI-Mode2",0x00010001,0x02
+HKLM,%ProductKey%,"DPI-Mode",0x00010001,0x02
+HKCU,%ProductKey%"\Wheel","TiltWheelMouse",%REG_DWORD%,0x01
+
+; ----------------------------------------
+; Copy Files Section
+[PMouse.Copy]
+
+
+[PMouse.Copy.NT.DLL]
+
+
+[PMouse.Copy.NT.SYS]
+PELMOUSE.SYS,,,0x00000004
+PELVENDR.SYS,,,0x00000004
+
+[PMouse.Copy.HLP]
+
+
+[USB.Copy.NT]
+pelusblf.sys,,,0x00000004
+PELVENDR.SYS,,,0x00000004
+
+; ----------------------------------------
+; User-visible Strings
+[Strings]
+Provider = "Lenovo"
+Mfg	     = "Lenovo"
+
+; ======= Disk Name ==========
+PMouseDisk="Mouse Suite Driver Disk"
+
+; ======= Driver Version ==========
+ProductVersion = "2.1.0.0"
+
+; ======= Product Misc. Info. ==========
+2DMouseButtonNumber = "2"
+DefaultMouseID = "04"
+; ======= Resource dll names ===========
+ExtResDll = "PELBDO.DLL"
+2DExtResDll = "PMRESHP.DLL"
+3DExtResDll = "PMMO32R.DLL"
+4DExtResDll = "PMLenovo.DLL"
+WheelExtResDll = "PMMILG.DLL"
+5BTiltExtResDll = "TILT_5B.DLL"
+
+SelResDll_1_ProductName_4D = "Lenovo ScrollPoint Optical"
+SelResDll_2_ProductName_4D = "Lenovo ScrollPoint III"
+SelResDll_3_ProductName_4D = "Lenovo ScrollPoint Pro"
+SelResDll_4_ProductName_3D = "Lenovo Travel Mouse"
+SelResDll_5_ProductName_3D = "Lenovo Travel Optical"
+SelResDll_6_ProductName_4D = "Lenovo 800dpi ScrollPoint Optical"
+SelResDll_7_ProductName_4D = "Lenovo 800dpi ScrollPoint Pro Optical"
+SelResDll_8_ProductName_3D = "Lenovo Optical Mouse"
+SelResDll_9_ProductName_3D = "Wireless USB 3-Button Wheel Mouse"
+SelResDll_10_ProductName_3D = "Lenovo Laser Mouse"
+
+; ======= Product Name =======
+SP4D.Product = "Lenovo ScrollPoint Optical"
+2D.Product = "Standard Mouse"
+3D.Product = "Lenovo Travel Optical"
+Ergo.Product = "Programmable Mouse"
+
+; ======= Device Names ==========
+TravelMouse.Desc = "Lenovo Travel Mouse (HID)"
+TravelOptical.Desc = "ThinkPad USB Travel Mouse (HID)"
+USBWheelOptical.Desc = "Lenovo Optical Mouse (HID)"
+USBScrollPointProMouse.Desc = "Lenovo ScrollPoint Pro (HID)"
+USBScrollPointOpticalMouse.Desc = "Lenovo ScrollPoint Optical (HID)"
+USBScrollPointOptical800dpi.Desc = "Lenovo 800dpi ScrollPoint Optical (HID)"
+USBScrollPointProOptical800dpi.Desc = "Lenovo 800dpi ScrollPoint Pro Optical (HID)"
+USBScrollPointIIIMouse.Desc = "Lenovo ScrollPoint III (HID)"
+USB\VID_04B3&PID_3020&MI_01.Desc = "Lenovo Wireless USB 3-Button Wheel Mouse"
+USB\VID_17EF&PID_6000.Desc = "Lenovo Laser Mouse (HID)"
+USB\VID_17EF&PID_600C.Desc = "Lenovo Optical Mouse (HID)"
+USB\VID_17EF&PID_6016.Desc = "ThinkPad USB Laser Mouse (HID)"
+USB\VID_17EF&PID_600E.Desc = "Lenovo Optical Mouse (HID)"
+USB\VID_17EF&PID_601D.Desc = "Lenovo Laser Mouse (HID)"
+USB\VID_17EF&PID_6022&MI_01.Desc = "USB Human Interface Device"
+USB\VID_17EF&PID_6025.Desc="ThinkPad USB Travel Mouse (HID)"
+USB\VID_17EF&PID_602F.Desc="Lenovo Wireless Plus Mouse (HID)"
+USB\VID_17EF&PID_6030&MI_02.Desc="USB Human Interface Device"
+USB\VID_17EF&PID_6039.Desc="Lenovo Laser Wireless Mouse (HID)"
+USB\VID_17EF&PID_6044.Desc = "ThinkPad USB Laser Mouse (HID)"
+USB\VID_17EF&PID_6045.Desc = "Lenovo USB Laser Mouse (HID)"
+USB\VID_17EF&PID_6049.Desc = "Lenovo ScrollPoint Mouse (HID)"
+; ======= Service Names =======
+PELUSBLF.SvcDesc = "USB Mouse Low Filter Driver"
+PELMOUSE.SvcDesc = "Mouse Suite Driver"
+PELVENDR.SvcDesc = "Mouse Suite I/O Driver"
+
+HID.ClassName    = "Human Interface Devices"
+ProductKey       = "SOFTWARE\Primax\Mouse Suite 98"
+UninstallKeyName = "MouseSuite98"
+UninstallKey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\MouseSuite98"
+SystemRunKey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+SystemRunOnceKey = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+MouseCPLXKey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Controls Folder\Mouse\shellex\PropertySheetHandlers"
+NTServiceRootKey = "System\CurrentControlSet\Services"
+RemoteDesktopServerKey = "System\CurrentControlSet\Control\Terminal Server\AddIns\FSRremote"
+RemoteDesktopClientKey = "Software\Microsoft\Terminal Server Client\Default\AddIns\FSRremote"
+
+CPLXPPMCLSID = "{02D613BA-B0E9-4DE0-A98E-6AA317EE731E}"
+CPLXBDOCLSID = "{FECA2FBB-CA2B-49ED-9AEE-B1B731D1B6E7}"
+CPLXWHEELCLSID = "{30ABC82B-5ADB-4312-B398-12A20C9722A0}"
+CPLEXTPAGECLSID = "{79596D25-79FD-436b-9EC3-7F058F642C2C}"
+
+UNINSTALL_ROOT_KEY = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+UNINSTALL_SHARED_FILE = "Software\Primax\Uninstall\SharedFile"
+UNINSTALL_SHARED_REG = "Software\Primax\Uninstall\SharedReg"
+
+;  *******Non Localizable Strings******* 
+SERVICE_BOOT_START      = 0x0
+SERVICE_SYSTEM_START    = 0x1
+SERVICE_AUTO_START      = 0x2
+SERVICE_DEMAND_START    = 0x3
+SERVICE_DISABLED        = 0x4
+
+SERVICE_KERNEL_DRIVER 	= 0x1
+SERVICE_ERROR_IGNORE 	= 0x0
+SERVICE_ERROR_NORMAL 	= 0x1
+SERVICE_ERROR_SEVERE 	= 0x2
+SERVICE_ERROR_CRITICAL 	= 0x3
+
+REG_EXPAND_SZ	        = 0x00020000 
+REG_DWORD               = 0x00010001 
+REG_MULTI_SZ	        = 0x00010000
+REG_BINARY              = 0x00000001

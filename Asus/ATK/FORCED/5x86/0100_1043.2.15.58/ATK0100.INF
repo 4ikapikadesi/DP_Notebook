@@ -1,0 +1,87 @@
+;kkk
+[version]
+Signature="$Windows NT$"
+Provider=%ATK%
+ClassGUID={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Class=System
+CatalogFile=ATK0100.cat
+LayoutFile = layout.inf
+DriverVer=04/13/2006, 1043.2.15.58
+
+[DestinationDirs]
+DefaultDestDir = 12		; load driver to system32\drivers
+HControl.CopyFiles = 10,ATK0100
+
+[ControlFlags]
+ExcludeFromselect = *
+
+[ClassInstall32]
+AddReg = System_Class_Addreg
+
+[System_Class_Addreg]
+HKR,,,0,"System Class Drivers"
+
+[Manufacturer]
+%ATK%=ATK
+
+[ATK]
+%DeviceDesc1%=DriverInstall,ACPI\ATK0100
+
+[DriverInstall]
+CopyFiles=ATKACPI.CopyFiles, HControl.CopyFiles
+AddReg = HControl.AddReg
+
+[ATKACPI.CopyFiles]
+ATKACPI.sys
+
+[HControl.CopyFiles]
+HControl.exe
+ATKOSD.exe
+XPunin.exe
+inter_f2.dll
+radfn.dll
+ATKWLIOC.DLL
+ASNDIS5.sys
+ASUSNet.dll
+ASW32N50.dll
+CMSSC.dll
+SiSPkt.dll
+
+[DriverInstall.Services]
+AddService=MTsensor,2,MTsensorService
+
+[MTsensorService]
+DisplayName = %ATKACPI.DisplayName%
+ServiceType=1           ; SERVICE_KERNEL_DRIVER
+StartType=3             ; SERVICE_DEMAND_START
+ErrorControl=1          ; SERVICE_ERROR_NORMAL
+ServiceBinary=%12%\ATKACPI.sys
+
+[HControl.AddReg]
+HKLM, "Software\Microsoft\Windows\CurrentVersion\Run","HControl",,"%10%\ATK0100\HControl.exe"
+HKLM,%UninstallReg%,"DisplayName",,"ATK0100 ACPI UTILITY"
+HKLM,%UninstallReg%,"UninstallString",,"%10%\ATK0100\XPunin.exe"
+
+[SourceDisksNames]
+1 = %DiskID1%,,,,
+
+[SourceDisksFiles]
+ATKACPI.SYS = 1
+HControl.exe = 1
+ATKOSD.exe = 1
+XPunin.exe = 1
+inter_f2.dll = 1
+radfn.dll = 1
+ATKWLIOC.DLL = 1
+ASNDIS5.sys = 1
+ASUSNet.dll = 1
+ASW32N50.dll = 1
+CMSSC.dll = 1
+SiSPkt.dll = 1
+
+[Strings]
+ATK="ATK"
+DeviceDesc1="ATK0100 ACPI UTILITY"
+ATKACPI.DisplayName = "ATK0100 ACPI UTILITY"
+DiskId1 = "ATK0100 ACPI UTILITY"
+UninstallReg = "Software\Microsoft\Windows\CurrentVersion\Uninstall\HControl"

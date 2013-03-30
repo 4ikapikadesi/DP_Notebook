@@ -1,0 +1,89 @@
+; Installation file for the IR Remote
+;
+; Copyright © 2006-2008 Apple Inc. All Rights Reserved.
+ 
+[Version]
+signature="$CHICAGO$"
+Class=HIDClass
+ClassGUID={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%Apple%
+DriverPackageDisplayName="Apple IR Receiver"
+DriverPackageType=PlugAndPlay
+CatalogFile=IRFilter64.cat
+DriverVer=02/21/2008,2.0.4.0
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[SourceDisksNames]
+1 = %DiskId1%,,,
+
+[SourceDisksFiles]
+wdfcoinstaller01005.dll=1 ; make sure the number matches with SourceDisksNames
+IRFilter.sys=1
+
+[DestinationDirs]
+IRRemote.NT.CopyList = 10,system32\drivers
+IRRemote_CoInstaller_CopyFiles = 11
+
+[Manufacturer]
+%Apple%=Apple,NTamd64
+
+[Apple.NTamd64]
+%IRRemote.DeviceDesc%=IRRemote,USB\VID_05AC&PID_8240
+%IRRemote.DeviceDesc%=IRRemote,USB\VID_05AC&PID_8242
+
+[IRRemote.NT]
+Include=Input.inf
+Needs=HID_Inst.NT
+CopyFiles=IRRemote.NT.CopyList
+AddReg=IRRemote.NT.AddReg
+
+[IRRemote.NT.AddReg]
+HKR,,FriendlyName,,%IRRemote.DeviceDesc%
+
+[IRRemote.NT.HW]
+AddReg=IRRemote.NT.HW.AddReg
+
+[IRRemote.NT.HW.AddReg]
+HKR,,"LowerFilters",0x00010000,"IRRemoteFlt"
+
+[IRRemote.NT.Services]
+Include=Input.inf
+Needs=HID_Inst.NT.Services
+AddService = IRRemoteFlt,, IRRemote_Service_Inst
+
+[IRRemote_Service_Inst]
+DisplayName    = %IRRemote.SvcDesc%                            
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\IRFilter.sys                            
+
+[IRRemote.NT.CoInstallers]
+AddReg=IRRemote_CoInstaller_AddReg
+CopyFiles=IRRemote_CoInstaller_CopyFiles
+
+[IRRemote_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01005.dll,WdfCoInstaller"
+
+[IRRemote_CoInstaller_CopyFiles]
+WdfCoInstaller01005.dll
+
+[IRRemote.NT.Wdf]
+KmdfService = IRRemote, IRRemote_wdfsect
+
+[IRRemote_wdfsect]
+KmdfLibraryVersion = 1.5
+
+[IRRemote.NT.CopyList]
+IRFilter.sys
+
+;=======================================================
+
+[Strings]
+
+Apple="Apple Inc."
+IRRemote.DeviceDesc="Apple IR Receiver"
+DiskId1 = "IR Receiver Installation Disk #1"
+IRRemote.SvcDesc = "IR Receiver Filter Driver"

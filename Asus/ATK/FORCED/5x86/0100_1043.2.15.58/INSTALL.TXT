@@ -1,0 +1,20 @@
+How to install ATK0100 ACPI Control Driver in Windows XP
+=========================================================
+
+Install:
+========
+1. During WinXP OS found a "Unknown" device.
+2. Click on "Search for a suitable driver for my device(recommended) and click "Next" button
+3. Only choice "Specify a location" and click on "Next" button.
+4. Click on "Browse..." to your driver location. (example: CDROM driver:\ATK0100\WinXP)
+5. Click on "Open" button and "OK" button to start driver installation.
+6. If OS request you to "Insert Disk", please "Browse..." to your driver location.
+7. Click on "Finish" button.
+8. You need to Restart System for driver work fine.
+
+Uninstall:
+==========
+1. Double click [My Computer], double click [Control Panel],
+   double click [Add/Remove Programs].
+2. Click on "ATK0100 ACPI UTILITY" item and click on "Change/Remove" button.
+3. Click on "OK" button to restart system.

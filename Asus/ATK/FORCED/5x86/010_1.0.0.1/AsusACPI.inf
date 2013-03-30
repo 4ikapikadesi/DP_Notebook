@@ -1,0 +1,57 @@
+[version]
+Signature="$Windows NT$"
+Class=System
+ClassGUID={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ASUS%
+DriverVer=04/08/2008,1.0.0.1
+LayoutFile=layout.inf
+catalogfile=asusacpi.cat
+
+[DestinationDirs]
+DefaultDestDir = 12		; load driver to system32\drivers
+ACPISVR.CopyFiles = 10,ASUSACPI		
+
+[ControlFlags]
+ExcludeFromselect = *
+
+[ClassInstall32] 
+AddReg = System_Class_Addreg
+
+[System_Class_Addreg]
+HKR,,,0,"System Class Drivers"
+
+[Manufacturer]
+%ASUS%=AsusTeK
+
+[AsusTeK]
+%DeviceDesc% = DriverInstall,ACPI\ASUS010
+
+[DriverInstall]
+CopyFiles = ASUSACPI.CopyFiles
+
+[ASUSACPI.CopyFiles]
+AsusACPI.inf
+ASUSACPI.SYS
+
+[DriverInstall.Services]
+AddService=AsusACPI,2,AsusACPIService
+
+[AsusACPIService]
+DisplayName = %ASUSACPI.DisplayName%
+ServiceType=1           ; SERVICE_KERNEL_DRIVER
+StartType=3             ; SERVICE_DEMAND_START
+ErrorControl=1          ; SERVICE_ERROR_NORMAL
+ServiceBinary=%12%\ASUSACPI.sys
+
+[SourceDisksNames]
+1 = %DiskID1%,,,,
+
+[SourceDisksFiles]
+ASUSACPI.SYS = 1
+AsusACPI.inf = 1
+
+[Strings]
+ASUS = "ASUSTeK Computer Inc."
+DeviceDesc = "ASUS ACPI Driver"
+ASUSACPI.DisplayName = "ASUS ACPI Driver" 
+DiskId1 = "ASUS ACPI Driver" 

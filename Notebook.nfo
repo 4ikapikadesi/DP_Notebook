@@ -1,0 +1,95 @@
+13.03.4
+-------
+* Обновлены драйверы HP Hotkey Buttons 7.0.3.1
+
+
+13.03.3
+-------
++ Добавлены драйверы HP Modular USB Smartcard Keyboard 4.32.00.01
++ Добавлены драйверы Dell USB Keyboard Smart Card Reader 2.0.0.13
+* Обновлены драйверы Lenovo Integrated Smart Card Reader 4.1.1.6
+* Перенос драйверов EgisTec-Corp Finger Printer Sensor в DP_Biometrics
+
+
+13.03.2
+-------
++ Добавлены драйверы HP Wireless Button 1.0.5.1
++ Добавлены драйверы Lenovo Integrated Smart Card Reader 4.0.0.8
+* Обновлены драйверы Dell Smartcard Keyboard 4.0.8.5
+* Обновлены драйверы Dell PBA Device Driver 1.0.1.6
+* Дополнен драйвер HP HP Remote Control 1.0.0.0
+
+
+13.03.1
+-------
++ Добавлены драйверы HP Device Access Manager 6.0.0.11
+* Дополнен драйвер HP ACCELEROMETER 1.20.5.1
+
+
+13.02.4
+-------
++ Добавлены драйверы Fujitsu
++ Добавлены драйверы Lenovo MouseSuite 6.63
++ Добавлены драйверы Dell Smart Card Reader Keyboard 3.1.0.0 и Dell PBA 1.0.1.5
+
+
+13.02.3
+-------
++ Добавлены драйверы Lenovo Auto Scroll Utility 1.34
+* Обновлены драйверы Lenovo Power Management 1.66.00.22
+
+
+13.02.2
+-------
+* Перенос драйверов FingerPrint Sensors в DP_Biometrics
+
+
+13.01.5
+-------
++ Добавлены драйверы Lenovo Settings Power 17.2.5.163
+
+
+13.01.4
+-------
+* Обновлены драйверы TOSHIBA HDD Protection 2.0.0.4
+
+
+13.01.3
+-------
++ Добавлены драйверы Apple
++ Добавлены драйверы HP ACCELEROMETER 1.20.5.1 XP
+
+
+13.01.2
+-------
++ Добавлен драйвер ASUS ACPI ASUS010 v1.0.0.1
+
+
+13.01.1
+-------
++ Добавлены драйверы AuthenTec TruePrint WBF 3.4.0.32
+* Обновлены драйверы Biometric Framework 1.6.1.0341
+* Обновлены драйверы Lenovo Power Management 1.66.00.21
+
+
+13.00.2
+-------
+* Введен системный маркер для отображения драйверов в окне установки оболочек
+
+
+13.00.1
+-------
++ Добавлены драйверы ASUS Wireless Radio Control 1.0.0.1
+* Обновлены драйверы Finger Printer Sensor Reader 1.9.2.0167
+
+
+13.00.0
+-------
+* Каталогизация драйверов по вендорам и удаление дубликатов
+* Обновлен драйвер HP ACCELEROMETER 4.2.9.1
++ Добавлены драйверы HP Validity Sensors + SimplePass Identity Protection
+
+
+12.12.3
+-------
++ Добавлены драйверы Lenovo Power Management 1.65.05.21

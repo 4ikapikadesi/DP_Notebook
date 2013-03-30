@@ -1,0 +1,118 @@
+;;;
+;;; DAMDrv
+;;;
+;;;
+;;; Copyright (c) 2000, Microsoft Corporation
+;;;
+
+[Version]
+signature   = "$Windows NT$"
+Class       = "DAMDrv"                         ;This is determined by the work this filter driver does
+ClassGuid   = {4D36E97D-E325-11CE-BFC1-08002BE10318}    ;This value is determined by the Class
+Provider    = %HP%
+CatalogFile.ntx86=DAMDrv.cat
+CatalogFile.NTamd64=DAMDrv64.cat
+DriverVer   = 03/17/2011,6.0.0.11
+
+[SourceDisksNames]
+1=Device Access Manager For HP Protect Tools
+
+[SourceDisksFiles.x86]
+DAmDrv.sys=1
+
+[SourceDisksFiles.amd64]
+DAmDrv64.sys=1
+
+
+[DestinationDirs]
+DefaultDestDir          = 12
+DAMDrv.DriverFiles      = 12           ;%windir%\system32\drivers
+
+;;
+;; Default install sections
+;;
+
+[DefaultInstall.NTx86]
+OptionDesc          = %ServiceDesc%
+CopyFiles           = DAMDrv.DriverFiles.NTx86
+
+[DefaultInstall.NTamd64]
+OptionDesc          = %ServiceDesc%
+CopyFiles           = DAMDrv.DriverFiles.NTamd64
+
+[DefaultInstall.NTx86.Services]
+AddService          = %ServiceName%,,DAMDrv.Service.NTx86
+
+[DefaultInstall.NTamd64.Services]
+AddService          = %ServiceName%,,DAMDrv.Service.NTamd64
+
+;;
+;; Default uninstall sections
+;;
+
+[DefaultUninstall.NTx86]
+DelFiles   = DAMDrv.DriverFiles.NTx86
+DelReg     = DAMDrv.DelRegistry
+
+[DefaultUninstall.NTamd64]
+DelFiles   = DAMDrv.DriverFiles.NTamd64
+DelReg     = DAMDrv.DelRegistry
+
+[DefaultUninstall.NTx86.Services]
+DelService = %ServiceName%      ;Ensure service is stopped before deleting
+
+[DefaultUninstall.NTamd64.Services]
+DelService = %ServiceName%      ;Ensure service is stopped before deleting
+
+;
+; Services Section
+;
+;
+; NOTE -- If the kit is to be delivered into an environment where
+;         the DAM driver should not start automatically by default
+;         then the 2 StartType settings below should be set to
+;         SERVICE_DEMAND_START
+;
+;
+
+[DAMDrv.Service.NTx86]
+ServiceBinary    = %12%\DAMDrv.sys     ;%windir%\system32\drivers\
+DisplayName      = %ServiceName%
+Description      = %ServiceDesc%
+ServiceType      = 1                    ;SERVICE_KERNEL_DRIVER
+StartType        = 3                    ;SERVICE_MANUAL_START
+ErrorControl     = 1                    ;SERVICE_ERROR_NORMAL
+LoadOrderGroup   = "COM Infrastructure"
+
+[DAMDrv.Service.NTamd64]
+ServiceBinary    = %12%\DAMDrv64.sys     ;%windir%\system32\drivers\
+DisplayName      = %ServiceName%
+Description      = %ServiceDesc%
+ServiceType      = 1                    ;SERVICE_KERNEL_DRIVER
+StartType        = 3                    ;SERVICE_MANUAL_START
+ErrorControl     = 1                    ;SERVICE_ERROR_NORMAL
+LoadOrderGroup   = "COM Infrastructure"
+
+
+[DAMDrv.Service.NTCommon]
+
+
+;
+; Copy Files
+;
+
+[DAMDrv.DriverFiles.NTx86]
+DAMDrv.sys
+
+[DAMDrv.DriverFiles.NTamd64]
+DAMDrv64.sys
+
+;;
+;; String Section
+;;
+
+[Strings]
+HP = "Hewlett-Packard Development Company L.P."
+ServiceDesc         = "Device Access Manager DAMDrv"
+ServiceName         = "DAMDrv"
+

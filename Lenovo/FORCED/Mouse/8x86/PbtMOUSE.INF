@@ -1,0 +1,772 @@
+; Setup INF file for Mouse Suite
+; Copyright (C) 2006-2009, All rights reserved.
+
+[Version]
+Signature="$Windows NT$"
+Class=Mouse
+ClassGUID={4D36E96F-E325-11CE-BFC1-08002BE10318}
+Provider=%Provider%
+DriverVer=06/19/2012,%ProductVersion%
+CatalogFile=bt99.cat
+
+;[ClassInstall32.NT]
+;AddReg=mouse_class_addreg
+
+;[mouse_class_addreg]
+;HKR,,,,%MouseClassName%
+;HKR,,Icon,,"-2"
+;HKR,,Installer32,,"SysSetup.Dll,MouseClassInstaller"
+;HKR,,NoInstallClass,,"1"
+;HKR,,TroubleShooter-0,,"tshoot.chm,hdw_mouse.htm"
+
+[DestinationDirs]
+DefaultDestDir = 12 ; DIRID_DRIVERS
+PMouse.Copy				= 11
+PMouse.Copy.NT.SYS		= 12
+PMouse.Copy.NT.DLL		= 11
+PMouse.Copy.HLP			= 18
+coinst.CopyFiles		= 11
+PS2.Copy.NT				= 12
+
+[ControlFlags]
+;
+; Mark any install sections for drivers that also control the i8042 keyboard port,
+; so that we can warn the user that they may also be affecting their keyboard with
+; a mouse driver change.
+;
+ExcludeFromSelect.ntx86=*
+
+[SourceDisksNames]
+91=%PMouseDisk%,"ms98.cab"
+
+
+[SourceDisksFiles]
+PELMOUBT.SYS = 91
+PELBTM.SYS = 91
+
+
+
+
+;ICONSPY.EXE = 91
+;PELSETUP.DLL = 91
+
+
+;pelsetup.sys = 91			; For AutoSetup Function
+
+
+; Manufacturer Sections
+; ----------------------------------------
+[Manufacturer]
+%Mfg%=PMouse
+
+[PMouse]
+;------------- WidComm BT IDs ----------------------------
+%BT05.mouse.desc% = PS2Mouse.Inst,HID\{00001124-0000-1000-8000-00805f9b34fb}&VID_17EF&PID_6002&Col01
+%BT06.mouse.desc% = PS2Mouse.Inst,HID\{00001124-0000-1000-8000-00805f9b34fb}&VID_17EF&PID_6038&Col01
+;------------- Microsoft BT IDs --------------------------
+%BT05.mouse.desc% = PS2Mouse.Inst,HID\{00001124-0000-1000-8000-00805f9b34fb}_VID&000217EF_PID&6002&Col01
+%BT06.mouse.desc% = PS2Mouse.Inst,HID\{00001124-0000-1000-8000-00805f9b34fb}_VID&000217EF_PID&6038&Col01
+;------------- Toshiba BT IDs --------------------------
+%BT05.mouse.desc% = PS2Mouse.Inst,HID\VID_17EF&PID_6002&Col01
+%BT06.mouse.desc% = PS2Mouse.Inst,HID\VID_17EF&PID_6038&Col01
+;--------------------------------------------------
+;              PS2 Mouse Windows NT 
+;--------------------------------------------------
+[PS2Mouse.Inst.NT]
+Include     = msmouse.inf
+Needs       = HID_Mouse_Inst.NT
+AddReg = PMouse.AddReg, SelectDLL.AddReg, SP.AddReg, LENOVO_5B_TILT_WHEEL.AddReg, DefResourceDLL.AddReg, PMouse.AddUninstReg, PMouse.AddUninstReg.NT
+CopyFiles = PMouse.Copy, PS2.Copy.NT, PMouse.Copy.NT.SYS, PMouse.Copy.NT.DLL, PMouse.Copy.HLP
+
+;[PS2Mouse.Inst.NT.CoInstallers]
+;CopyFiles=coinst.CopyFiles
+;AddReg=coinst.AddReg
+
+[PS2Mouse.Inst.NT.Services]
+AddService = pelbtm,, pelbtm.Service.Inst.NT, pelbtm.EventLog.Inst.NT 	; Port Driver
+AddService = pelmoubt,, pelmoubt.Service.Inst.NT, pelmoubt.EventLog.Inst.NT 		; Parent Driver
+Include=msmouse.inf
+Needs       = HID_Mouse_Inst.NT.Services
+
+[PS2Mouse.Inst.NT.HW]
+AddReg = PS2Mouse.Inst.NT.HW.AddReg
+Include=msmouse.inf
+Needs       = HID_Mouse_Inst.NT.HW
+
+;--------------------------------
+;[coinst.CopyFiles]
+;Pelsetup.dll,,,2
+
+;[coinst.AddReg]
+;HKR,,CoInstallers32,0x00010000,"Pelsetup.dll"
+
+[PS2Mouse.Inst.NT.HW.AddReg]
+;HKR,,"EnableWheelDetection",0x00010003,2
+;HKR,,"MouseInitializePolled",0x00010003,1
+HKR,,"UpperFilters",0x00010000,"pelbtm"
+;HKR,,"UpperFilters",0x00010000,"pelmouse"
+
+
+
+;----------------------------------------
+; PELps2m Service Install - Windows NT
+;----------------------------------------
+[pelbtm.Service.Inst.NT]
+DisplayName    = %BT.SvcDesc.NT%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\pelbtm.sys
+LoadOrderGroup = Pointer Port
+
+[pelbtm.EventLog.Inst.NT]
+AddReg = pelbtm.EventLog.AddReg.NT
+
+[pelbtm.EventLog.AddReg.NT]
+HKR,,EventMessageFile,0x00020000,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\pelbtm.sys"
+HKR,,TypesSupported,0x00010001,7
+
+
+;----------------------------------------
+; PELMouse Service Install - Windows NT
+;----------------------------------------
+[pelmoubt.Service.Inst.NT]
+DisplayName    = %PMOUBT.SvcDesc.NT%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 1                  ; SERVICE_AUTO_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\pelmoubt.sys
+LoadOrderGroup = Pointer Class
+
+[pelmoubt.EventLog.Inst.NT]
+AddReg = pelmoubt.EventLog.AddReg.NT
+
+[pelmoubt.EventLog.AddReg.NT]
+HKR,,EventMessageFile,0x00020000,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\pelmoubt.sys"
+HKR,,TypesSupported,0x00010001,7
+
+
+
+
+
+;--------------------------------------
+; Common - AddReg section
+
+[PMouse.AddReg]
+;patch for IBM software
+HKLM,"Software\IBM\Messaging\TBS","CHECK5",,"INST"
+
+; Add Run Key...
+;HKLM,%SystemRunKey%,"Mouse Suite 98 Daemon",0,PELMICED.EXE
+HKLM,%SystemRunKey%,"Mouse Suite 98 Daemon",0,"ICO.EXE"
+;HKLM,%SystemRunOnceKey%,"Mouse Suite 98 Daemon",0,"rundll32 pelutil.dll,OnRunDaemon"
+;HKCU,%CoInstallerKey%,"Run",0,"ICONSPY.EXE"
+;HKCU,%CoInstallerKey%,"MouseType",0x00010001,1
+
+; Add CPLX Key...
+HKLM,%MouseCPLXKey%"\Mouse Suite 98 BDO",,0,%CPLXBDOCLSID%
+HKCR,"CLSID\"%CPLXBDOCLSID%,,0,"Mouse Suite 98 BDO"
+HKCR,"CLSID\"%CPLXBDOCLSID%"\InProcServer32",,0,PELBDO.DLL
+HKCR,"CLSID\"%CPLXBDOCLSID%"\InProcServer32",ThreadingModel,0,Apartment
+HKLM,%MouseCPLXKey%"\Mouse Suite 98 WHEEL",,0,%CPLXWHEELCLSID%
+HKCR,"CLSID\"%CPLXWHEELCLSID%,,0,"Mouse Suite 98 WHEEL"
+HKCR,"CLSID\"%CPLXWHEELCLSID%"\InProcServer32",,0,PELWHEEL.DLL
+HKCR,"CLSID\"%CPLXWHEELCLSID%"\InProcServer32",ThreadingModel,0,Apartment
+HKLM,%MouseCPLXKey%"\Mouse Suite 98 PPM",,0,%CPLXPPMCLSID%
+HKCR,"CLSID\"%CPLXPPMCLSID%,,0,"Mouse Suite 98 PPM"
+HKCR,"CLSID\"%CPLXPPMCLSID%"\InProcServer32",,0,PELPPM.DLL
+HKCR,"CLSID\"%CPLXPPMCLSID%"\InProcServer32",ThreadingModel,0,Apartment
+HKLM,%MouseCPLXKey%"\Mouse Suite 98 CPL_EXT",,0,%CPLEXTPAGECLSID%
+HKCR,"CLSID\"%CPLEXTPAGECLSID%,,0,"Mouse Suite 98 CPL_EXT"
+HKCR,"CLSID\"%CPLEXTPAGECLSID%"\InProcServer32",,0,PELCPEXT.DLL
+HKCR,"CLSID\"%CPLEXTPAGECLSID%"\InProcServer32",ThreadingModel,0,Apartment
+
+HKLM,%ProductKey%,"ProductName",0,%ProductName%
+;;HKLM,%ProductKey%,"Version",0,%ProductVersion%
+;;HKCU,%ProductKey%,"Version",0,%ProductVersion%
+HKLM,%ProductKey%,"IsBTMouse", 0x00010001,              	0x01
+HKCU,%ProductKey%,"EnableTooltips",0x00010001,1
+;HKCU,%ProductKey%"\Wheel","Use Shift for Horizontal Scroll",0x00010001,0
+HKCU,%ProductKey%"\Mouse\2DMouse","DefaultProductName",0,%2D.Product%
+HKLM,%ProductKey%"\Mouse\2DMouse","DefaultProductName",0,%2D.Product%
+;HKCU,%ProductKey%"\Mouse\2DMouse","ID",0x00010001,0x00
+HKCU,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%3D.Product%
+HKLM,%ProductKey%"\Mouse\3DMouse","DefaultProductName",0,%3D.Product%
+;HKCU,%ProductKey%"\Mouse\3DMouse","ID",0x00010001,0x03
+HKCU,%ProductKey%"\Mouse\Ergo","DefaultProductName",0,%Ergo.Product%
+HKLM,%ProductKey%"\Mouse\Ergo","DefaultProductName",0,%Ergo.Product%
+;HKCU,%ProductKey%"\Mouse\Ergo","ID",0x00010001,0xE3
+
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Dll Path",0,"pelutil"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Function Entry",0,"OnShortcut"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Setting Entry",0,"DlgShortcutSetting"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Desc Entry",0,"ShortcutGetDescript"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Local Name Entry",0,"ShortcutGetLocalName"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Desc Name",0,"HyperLink"
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Call On",0x00010001,0
+HKLM,%ProductKey%"\ButtonFunctions\HyperLink","Flag",0x00010001,0
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Dll Path",0,"pelzoom"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Function Entry",0,"OnZooming"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Setting Entry",0,"DlgZoomingSetting"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Desc Entry",0,"ZoomingGetDescript"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Local Name Entry",0,"ZoomingGetLocalName"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Desc Name", 0, "Magnifier"
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Call On",0x00010001,2
+HKLM,%ProductKey%"\ButtonFunctions\Zooming","Flag",0x00010001,0
+
+; Universal Scrolling Exception...
+HKCU,%ProductKey%"\Wheel\IntelliApp\Internet ListBox","Class",0,"Internet Explorer_TridentLstBox"
+HKCU,%ProductKey%"\Wheel\IntelliApp\Microsoft Internet Explorer","Class",0,"IEFrame"
+HKCU,%ProductKey%"\Wheel\IntelliApp\Microsoft Internet Explorer","Path",0,"iexplore.exe"
+HKCU,%ProductKey%"\Wheel\IntelliApp\Add/Remove Class","Class",0,"DirectUIHWND"
+HKLM,%ProductKey%"\Wheel\IntelliApp\Internet ListBox","Class",0,"Internet Explorer_TridentLstBox"
+HKLM,%ProductKey%"\Wheel\IntelliApp\Microsoft Internet Explorer","Class",0,"IEFrame"
+HKLM,%ProductKey%"\Wheel\IntelliApp\Microsoft Internet Explorer","Path",0,"iexplore.exe"
+HKLM,%ProductKey%"\Wheel\IntelliApp\Add/Remove Class","Class",0,"DirectUIHWND"
+
+; OEM logo selection
+HKLM,%ProductKey%,"UseDefaultMousePicture",0,%OEMLogoNumber%
+HKCU,%ProductKey%,"UseDefaultMousePicture",0,%OEMLogoNumber%
+; Default mouse ID to show in Button page if no devices was found...
+HKLM,%ProductKey%,"DefaultMouseID",0,%DefaultMouseID%
+; PS/2 2D Mouse Button Number
+HKLM,%ProductKey%"\Mouse\2DMouse","ButtonNumber",0,%2DMouseButtonNumber%
+; Support Information
+;;HKLM,%ProductKey%,"Web",0,%WebLink%
+;;HKCU,%ProductKey%,"Web",0,%WebLink%
+;;HKLM,%ProductKey%,"Mail",0,%EmailLink%
+;;HKCU,%ProductKey%,"Mail",0,%EmailLink%
+
+; For Remote Desktop Connect
+; Server
+HKLM,%RemoteDesktopServerKey%,"Name",0,"FSRremoS.EXE"
+HKLM,%RemoteDesktopServerKey%,"Type",0x00010001,3
+; Client
+HKCU,%RemoteDesktopClientKey%,"Name",0,"FSRremoC.DLL"
+
+[SP.AddReg]
+; 4D SPMouse only...
+HKLM,%ProductKey%,"MinDblClkSpeed",0x00010001,0xC8
+HKCU,%ProductKey%"\Wheel","Max Lines",0x00010001,0x15
+HKCU,%ProductKey%"\Wheel","PageRequire",0x00010001,0x0A
+HKCU,%ProductKey%"\Wheel","PagePerMickey",0x00010001,0x07
+;HKCU,%ProductKey%"\Mouse\4DMouse","ProductName",0,%SP4D.Product%
+HKCU,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SP4D.Product%
+HKLM,%ProductKey%"\Mouse\4DMouse","DefaultProductName",0,%SP4D.Product%
+HKCU,%ProductKey%"\Mouse\4DMouse","ID",0x00010001,0xA1
+HKCU,"Control Panel\desktop","WheelScrollLines",0,"1"
+HKCU,%ProductKey%,"UseComboBox",0,"1"
+HKCU,%ProductKey%,"InfoAddSearchSPString",0,"1"
+
+;TP4 only
+HKLM,%ProductKey%,"ChkTP4",0x00010001,0x01
+HKLM,"Software\IBM\TrackPoint","ScrollPointDriverName",0,"\\.\PELPS2M"
+
+[Wheel.AddReg]
+HKLM,%ProductKey%,"MinDblClkSpeed",0x00010001,0xC8
+HKCU,"Control Panel\desktop","WheelScrollLines",0,"3"
+HKCU,%ProductKey%,"UseComboBox",0,"1"
+HKCU,%ProductKey%,"InfoAddSearchSPString",0,"1"
+
+
+[DefResourceDLL.AddReg]
+; Select Resource Dll for OEM
+HKLM,%ProductKey%,"2DExternalResourceDll",0,%2DExtResDll%
+HKCU,%ProductKey%,"2DExternalResourceDll",0,%2DExtResDll%
+;HKLM,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+;HKCU,%ProductKey%,"3DExternalResourceDll",0,%3DExtResDll%
+HKLM,%ProductKey%\ResourceDLL,"2DExternalResourceDll",0,%2DExtResDll%
+HKCU,%ProductKey%\ResourceDLL,"2DExternalResourceDll",0,%2DExtResDll%
+;HKLM,%ProductKey%\ResourceDLL,"3DExternalResourceDll",0,%3DExtResDll%
+;HKCU,%ProductKey%\ResourceDLL,"3DExternalResourceDll",0,%3DExtResDll%
+
+[SelectDLL.AddReg]
+; Select Resource Dll for OEM
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"1"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"1"
+HKCU,%ProductKey%"\ResourceDLL","SelectResourceDll",0,%SelExtResDll%
+HKLM,%ProductKey%"\ResourceDLL","SelectResourceDll",0,%SelExtResDll%
+HKCU,%ProductKey%"\ResourceDLL","ResourceNameToSelect",0,"4DMouse"
+HKLM,%ProductKey%"\ResourceDLL","ResourceNameToSelect",0,"4DMouse"
+HKCU,%ProductKey%"\ResourceDLL","SelectResourceDllFunc",0,%SelResFuncEntry%
+HKLM,%ProductKey%"\ResourceDLL","SelectResourceDllFunc",0,%SelResFuncEntry%
+
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_1%,"4D Desc Name",0,%SelResDll_1_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_1%,"4D Desc Name",0,%SelResDll_1_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_2%,"4D Desc Name",0,%SelResDll_2_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_2%,"4D Desc Name",0,%SelResDll_2_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_3%,"4D Desc Name",0,%SelResDll_3_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_3%,"4D Desc Name",0,%SelResDll_3_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_6%,"4D Desc Name",0,%SelResDll_6_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_6%,"4D Desc Name",0,%SelResDll_6_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_7%,"4D Desc Name",0,%SelResDll_7_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_7%,"4D Desc Name",0,%SelResDll_7_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_1%,"4D Local",65537,1,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_2%,"4D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_3%,"4D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_6%,"4D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_7%,"4D Local",65537,0,0,0,0
+
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_4%,"3D Desc Name",0,%SelResDll_4_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_4%,"3D Desc Name",0,%SelResDll_4_ProductName_3D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_5%,"3D Desc Name",0,%SelResDll_5_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_5%,"3D Desc Name",0,%SelResDll_5_ProductName_3D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_8%,"3D Desc Name",0,%SelResDll_8_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_8%,"3D Desc Name",0,%SelResDll_8_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_4%,"3D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_5%,"3D Local",65537,1,0,0,0
+HKLM,%ProductKey%"\ResourceDLL","DefaultLocal",65537,0,0,0,0
+
+
+; Use external resource dll for OEM
+;HKLM,%ProductKey%,"ExternalResourceDll",0,%ExtResDll%
+;HKCU,%ProductKey%,"ExternalResourceDll",0,%ExtResDll%
+
+
+
+
+
+
+[PMouse.AddUninstReg.NT]
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%NTServiceRootKey%"\pelps2m",0,0
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%NTServiceRootKey%"\pelmouse",0,0
+HKLM,%UninstallKey%"\DeleteKey",%NTServiceRootKey%"\pelbtm",0,""
+HKLM,%UninstallKey%"\DeleteKey",%NTServiceRootKey%"\pelmoubt",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelmoubt.sys",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelmoubt.sys,0,"%SYS32_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\pelps2m.sys",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelbtm.sys,0,"%SYS32_DIR%"
+;HKLM,%UNINSTALL_SHARED_FILE%"\pelserm.sys",%UninstallKeyName%,0,0
+;HKLM,%UninstallKey%"\DeleteFiles",pelserm.sys,0,"%SYS32_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\Pmuninnt.exe",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",Pmuninnt.exe,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\Pelsetup.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",Pelsetup.dll,0,""
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%BT05.mouse.desc%,0,"HID-compliant mouse"
+HKLM,%UninstallKey%"\RestoreDriver\"%Provider%,%BT06.mouse.desc%,0,"HID-compliant mouse"
+;HKLM,%UninstallKey%"\KillDriver\"%Provider%,%SerialMouse.Desc%,0,""
+
+
+[PMouse.AddUninstReg]
+;;HKLM,%UninstallKey%,DisplayName,0,%ProductName%
+;;HKLM,%UninstallKey%,UninstallString,0,"PMUninst.exe MouseSuite98"
+HKLM,%UninstallKey%,SetupTitle,0,%ProductName%" Uninstall"
+HKLM,%UninstallKey%,FontName,0,"Times New Roman Italic"
+HKLM,%UninstallKey%,FontColor,0,"White"
+HKLM,%UninstallKey%,NeedRestart,0,"TRUE"
+
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%ProductKey%,0,0
+HKLM,%UninstallKey%"\DeleteKey",%ProductKey%,0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CURRENT_USER",%ProductKey%"\",0,0
+HKLM,%UninstallKey%"\DeleteKey",%ProductKey%"\",0,HKEY_CURRENT_USER
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%RemoteDesktopServerKey%,0,0
+HKLM,%UninstallKey%"\DeleteKey",%RemoteDesktopServerKey%,0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CURRENT_USER",%RemoteDesktopClientKey%"\",0,0
+HKLM,%UninstallKey%"\DeleteKey",%RemoteDesktopClientKey%"\",0,HKEY_CURRENT_USER
+
+;HKLM,%UninstallKey%"\DeleteKey",%CoInstallerKey%"\",0,HKEY_CURRENT_USER
+
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%SystemRunKey%,0,"Mouse Suite 98 Daemon"
+HKLM,%UninstallKey%"\DeleteValue",%SystemRunKey%,0,"Mouse Suite 98 Daemon"
+
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 PPM",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 PPM",0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 BDO",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 BDO",0,""
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 WHEEL",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 WHEEL",0,""
+
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_LOCAL_MACHINE",%MouseCPLXKey%"\Mouse Suite 98 CPL_EXT",0,0
+HKLM,%UninstallKey%"\DeleteKey",%MouseCPLXKey%"\Mouse Suite 98 CPL_EXT",0,""
+
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLXPPMCLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLXPPMCLSID%,0,HKEY_CLASSES_ROOT
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLXBDOCLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLXBDOCLSID%,0,HKEY_CLASSES_ROOT
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLXWHEELCLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLXWHEELCLSID%,0,HKEY_CLASSES_ROOT
+HKLM,%UNINSTALL_SHARED_REG%"\"%UninstallKeyName%"\HKEY_CLASSES_ROOT","CLSID\"%CPLEXTPAGECLSID%,0,0
+HKLM,%UninstallKey%"\DeleteKey","CLSID\"%CPLEXTPAGECLSID%,0,HKEY_CLASSES_ROOT
+
+HKLM,%UNINSTALL_SHARED_FILE%"\pelmiced.exe",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelmiced.exe,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelcomm.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelcomm.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelutil.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelutil.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelhooks.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelhooks.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelscrll.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelscrll.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelbdo.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelbdo.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelppm.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelppm.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelwheel.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelwheel.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\pelzoom.dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",pelzoom.dll,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\Pmuninst.exe",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",Pmuninst.exe,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\ICONSPY.exe",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",ICONSPY.exe,0,""
+HKLM,%UninstallKey%"\DeleteFiles",ICO.exe,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\PMMILG.DLL",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",PMMILG.DLL,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\PMLenovo.DLL",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",PMLenovo.DLL,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\PMBDO.DLL",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",PMBDO.DLL,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\FSRremoS.EXE",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",FSRremoS.EXE,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\FSRremoC.DLL",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",FSRremoC.DLL,0,""
+
+HKLM,%UNINSTALL_SHARED_FILE%"\PELCPEXT.DLL",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",PELCPEXT.DLL,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\PELCPEXT.INI",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",PELCPEXT.INI,0,""
+HKLM,%UninstallKey%"\DeleteFiles",ms98.cab,0,"%SYS32_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",bt99.cat,0,"%SYS32_DIR%"
+
+
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98ACHS.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98ACHS.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98ACHT.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98ACHT.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98ADAN.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98ADAN.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98ADUT.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98ADUT.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98AENG.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98AENG.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98AFIN.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98AFIN.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98AFRE.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98AFRE.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98AGER.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98AGER.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98AITA.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98AITA.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98AJPA.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98AJPA.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98ANOR.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98ANOR.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98APOR.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98APOR.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98ASPA.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98ASPA.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\MS98ASWE.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",MS98ASWE.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUSE.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSE.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUSE.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSE.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSE.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUCHT.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUCHT.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUCHT.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUCHT.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUCHT.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUCHS.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUCHS.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUCHS.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUCHS.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUCHS.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUDAN.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUDAN.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUDAN.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUDAN.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUDAN.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUDUT.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUDUT.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUDUT.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUDUT.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUDUT.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUFIN.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUFIN.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUFIN.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUFIN.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUFIN.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUFRE.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUFRE.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUFRE.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUFRE.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUFRE.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUGER.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUGER.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUGER.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUGER.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUGER.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUITA.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUITA.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUITA.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUITA.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUITA.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUJPA.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUJPA.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUJPA.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUJPA.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUJPA.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUNOR.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUNOR.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUNOR.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUNOR.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUNOR.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUPOR.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUPOR.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUPOR.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUPOR.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUPOR.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUSPA.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSPA.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUSPA.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSPA.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSPA.GID,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUSWE.HLP",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSWE.HLP,0,"%HELP_DIR%"
+HKLM,%UNINSTALL_SHARED_FILE%"\SPMOUSWE.CNT",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSWE.CNT,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteFiles",SPMOUSWE.GID,0,"%HELP_DIR%"
+
+HKLM,%UNINSTALL_SHARED_FILE%"\"%2DExtResDll%,%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%2DExtResDll%,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%3DExtResDll%,%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%3DExtResDll%,0,""
+
+HKLM,%UNINSTALL_SHARED_FILE%"\"%5BTiltExtResDll%,%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%5BTiltExtResDll%,0,""
+
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelExtResDll%,%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelExtResDll%,0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_1%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_1%".dll",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_2%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_2%".dll",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_3%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_3%".dll",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_4%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_4%".dll",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_5%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_5%".dll",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_6%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_6%".dll",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_7%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_7%".dll",0,""
+HKLM,%UNINSTALL_SHARED_FILE%"\"%SelResDll_8%".dll",%UninstallKeyName%,0,0
+HKLM,%UninstallKey%"\DeleteFiles",%SelResDll_8%".dll",0,""
+
+;HKLM,%UNINSTALL_SHARED_FILE%"\"%ExtResDll%,%UninstallKeyName%,0,0
+;HKLM,%UninstallKey%"\DeleteFiles",%ExtResDll%,0,""
+
+
+; For support IBM TrackPoint4 only
+;HKLM,%UNINSTALL_SHARED_FILE%"\DAEMON.EXE",%UninstallKeyName%,0,0
+;HKLM,%UninstallKey%"\DeleteFiles",DAEMON.EXE,0,""
+;HKLM,%UNINSTALL_SHARED_FILE%"\TP4RES.DLL",%UninstallKeyName%,0,0
+;HKLM,%UninstallKey%"\DeleteFiles",TP4RES.DLL,0,""
+;HKLM,%UNINSTALL_SHARED_FILE%"\tp4scrol.dat",%UninstallKeyName%,0,0
+;HKLM,%UninstallKey%"\DeleteFiles",tp4scrol.dat,0,""
+;HKLM,%UNINSTALL_SHARED_FILE%"\TP4.CPL",%UninstallKeyName%,0,0
+;HKLM,%UninstallKey%"\DeleteFiles",TP4.CPL,0,""
+;HKLM,%UninstallKey%"\DeleteFiles",TP4.HLP,0,"%HELP_DIR%"
+;HKLM,%UNINSTALL_SHARED_FILE%"\TP4.CNT",%UninstallKeyName%,0,0
+;HKLM,%UninstallKey%"\DeleteFiles",TP4.CNT,0,"%HELP_DIR%"
+;HKLM,%UninstallKey%"\DeleteFiles",TP4.GID,0,"%HELP_DIR%"
+HKLM,%UninstallKey%"\DeleteValue","Software\IBM\TrackPoint",0,"ScrollPointDriverName"
+
+
+HKLM,%UninstallKey%"\KillWindow\0001",Class,0,"MS98 Daemon"
+HKLM,%UninstallKey%"\KillWindow\0001",Caption,0,"MS98 Daemon"
+HKLM,%UninstallKey%"\KillWindow\0002",Class,0,"Daemon Spy"
+HKLM,%UninstallKey%"\KillWindow\0002",Caption,0,"Daemon Spy"
+HKLM,%UninstallKey%"\KillWindow\0003",Class,0,""
+HKLM,%UninstallKey%"\KillWindow\0003",Caption,0,"FSRREMOS"
+
+
+
+
+[SPSelectDLL.AddReg]
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"1"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"1"
+HKCU,%ProductKey%"\ResourceDLL","SelectResourceDll",0,%SelExtResDll%
+HKLM,%ProductKey%"\ResourceDLL","SelectResourceDll",0,%SelExtResDll%
+HKCU,%ProductKey%"\ResourceDLL","ResourceNameToSelect",0,"4DMouse"
+HKLM,%ProductKey%"\ResourceDLL","ResourceNameToSelect",0,"4DMouse"
+HKCU,%ProductKey%"\ResourceDLL","SelectResourceDllFunc",0,%SelResFuncEntry%
+HKLM,%ProductKey%"\ResourceDLL","SelectResourceDllFunc",0,%SelResFuncEntry%
+
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_1%,"4D Desc Name",0,%SelResDll_1_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_1%,"4D Desc Name",0,%SelResDll_1_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_2%,"4D Desc Name",0,%SelResDll_2_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_2%,"4D Desc Name",0,%SelResDll_2_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_3%,"4D Desc Name",0,%SelResDll_3_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_3%,"4D Desc Name",0,%SelResDll_3_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_6%,"4D Desc Name",0,%SelResDll_6_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_6%,"4D Desc Name",0,%SelResDll_6_ProductName_4D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_7%,"4D Desc Name",0,%SelResDll_7_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_7%,"4D Desc Name",0,%SelResDll_7_ProductName_4D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_1%,"4D Local",65537,1,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_2%,"4D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_3%,"4D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_6%,"4D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_7%,"4D Local",65537,0,0,0,0
+
+[TMSelectDLL.AddReg]
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"1"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"1"
+HKCU,%ProductKey%"\ResourceDLL","SelectResourceDll",0,%SelExtResDll%
+HKLM,%ProductKey%"\ResourceDLL","SelectResourceDll",0,%SelExtResDll%
+HKCU,%ProductKey%"\ResourceDLL","ResourceNameToSelect",0,"3DMouse"
+HKLM,%ProductKey%"\ResourceDLL","ResourceNameToSelect",0,"3DMouse"
+HKCU,%ProductKey%"\ResourceDLL","SelectResourceDllFunc",0,%SelResFuncEntry%
+HKLM,%ProductKey%"\ResourceDLL","SelectResourceDllFunc",0,%SelResFuncEntry%
+
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_4%,"3D Desc Name",0,%SelResDll_4_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_4%,"3D Desc Name",0,%SelResDll_4_ProductName_3D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_5%,"3D Desc Name",0,%SelResDll_5_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_5%,"3D Desc Name",0,%SelResDll_5_ProductName_3D%
+HKCU,%ProductKey%"\ResourceDLL\"%SelResDll_8%,"3D Desc Name",0,%SelResDll_8_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_8%,"3D Desc Name",0,%SelResDll_8_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_9%,"3D5B Desc Name",0,%SelResDll_10_ProductName_3D%
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_4%,"3D Local",65537,0,0,0,0
+HKLM,%ProductKey%"\ResourceDLL\"%SelResDll_5%,"3D Local",65537,1,0,0,0
+
+
+[LENOVO_5B_TILT_WHEEL.AddReg]
+HKLM,%ProductKey%,"3D5BExternalResourceDll",0,%5BTiltExtResDll%
+HKCU,%ProductKey%,"3D5BExternalResourceDll",0,%5BTiltExtResDll%
+HKCU,%ProductKey%"\Mouse\3D5BMouse","DefaultProductName",0,%SelResDll_10_ProductName_3D%
+HKLM,%ProductKey%"\Mouse\3D5BMouse","DefaultProductName",0,%SelResDll_10_ProductName_3D%
+HKCU,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKLM,%ProductKey%"\ResourceDLL","EnableSelect",0,"0"
+HKCU,%ProductKey%,"DPI-Mode",0x00010001,0x02
+HKLM,%ProductKey%,"DPI-Mode",0x00010001,0x02
+HKCU,%ProductKey%"\Wheel","TiltWheelMouse",%REG_DWORD%,0x01
+;HKCU,%ProductKey%"\Wheel","TiltWheelSpeed",%REG_DWORD%,0x04
+
+HKCU,%ProductKey%,"ShowUseDefaultPage",%REG_DWORD%,0
+
+; ----------------------------------------
+; Copy Files Section
+
+[PMouse.Copy]
+
+;ICONSPY.EXE
+
+
+[PMouse.Copy.NT.DLL]
+
+[PMouse.Copy.NT.SYS]
+PELMoubt.SYS
+
+[PMouse.Copy.HLP]
+
+
+[PS2.Copy.NT]
+pelbtm.sys
+
+
+
+
+; ----------------------------------------
+; User-visible Strings
+
+[Strings]
+Provider = "Lenovo"
+Mfg	 = "Lenovo"
+
+; ======= Disk Name ==========
+PMouseDisk="Mouse Suite Driver Disk"
+
+; ======= Product Name ==========
+ProductName = "Lenovo Mouse Suite"
+ProductVersion = "1.9.0.9"
+
+; ======= Product Misc. Info. ==========
+2DMouseButtonNumber = "2"
+OEMLogoNumber = "13"
+DefaultMouseID = "04"
+;;WebLink = ""
+;;EmailLink = ""
+ExtResDll = "PELBDO.DLL"
+2DExtResDll = "PMRESHP.DLL"
+3DExtResDll = "PMMO32R.DLL"
+4DExtResDll = "PMLenovo.DLL"
+SPWheelExtResDll = "PMMILG.DLL"
+5BTiltExtResDll = "TILT_5B.DLL"
+
+SelResDll_1 = "PELBDO"
+SelResDll_2 = "PMBDO"
+SelResDll_3 = "PMLenovo"
+SelResDll_4 = "PMMO32R1"
+SelResDll_5 = "PMMO32R"
+SelResDll_6 = "PMLenovo1"
+
+SelResDll_7 = "PELBDO1"
+SelResDll_8 = "PMMILG"
+SelResDll_9 = "TILT_5B"
+SelExtResDll = "PELRESS.dll"
+SelResFuncEntry = "ResDlg"
+Sel5BTiltExtResDll = "TILT_5B.DLL"
+
+SelResDll_1_ProductName_4D = "Lenovo ScrollPoint Optical"
+SelResDll_2_ProductName_4D = "Lenovo 800dpi ScrollPoint Optical"
+SelResDll_3_ProductName_4D = "Lenovo ScrollPoint Pro"
+SelResDll_4_ProductName_3D = "Lenovo Travel Mouse"
+SelResDll_5_ProductName_3D = "Lenovo Travel Optical"
+SelResDll_6_ProductName_4D = "Lenovo 800dpi ScrollPoint Pro Optical"
+
+SelResDll_7_ProductName_4D = "Lenovo ScrollPoint II"
+SelResDll_8_ProductName_3D = "Lenovo Wheel Mouse"
+SelResDll_10_ProductName_3D = "Lenovo Laser Mouse"
+
+; ======= Device Names ==========
+BT05.mouse.desc = "ThinkPad Bluetooth Laser Mouse"
+BT06.mouse.desc = "ThinkPad Bluetooth Laser Mouse"
+
+; Product Name
+SP4D.Product = "Lenovo ScrollPoint Optical"
+2D.Product = "Standard Mouse"
+3D.Product = "Lenovo Travel Optical"
+Ergo.Product = "Cyber Navigator"
+
+
+;MouseClassName = "Mouse"
+
+; Service Names
+PMOUBT.SvcDesc.NT = "Mouse Suite Bluetooth Driver"
+BT.SvcDesc.NT = "Bluetooth Mouse Filter Driver"
+Serial.SvcDesc.NT = "Serial Mouse Driver"
+
+; Description of device also controlled by a shared driver
+PS2_Inst.SharedDriverMsg = "Keyboard Port"
+
+
+UninstallKeyName = "MouseSuite98"
+
+UninstallKey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\MouseSuite98"
+SystemRunKey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+SystemRunOnceKey = "SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+MouseCPLXKey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Controls Folder\Mouse\shellex\PropertySheetHandlers"
+StaticVxDRootKey = "System\CurrentControlSet\Services\VXD"
+NTServiceRootKey = "System\CurrentControlSet\Services"
+RemoteDesktopServerKey = "System\CurrentControlSet\Control\Terminal Server\AddIns\FSRremote"
+RemoteDesktopClientKey = "Software\Microsoft\Terminal Server Client\Default\AddIns\FSRremote"
+
+UNINSTALL_ROOT_KEY = "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+UNINSTALL_SHARED_FILE = "Software\Primax\Uninstall\SharedFile"
+UNINSTALL_SHARED_REG = "Software\Primax\Uninstall\SharedReg"
+
+
+ProductKey = "SOFTWARE\Primax\Mouse Suite 98"
+;CoInstallerKey = "SOFTWARE\\Primax\\CoInstaller"
+
+CPLXPPMCLSID = "{94149CC1-2600-11D2-9D15-00C04F9A1D50}"
+CPLXBDOCLSID = "{94149CC0-2600-11D2-9D15-00C04F9A1D50}"
+CPLXWHEELCLSID = "{A2598260-0732-11D2-9D15-00C04F9A1D50}"
+CPLEXTPAGECLSID = "{79596D25-79FD-436b-9EC3-7F058F642C2C}"
+
+REG_EXPAND_SZ	        = 0x00020000 
+REG_DWORD               = 0x00010001 
+REG_MULTI_SZ	        = 0x00010000

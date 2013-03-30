@@ -1,0 +1,124 @@
+; HPQLB.INF
+;Copyright (c) 2003-2005 Hewlett-Packard Developement Company, L.P.
+; 
+[Version] 
+Signature = "$Windows NT$" 
+Class=HIDClass
+ClassGUID={745a17a0-74d3-11d0-b6fe-00a0c90f57da} 
+Provider=%HP% 
+CatalogFile.ntx86=hpqlbx86.cat
+CatalogFile.NTamd64=hpqlbamd64.cat
+DriverVer=04/02/2007,4.20.5
+
+
+[DestinationDirs] 
+HPQ0006.Files.x86_12 = 12
+HPQ0006.Files.ntamd64_12 = 12
+
+[SourceDisksNames.x86]
+1=%Desc_x860%
+
+[SourceDisksNames.amd64]
+1=%Desc_x860%
+
+[SourceDisksFiles.x86]
+CPQBttn.sys=1 
+
+[SourceDisksFiles.amd64]
+CPQBttn64.sys=1,,
+
+[Manufacturer] 
+%HP%=HP, NTamd64
+
+[HP]
+%HPQ0006Desc%=HPQ0006_Inst,ACPI\HPQ0006,ACPI\HP_TabletPC_Buttons
+
+[HP.ntamd64]
+%HPQ0006Desc64%=HPQ0006_Inst,ACPI\HPQ0006
+
+[HPQ0006_Inst.x86] 
+CopyFiles = HPQ0006.Files.x86_12 
+
+[HPQ0006_Inst.ntx86.HW]
+
+[HPQ0006_Inst.ntx86.Services]
+AddService = HBtnKey,0x00000002,HPQ0006_cpqbttn_Instx86, HPQ0006_EventLog_Inst
+
+
+
+[HPQ0006_cpqbttn_Instx86] 
+ServiceType = %SERVICE_KERNEL_DRIVER% 
+StartType = %SERVICE_DEMAND_START% 
+ErrorControl = %SERVICE_ERROR_IGNORE% 
+ServiceBinary = %12%\cpqbttn.sys 
+LoadOrderGroup = Extended Base
+
+[HPQ0006.Files.x86_12] 
+CPQBttn.sys
+
+[HPQ0006_EventLog_Inst] 
+AddReg = HPQ0006_EventLog_Inst.AddReg 
+ 
+[HPQ0006_EventLog_Inst.AddReg] 
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll" 
+HKR,,TypesSupported,%REG_DWORD%,7
+
+  
+[HPQ0006_Inst.ntamd64] 
+; Setting up some reg entries/files for the class/port drivers via msmouse.inf 
+;Include = keyboard.inf 
+;Needs = STANDARD_Inst
+CopyFiles = HPQ0006.Files.ntamd64_12
+;AddReg = HPQ0006.AddReg.x86 
+
+[HPQ0006_Inst.ntamd64.Services]
+AddService = HBtnKey,0x00000002,HPQ0006_cpqbttn_Instamd64, HPQ0006_EventLog_Inst
+
+
+[HPQ0006_Inst.ntamd64.HW] 
+
+
+
+[HPQ0006_cpqbttn_Instamd64] 
+ServiceType = %SERVICE_KERNEL_DRIVER% 
+StartType = %SERVICE_DEMAND_START% 
+ErrorControl = %SERVICE_ERROR_IGNORE% 
+ServiceBinary = %12%\cpqbttn64.sys 
+LoadOrderGroup = Extended Base
+
+  
+
+[HPQ0006.Files.ntamd64_12] 
+CPQBttn64.sys
+
+[Strings] 
+;  *******Localizable Strings******* 
+HP= "Hewlett-Packard" 
+Desc_x860= "NAZH-R" 
+HPQ0006Desc= "HP Quick Launch Buttons" 
+HPQ0006Desc64= "HP Quick Launch Buttons 64"
+
+;  *******Non Localizable Strings******* 
+
+SERVICE_BOOT_START = 0x0 
+SERVICE_SYSTEM_START = 0x1 
+SERVICE_AUTO_START = 0x2 
+SERVICE_DEMAND_START = 0x3 
+SERVICE_DISABLED = 0x4 
+
+SERVICE_KERNEL_DRIVER = 0x1 
+SERVICE_ERROR_IGNORE = 0x0 
+SERVICE_ERROR_NORMAL = 0x1 
+SERVICE_ERROR_SEVERE = 0x2 
+SERVICE_ERROR_CRITICAL = 0x3 
+
+SPSVCINST_ASSOCSERVICE = 0x00000002
+
+REG_SZ                      = 0x00000000
+REG_SZ_NOCLOBBER            = 0x00000002
+REG_MULTI_SZ                = 0x00010000
+REG_EXPAND_SZ               = 0x00020000
+REG_MULTI_SZ_APPEND         = 0x00010008
+REG_DWORD                   = 0x00010001
+REG_DWORD_NOCLOBBER         = 0x00010003
+REG_BINARY                  = 0x00000001

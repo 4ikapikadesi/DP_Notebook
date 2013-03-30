@@ -1,0 +1,111 @@
+; FSC.inf -- This file contains descriptions for the Fujitsu Siemens FibreCAT TX autoloader for XP and 2003
+; Copyright (c) BDT AG, 2001-2008
+
+[version]
+signature="$Windows NT$"
+Class=MediumChanger
+ClassGUID={CE5939AE-EBDE-11d0-B181-0000F8753EC4}
+Provider=%BDT%
+CatalogFile="FibreCat.cat"
+DriverVer=06/11/2008,5.2.3790.6
+
+[DestinationDirs]
+DefaultDestDir = 12 ; DIRID_DRIVERS
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+%BDT% = BDTUL, NTx86, NTamd64
+
+
+;***************** 32 bit Windows XP/2003 medium changer device list ******************
+[BDTUL.NTx86]
+%BDTUL.NTx86.BDT_FlexStor.DeviceDesc%  = BDTULNTx86_Inst, SCSI\ChangerFSC_____FibreCAT_TX08___
+%BDTUL.NTx86.BDT_FlexStor.DeviceDesc%  = BDTULNTx86_Inst, SCSI\ChangerFSC_____FibreCAT-TX24 S2
+%BDTUL.NTx86.BDT_FlexStor.DeviceDesc%  = BDTULNTx86_Inst, SCSI\ChangerFSC_____FibreCAT-TX48 S2
+%BDTUL.NTx86.BDT_FlexStor.DeviceDesc%  = BDTULNTx86_Inst, SCSI\ChangerFSC_____FibreCAT-TX96 S2
+
+[BDTULNTx86_Inst]
+CopyFiles = @fbcatn32.sys
+
+[BDTULNTx86_Inst.Services]
+AddService = fbcatn32, %SPSVCINST_ASSOCSERVICE%, BDTULNTx86_Service_Inst, BDTULNTx86_EventLog_Inst
+
+[BDTULNTx86_Service_Inst]
+ServiceType    = %SERVICE_KERNEL_DRIVER%
+StartType      = %SERVICE_SYSTEM_START%
+ErrorControl   = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\fbcatn32.sys
+LoadOrderGroup = SCSI Class
+Dependencies   = +SCSI Miniport
+
+[BDTULNTx86_EventLog_Inst]
+AddReg = BDTULNTx86_EventLog_AddReg
+
+[BDTULNTx86_EventLog_AddReg]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\fbcatn32.sys"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+;***************** x64 based Windows XP/2003 medium changer device list ******************
+[BDTUL.NTamd64]
+%BDTUL.NTamd64.BDT_FlexStor.DeviceDesc%  = BDTULNTx64_Inst, SCSI\ChangerFSC_____FibreCAT_TX08___
+%BDTUL.NTamd64.BDT_FlexStor.DeviceDesc%  = BDTULNTx64_Inst, SCSI\ChangerFSC_____FibreCAT-TX24 S2
+%BDTUL.NTamd64.BDT_FlexStor.DeviceDesc%  = BDTULNTx64_Inst, SCSI\ChangerFSC_____FibreCAT-TX48 S2
+%BDTUL.NTamd64.BDT_FlexStor.DeviceDesc%  = BDTULNTx64_Inst, SCSI\ChangerFSC_____FibreCAT-TX96 S2
+
+[BDTULNTx64_Inst]
+CopyFiles = @fbcatn64.sys
+
+[BDTULNTx64_Inst.Services]
+AddService = fbcatn64, %SPSVCINST_ASSOCSERVICE%, BDTULNTx64_Service_Inst, BDTULNTx64_EventLog_Inst
+
+[BDTULNTx64_Service_Inst]
+ServiceType    = %SERVICE_KERNEL_DRIVER%
+StartType      = %SERVICE_SYSTEM_START%
+ErrorControl   = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\fbcatn64.sys
+LoadOrderGroup = SCSI Class
+Dependencies   = +SCSI Miniport
+
+[BDTULNTx64_EventLog_Inst]
+AddReg = BDTULNTx64_EventLog_AddReg
+
+[BDTULNTx64_EventLog_AddReg]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\fbcatn64.sys"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+
+;**************************************************************************************
+[SourceDisksNames.x86]
+; source-disk-number = disk-label,tag-or-cab-file,,subdir,flags,tag-file
+1 = %sourcediskname%,,,
+
+[SourceDisksNames.amd64]
+2 = %sourcediskname%,,,
+
+[SourceDisksFiles]
+; source-filename = source-disk-number,subdir,size
+fbcatn32.sys = 1
+fbcatn64.sys = 2
+
+
+;**************************************************************************************
+[Strings]
+BDT = "Fujitsu Siemens"
+
+BDTUL.NTx86.BDT_FlexStor.DeviceDesc    = "Fujitsu Siemens FibreCAT TX autoloader  (x86 based XP/2003)"
+BDTUL.NTamd64.BDT_FlexStor.DeviceDesc  = "Fujitsu Siemens FibreCAT TX autoloader  (x64 based XP/2003)"
+
+sourcediskname = "Fujitsu Siemens FibreCAT TX autoloader drivers for Windows XP/2003"
+
+;**************************************************************************************
+;Handy macro substitutions (non-localizable)
+SPSVCINST_ASSOCSERVICE = 0x00000002
+SERVICE_KERNEL_DRIVER  = 1
+SERVICE_SYSTEM_START   = 1
+SERVICE_ERROR_NORMAL   = 1
+REG_EXPAND_SZ          = 0x00020000
+REG_DWORD              = 0x00010001
+
+

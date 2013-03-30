@@ -1,0 +1,36 @@
+Driver Software Version list and debug information
+
+Fujitsu Component Ltd.
+
+
+Driver set name 	: Serial I/F Touch Panel Driver
+Driver set number	: NS01B-0559-0542
+Driver set version	: V1.0L02
+
+Operating System	: Windows Vista
+
+
+Driver module list
+
+No, 	file  name           size          date         Version
+1       Calwin.exe          90,319  06-11-15  10:23:20  V1.0L01
+2       Event.exe          352,438  06-10-12  11:34:30  V1.0L01
+3       Fidmous.cpl         37,073  06-10-12  11:15:02  V1.0L01
+4       FIDMOUS.DEL          2,244  07-01-10  11:43:32     -
+5       Fidmous.inf          6,029  07-09-11  17:26:42     -
+6       FIDMOUS.sys         37,376  07-01-09  15:25:43  V1.0L01
+7       Fidmsflt.exe        53,454  06-10-12  11:03:40  V1.0L01
+8       Fidset.exe         495,819  07-01-12  09:52:58  V1.0L01
+9       FidTAPI.dll         41,148  06-10-12  11:43:32  V1.0L01
+10      FidUinst.exe        41,165  07-01-18  18:56:20  V1.0L01
+11      fphook.dll         106,496  07-09-11  16:48:10  V1.0L02
+12      FTIMV.DLL           36,921  06-04-24  18:25:20  V1.0L01
+13      Panel.bmp          124,978  01-03-21  08:26:40     -
+14      RButton.exe        340,158  06-10-12  11:37:24  V1.0L01
+15      SetUp.exe          106,496  07-09-11  13:47:08  V1.0L02
+16      Readme.txt           5,012  07-01-15  10:36:28     -
+17      ReadmeE.txt          4,280  07-01-15  15:45:11     -
+18      Dvrlist.txt        (this file)    /  same as set version
+
+Total module number  : 18
+

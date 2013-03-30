@@ -1,0 +1,85 @@
+; tpsacpi.inf
+; 
+; TPS Firmware Extension Device Driver
+; install information file.
+;
+; Copyright (C) 2005-2007 TPS Corporation
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%TPS%
+CatalogFile=tpsacpi.cat
+CatalogFile.NTx86=tpsacpix86.cat
+CatalogFile.NTamd64=tpsacpix64.cat
+DriverVer=05/13/2010,1.00.00.0005
+
+[DestinationDirs]
+tpsacpiNT.CopyFiles = 12
+
+[Manufacturer]
+%TPS%=Topstar,NTx86,NTamd64
+
+[ControlFlags]
+ExcludeFromSelect = *TPSACPI01
+
+[Topstar.NTx86]
+%*TPSACPI01.DeviceDescNTx86% =tpsacpi,*TPSACPI01
+
+[Topstar.NTamd64]
+%*TPSACPI01.DeviceDescNTamd64%=tpsacpi,*TPSACPI01
+
+[SourceDisksNames.x86]
+1=%thpe%,,,\i386
+
+[SourceDisksNames.amd64]
+1=%thpe%,,,\amd64
+
+[SourceDisksFiles]
+tpsacpi.SYS = 1
+
+[tpsacpi.NT.HW]
+Addreg=tpsacpiHW.NT.AddReg
+
+[tpsacpiHW.NT.AddReg]
+HKR,,ConfigFlags,0x00010001,0
+
+[tpsacpi.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,tpsacpi.SYS
+HKR,,EnumPropPages,,"sysclass.dll,EnumPropPages"
+
+
+[tpsacpi.NT]
+AddReg=tpsacpi.AddReg
+CopyFiles=tpsacpiNT.CopyFiles
+
+[tpsacpi.NT.Services]
+AddService=tpsacpi,2,tpsacpi_Service_Inst
+
+[tpsacpi_Service_Inst]
+DisplayName    = %tpsacpi.SvcDesc%
+ServiceType    = 1
+StartType      = 0
+ErrorControl   = 1
+ServiceBinary  = %12%\tpsacpi.SYS
+
+[tpsacpiNT.CopyFiles]
+tpsacpi.sys
+
+
+[strings]
+TPS             = "TPS"
+tpsacpi.SvcDesc  = "TPS Firmware Extension Device Driver"
+thpe            = "tpsacpi"
+*TPSACPI01.DeviceDescNTx86   = "TPS Firmware Extension Device"
+*TPSACPI01.DeviceDescNTamd64 = "TPS Firmware Extension Device"
+
+[strings.0804]
+TPS             = "TPS"
+tpsacpi.SvcDesc  = "TPS固件扩展设备驱动"
+thpe            = "tpsacpi"
+*TPSACPI01.DeviceDescNTx86   = "TPS固件扩展设备"
+*TPSACPI01.DeviceDescNTamd64 = "TPS固件扩展设备"

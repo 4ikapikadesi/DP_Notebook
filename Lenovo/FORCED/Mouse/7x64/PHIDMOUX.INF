@@ -1,0 +1,62 @@
+
+; for Vista
+; Copyright (c) 2008 PRIMAX Inc.
+
+
+[Version]
+Signature   = "$Windows NT$"
+CatalogFile = x64.cat
+Class       = Mouse
+ClassGUID   = {4D36E96F-E325-11CE-BFC1-08002BE10318}
+Provider    = %Provider%
+DriverVer   = 06/06/2012,2.1.0.0
+
+[SourceDisksNames]
+;1 = %DiskName%,
+
+[SourceDisksFiles]
+
+
+[DestinationDirs]
+;DefaultDestDir       = 12    ; DIRID_DRIVERS
+
+[ControlFlags]
+ExcludeFromSelect   = *
+; ---------------------------------------------------------
+
+[Manufacturer]
+%Provider%	= PMOUSE,NTX86,NTamd64
+
+[PMouse]
+%Mouse.Desc% = PMOUSE.INST,HID\VID_17ef&PID_6030&MI_02
+
+[PMouse.NTX86]
+%Mouse.Desc% = PMOUSE.INST,HID\VID_17ef&PID_6030&MI_02
+
+[PMOUSE.NTamd64]
+%Mouse.Desc% = PMOUSE.INST,HID\VID_17ef&PID_6030&MI_02
+
+
+[PMOUSE.INST]
+Include     = msmouse.inf
+Needs       = HID_Mouse_Inst.NT
+
+[PMOUSE.INST.HW]
+Include     = msmouse.inf
+Needs       = HID_Mouse_Inst.NT.HW
+
+[PMOUSE.INST.Services]
+Include    = msmouse.inf
+Needs      = HID_Mouse_Inst.NT.Services
+
+[Strings]
+Provider  = "Lenovo"
+DiskName  = "Driver Disk"
+Mouse.Desc = "Lenovo Wireless Plus Mouse (HID)"
+SERVICE_KERNEL_DRIVER       = 0x00000001
+SERVICE_DEMAND_START        = 0x00000003
+SERVICE_ERROR_NORMAL        = 0x00000001
+REG_MULTI_SZ                = 0x00010000
+REG_DWORD                   = 0x00010001
+SPSVCINST_ASSOCSERVICE      = 0x00000002
+COPYFLG_NOSKIP              = 0x00000002

@@ -1,0 +1,132 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                                                                    ;
+; PuAcpi.inf -- Installation information for ACPI device             ;
+; Copyright -- PU
+;                                                                    ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[version]
+Signature		= "$Windows NT$"
+Provider		= %PROVIDER_NAME%
+ClassGUID		= {4D36E97D-E325-11CE-BFC1-08002BE10318}
+Class			= System
+CatalogFile.ntx86	= PuAcpi32.cat
+CatalogFile.ntamd64	= PuAcpi64.cat
+DriverVer		= 06/03/2009, 1043.2.31.102
+
+[DestinationDirs]
+DefaultDestDir = 12		; load driver to system32\drivers
+
+[SourceDisksNames]
+1 = %SOURCE_DISKS_NAME%,,,,
+
+[SourceDisksFiles]
+PuAcpi32.sys = 1
+PuAcpi64.sys = 1
+
+[SourceDisksFiles.x86]
+PuAcpi32.sys = 1
+
+[SourceDisksFiles.amd64]
+PuAcpi64.sys = 1
+
+[ControlFlags]
+ExcludeFromselect = *
+
+;[ClassInstall32]
+;AddReg = System_Class_Addreg
+
+;[System_Class_Addreg]
+;HKR,,,0,"System Class Drivers"
+
+[Manufacturer]
+%MANUFACTURER_NAME% = PU,NTx86,NTamd64
+
+[PU]
+
+[PU.NTx86]
+%DEVICE_NAME_ATK% = DriverInstall.NTx86,ACPI\ATK0100
+%DEVICE_NAME_ATK% = DriverInstall.NTx86,ACPI\ATK0101
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0001
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0002
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0003
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0004
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0005
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0006
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0007
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0008
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0009
+%DEVICE_NAME_PU% = DriverInstall.NTx86,ACPI\PU_0010
+
+[PU.NTamd64]
+%DEVICE_NAME_ATK% = DriverInstall.NTamd64,ACPI\ATK0100
+%DEVICE_NAME_ATK% = DriverInstall.NTamd64,ACPI\ATK0101
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0001
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0002
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0003
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0004
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0005
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0006
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0007
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0008
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0009
+%DEVICE_NAME_PU% = DriverInstall.NTamd64,ACPI\PU_0010
+
+[DriverInstall.NTx86]
+CopyFiles = PUACPI.CopyFiles.NTx86
+
+[DriverInstall.NTamd64]
+CopyFiles = PUACPI.CopyFiles.NTamd64
+
+[PUACPI.CopyFiles.NTx86]
+PuAcpi32.sys
+
+[PUACPI.CopyFiles.NTamd64]
+PuAcpi64.sys
+
+[DriverInstall.NTx86.Services]
+AddService = MTsensor32,2,MTsensorService.NTx86
+
+[DriverInstall.NTamd64.Services]
+AddService = MTsensor64,2,MTsensorService.NTamd64
+
+[MTsensorService.NTx86]
+DisplayName	= %SERVICE_DISPLAY_NAME%
+ServiceType	= %SERVICE_KERNEL_DRIVER%	; SERVICE_KERNEL_DRIVER
+StartType	= %SERVICE_DEMAND_START%	; SERVICE_DEMAND_START
+ErrorControl	= %SERVICE_ERROR_NORMAL%	; SERVICE_ERROR_NORMAL
+ServiceBinary	= %12%\PuAcpi32.sys
+
+[MTsensorService.NTamd64]
+DisplayName	= %SERVICE_DISPLAY_NAME%
+ServiceType	= %SERVICE_KERNEL_DRIVER%	; SERVICE_KERNEL_DRIVER
+StartType	= %SERVICE_DEMAND_START%	; SERVICE_DEMAND_START
+ErrorControl	= %SERVICE_ERROR_NORMAL%	; SERVICE_ERROR_NORMAL
+ServiceBinary	= %12%\PuAcpi64.sys
+
+
+
+;---------------------------------------------------------------
+;                S t r i n g s
+;---------------------------------------------------------------
+
+[Strings]
+
+;----------------
+; Non-Localizable
+;----------------
+SERVICE_KERNEL_DRIVER		= 1
+SERVICE_WIN32_OWN_PROCESS	= 16
+SERVICE_DEMAND_START		= 3
+SERVICE_AUTO_START		= 2
+SERVICE_ERROR_NORMAL		= 1
+
+;----------------
+; Localizable
+;----------------
+PROVIDER_NAME		= "PU"
+MANUFACTURER_NAME	= "PU"
+DEVICE_NAME_PU		= "PU ACPI UTILITY"
+DEVICE_NAME_ATK		= "ATK0100 ACPI UTILITY"
+SERVICE_DISPLAY_NAME	= "PU ACPI UTILITY"
+SOURCE_DISKS_NAME	= "PU ACPI UTILITY"

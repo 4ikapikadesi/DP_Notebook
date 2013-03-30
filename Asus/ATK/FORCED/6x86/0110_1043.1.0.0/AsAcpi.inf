@@ -1,0 +1,64 @@
+[version]
+Signature="$Windows NT$"
+Provider=%ATK%
+ClassGUID={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Class=System
+CatalogFile=AsAcpi.cat
+LayoutFile = layout.inf
+DriverVer=10/11/2006, 1043.1.0.0
+
+[DestinationDirs]
+DefaultDestDir = 12		; load driver to system32\drivers
+Hcontrol.CopyFiles = 10,ATK0110
+
+[ControlFlags]
+ExcludeFromselect = *
+
+[ClassInstall32]
+AddReg = System_Class_Addreg
+
+[System_Class_Addreg]
+HKR,,,0,"System Class Drivers"
+
+[Manufacturer]
+%ATK%=ATK
+
+[ATK]
+%DeviceDesc1%=DriverInstall,ACPI\ATK0110
+
+[DriverInstall]
+CopyFiles=ASACPI.CopyFiles, Hcontrol.CopyFiles
+AddReg = Hcontrol.AddReg
+
+[ASACPI.CopyFiles]
+ASACPI.sys
+
+[Hcontrol.CopyFiles]
+
+[DriverInstall.Services]
+AddService=MTsensor,2,MTsensorService
+
+[MTsensorService]
+DisplayName = %ASACPI.DisplayName%
+ServiceType=1           ; SERVICE_KERNEL_DRIVER
+StartType=3             ; SERVICE_DEMAND_START
+ErrorControl=1          ; SERVICE_ERROR_NORMAL
+ServiceBinary=%12%\ASACPI.sys
+
+[Hcontrol.AddReg]
+HKLM, "SOFTWARE\ASUS\ACPIDRV", "Version", 0x00010001, %Version%
+HKLM, "SOFTWARE\ASUS\ACPIDRV", "ReleaseTime", , "12:00:00 10/11/06"
+
+[SourceDisksNames]
+1 = %DiskID1%,,,,
+
+[SourceDisksFiles]
+ASACPI.SYS = 1
+
+[Strings]
+ATK="ATK"
+DeviceDesc1="ATK0110 ACPI UTILITY"
+ASACPI.DisplayName = "ATK0110 ACPI UTILITY"
+DiskId1 = "ATK0110 ACPI UTILITY"
+UninstallReg = "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hcontrol"
+Version = "0x01010004"

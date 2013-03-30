@@ -1,0 +1,106 @@
+; Copyright (c) 1997-2002, Sony Corporation
+;;
+;; SonyNC.inf
+;; 		Sony Notebook Control
+;;
+;;	(C) 2002 Sony Corporation All rights reserved.
+;;	
+;;	06/04/2002
+;;
+;;	Revision 6.0.0.2
+
+;--------- Version Section ---------------------------------------------------
+
+[Version]
+Signature = "$CHICAGO$"
+;Class = System
+;ClassGUID = {4d36e97d-e325-11ce-bfc1-08002be10318}
+Class=HIDClass
+ClassGUID={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider = %ProviderName%
+CatalogFile = sonync.cat
+DriverVer=06/04/2002,6.0.0.2
+
+[ControlFlags]
+ExcludeFromSelect=*SNY5001
+
+;--------- SourceDiskNames and SourceDiskFiles Section -----------------------
+
+; These sections identify source disks and files for installation.  They are
+; shown here as an example, but commented out.
+
+[SourceDisksNames.x86]
+1 = %DiskId%,,,
+
+[SourceDisksFiles]                            
+sonync.sys  = 1
+sonync.dll = 1
+;;sonync.inf = 1
+
+;--------- DestinationDirs Section -------------------------------------------
+
+[DestinationDirs]
+DefaultDestDir=10
+SNC_Files_Driver = 10,System32\Drivers
+SNC_Files_DLL = 10,System
+
+;--------- Manufacturer and Models Sections ----------------------------------
+
+[Manufacturer]
+%MfgName%=Mfg0
+
+[Mfg0]
+%DeviceDesc%=SNC_DDI, *SNY5001
+
+;---------- DDInstall Sections -----------------------------------------------
+; --------- Windows 9X -----------------
+
+[SNC_DDI]
+CopyFiles=SNC_Files_Driver, SNC_Files_DLL
+AddReg=SNC_9X_AddReg
+
+[SNC_9X_AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,SonyNC.sys
+HKR, "Parameters", "BreakOnEntry", 0x00010001, 0
+
+; --------- Windows NT -----------------
+
+[SNC_DDI.NT]
+CopyFiles=SNC_Files_Driver
+; CopyFiles=SNC_Files_Driver, SNC_Files_INF, SNC_Files_DLL
+; AddReg=SNC_NT_AddReg
+
+[SNC_DDI.NT.Services]
+Addservice = SNC, 0x00000002, SNC_AddService
+
+[SNC_AddService]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\SonyNC.sys
+
+; [SNC_NT_AddReg]
+; HKLM, "System\CurrentControlSet\Services\SNC\Parameters",\
+; 	"BreakOnEntry", 0x00010001, 0
+
+; --------- Files (common) -------------
+
+[SNC_Files_Driver]
+SonyNC.sys
+
+[SNC_Files_DLL]
+SonyNC.dll
+
+;--------- Strings Section ---------------------------------------------------
+
+[Strings]
+ProviderName="Sony Corporation"
+MfgName="Sony Corporation"
+DeviceDesc="Sony Notebook Control Device"
+SvcDesc="Sony Notebook Control Device"
+DiskId="SonyNC"
+
+
+

@@ -1,0 +1,98 @@
+; Installation file for the Apple Display driver
+;
+; Copyright © 2006-2009 Apple Inc. All Rights Reserved.
+
+[Version]
+signature="$CHICAGO$"
+Class=HIDClass
+ClassGUID={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%Apple%
+DriverPackageDisplayName="Apple Display"
+DriverPackageType=PlugAndPlay
+CatalogFile=aaplmonf.cat
+DriverVer=01/23/2009,3.0.0.0
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[SourceDisksNames]
+1 = %DiskId1%,,,
+
+[SourceDisksFiles]
+wdfcoinstaller01005.dll=1 ; make sure the number matches with SourceDisksNames
+aaplmonf.sys=1
+
+[DestinationDirs]
+Display.NT.CopyList = 10,system32\drivers
+Display_CoInstaller_CopyFiles = 11
+
+[Manufacturer]
+%Apple%=Apple
+
+[Apple]
+%Display.DeviceDesc%=Display,USB\VID_05AC&PID_921B
+%DisplayHD.DeviceDesc%=Display,USB\VID_05AC&PID_921C
+%Display.DeviceDesc%=Display,USB\VID_05AC&PID_921D
+%DisplayHD.DeviceDesc%=Display,USB\VID_05AC&PID_921E
+%DisplayHD.DeviceDesc%=Display,USB\VID_05AC&PID_921F
+%DisplayHD.DeviceDesc%=Display,USB\VID_05AC&PID_9220
+%DisplayHD.DeviceDesc%=Display,USB\VID_05AC&PID_9221
+%Display.DeviceDesc%=Display,USB\VID_05AC&PID_9222
+%DisplayHD.DeviceDesc%=Display,USB\VID_05AC&PID_9223
+%DisplayHD.DeviceDesc%=Display,USB\VID_05AC&PID_9232
+
+[Display.NT]
+Include=Input.inf
+Needs=HID_Inst.NT
+CopyFiles=Display.NT.CopyList
+AddReg=Display.NT.AddReg
+
+[Display.NT.AddReg]
+HKR,,FriendlyName,,%Display.DeviceDesc%
+
+[Display.NT.HW]
+AddReg=Display.NT.HW.AddReg
+
+[Display.NT.HW.AddReg]
+HKR,,"LowerFilters",0x00010000,"AppleDisplayFlt"
+
+[Display.NT.Services]
+Include=Input.inf
+Needs=HID_Inst.NT.Services
+AddService = AppleDisplayFlt,, Display_Service_Inst
+
+[Display_Service_Inst]
+DisplayName    = %Display.SvcDesc%                            
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\aaplmonf.sys                            
+
+[Display.NT.CoInstallers]
+AddReg=Display_CoInstaller_AddReg
+CopyFiles=Display_CoInstaller_CopyFiles
+
+[Display_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01005.dll,WdfCoInstaller"
+
+[Display_CoInstaller_CopyFiles]
+WdfCoInstaller01005.dll
+
+[Display.NT.Wdf]
+KmdfService = AppleDisplay, AppleDisplay_wdfsect
+
+[AppleDisplay_wdfsect]
+KmdfLibraryVersion = 1.5
+
+[Display.NT.CopyList]
+aaplmonf.sys
+
+;=======================================================
+
+[Strings]
+MfgName="Apple Inc."
+Apple="Apple Inc."
+Display.DeviceDesc="Apple Cinema Display"
+DisplayHD.DeviceDesc="Apple Cinema HD Display"
+DiskId1 = "Apple Display Installation Disk #1"
+Display.SvcDesc = "Apple Display Driver"

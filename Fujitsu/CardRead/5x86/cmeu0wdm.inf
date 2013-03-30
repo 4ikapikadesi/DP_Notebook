@@ -1,0 +1,125 @@
+; cmeu0wdm.inf
+; Copyright (c) 2000 - 2001 OMNIKEY AG
+
+[Version]
+Signature=$CHICAGO$
+Class=SmartCardReader
+ClassGuid={50DD5230-BA8A-11D1-BF5D-0000F805F530}
+Provider=%Provider%
+DriverVer=09/14/2001,3.7.1.1
+CatalogFile=cmeu0wdm.cat
+
+[SourceDisksNames]
+1=%DiskDescription%,,
+
+[SourceDisksFiles]
+cmeu0wdm.sys=1,,
+launchn.dll=1,,
+scbase.exe=1,,
+smclib.exe=1,,
+
+[DestinationDirs]
+DefaultDestDir = 10,system32\drivers
+cmeu0wdm.Install.CopyFiles=10,system32\drivers
+cmeu0wdm.Install.NT.CopyFiles=10,system32\drivers
+cmeu0wdm.Install.Scbase=11
+cmeu0wdm.Install.ScOrg=10,system
+
+[Manufacturer]
+%Manufacturer%=OMNIKEY
+
+; =================== Class section =======================
+
+
+
+
+; ===================== CardMan ===========================
+
+[ControlFlags]
+ExcludeFromSelect.NT = USB\VID_08D4&PID_0009
+
+[OMNIKEY]
+; DisplayName       	Section           DeviceId
+; -----------       	-------           --------
+%CM2020Description% = cm2020.Install, USB\VID_08D4&PID_0009
+
+
+; =================== Win9x specific ======================
+
+[cm2020.Install]
+AddReg    = cm2020.Install.AddReg
+CopyFiles = cmeu0wdm.Install.CopyFiles,cmeu0wdm.Install.Scbase,cmeu0wdm.Install.ScOrg
+
+[cm2020.Install.HW]
+AddReg    = cm2020.Install.AddReg.HW
+
+
+
+[cm2020.Install.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,cmeu0wdm.sys
+HKLM,"\Software\Microsoft\Windows\CurrentVersion\RunOnce",launchn,,"rundll32 launchn.dll,InstallSC"
+
+
+
+[cmeu0wdm.Install.CopyFiles]
+cmeu0wdm.sys
+
+[cmeu0wdm.Install.Scbase]
+launchn.dll
+scbase.exe
+smclib.exe
+
+[cmeu0wdm.Install.ScOrg]
+scbase.exe,scbase.exe
+smclib.exe,smclib.exe
+
+
+; ================== Win2000 specific =====================
+
+[cm2020.Install.NT]
+AddReg    = cmeu0wdm.Install.NT.AddReg
+CopyFiles = cmeu0wdm.Install.NT.CopyFiles
+
+[cm2020.Install.NT.HW]
+AddReg    = cm2020.Install.AddReg.HW
+
+[cm2020.Install.NT.Services]
+AddService = cmeu0wdm, 2, cmeu0wdm.Service.NT
+
+
+
+[cmeu0wdm.Install.NT.AddReg]
+HKR,, AdapterType, 0, "0100"
+
+[cmeu0wdm.Install.NT.CopyFiles]
+cmeu0wdm.sys,,,2
+
+[cmeu0wdm.Service.NT]
+DisplayName     = %CM2020Description%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_AUTO_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\cmeu0wdm.sys
+
+
+
+; =====================
+; === USB Smartcard Reader ====
+; =====================
+[cm2020.Install.AddReg.HW]
+HKR,,"VendorName",,"Fujitsu Siemens"
+HKR,,"IfdType",, "USB Smartcard Reader"
+
+
+
+
+; ================= Strings =====================
+
+[Strings]
+Provider		= "Fujitsu Siemens"
+Manufacturer    	= "OMNIKEY AG"
+CM2020Description	= "Fujitsu Siemens USB Smartcard Reader"
+DiskDescription         = "Fujitsu Siemens USB Smartcard Reader PC/SC Driver Disk"
+ClassName 		= "Smart Card Readers"
+

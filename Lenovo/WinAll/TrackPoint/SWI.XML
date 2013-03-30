@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?tpi version="0290" ?>
+<build id="7BG686WW">
+   <tpi id="TRACKPT">
+      <xrelease order="RELEASE" cpu="AMD64">
+         <release id="RELEASE">
+            <device><![CDATA[\*IBM3780]]></device>
+            <title><gd tpipath="data/resolve[@method=LANGUAGE]">NAME</gd></title>
+            <version>4.73.1.0</version>
+            <lastversion id="CRITICAL">null</lastversion>
+            <setup>\tp4track.inf, *(FilterProvider,TrackPointMouse)</setup>
+            <uninstall>@REG\TrackPoint</uninstall>
+            <os id="NT">[LH,LH]</os>
+         </release>
+      </xrelease>
+      <data>
+         <resolve method="LANGUAGE" default="0009">
+            <item id="0009">
+               <data id="NAME">ThinkPad TrackPoint Driver</data>
+            </item>
+            <item id="0011">
+               <data id="NAME">ThinkPad トラックポイント・ドライバー</data>
+            </item>
+            <item id="0007">
+               <data id="NAME">TrackPoint-Treiber</data>
+            </item>
+            <item id="000A">
+               <data id="NAME">Controlador del TrackPoint</data>
+            </item>
+            <item id="001D">
+               <data id="NAME">Drivrutin för TrackPoint</data>
+            </item>
+            <item id="0006">
+               <data id="NAME">TrackPoint-styreprogram</data>
+            </item>
+            <item id="000C">
+               <data id="NAME">Pilote TrackPoint</data>
+            </item>
+            <item id="000B">
+               <data id="NAME">TrackPoint-ajuri</data>
+            </item>
+            <item id="0010">
+               <data id="NAME">Driver TrackPoint</data>
+            </item>
+            <item id="0013">
+               <data id="NAME">TrackPoint-stuurprogramma</data>
+            </item>
+            <item id="0014">
+               <data id="NAME">TrackPoint-driver</data>
+            </item>
+         </resolve>
+      </data>
+   </tpi>
+</build>

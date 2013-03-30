@@ -1,0 +1,79 @@
+; Installation inf for the Apple Bluetooth Driver
+;
+; Copyright © 2006-2007 Apple Inc. All Rights Reserved.
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+provider=%AAPL%
+DriverPackageDisplayName="Apple Bluetooth Enabler"
+DriverPackageType=PlugAndPlay
+DriverVer=06/27/2007,2.0.0.1
+CatalogFile=BthKicker.cat
+
+[DestinationDirs]
+DefaultDestDir = 12
+BtDevice_CoInstaller_CopyFiles = 11
+
+[Manufacturer]
+%MfgName%=Apple
+
+[Apple]
+%AppleBlueToothDeviceDesc%=BtDevice, USB\VID_05ac&PID_1000
+
+[BtDevice.NT]
+CopyFiles=BtDevice.NT.Copy
+
+[BtDevice.NT.Copy]
+BthKicker.sys
+
+;-------------- Service installation
+
+[BtDevice.NT.Services]
+AddService = BthKicker, 0x00000002, BKicker_Service_Inst
+
+[BKicker_Service_Inst]
+DisplayName    = %BlueToothKicker.SvcDesc%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\BthKicker.sys
+LoadOrderGroup = Extended Base
+
+
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+BthKicker.sys  = 1,,
+wdfcoinstaller01005.dll=1 ; make sure the number matches with SourceDisksNames
+
+;
+;--- BtDevice WDF Coinstaller installation ------
+;
+
+[BtDevice.NT.CoInstallers]
+AddReg=BtDevice_CoInstaller_AddReg
+CopyFiles=BtDevice_CoInstaller_CopyFiles
+
+[BtDevice_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "wdfcoinstaller01005.dll,WdfCoInstaller"
+
+[BtDevice_CoInstaller_CopyFiles]
+wdfcoinstaller01005.dll
+
+[BtDevice.NT.Wdf]
+KmdfService = BKicker, BKicker_wdfsect
+
+[BKicker_wdfsect]
+KmdfLibraryVersion = 1.5
+
+[Strings]
+AAPL="Apple Inc."
+MfgName="Apple Inc."
+AppleBlueToothDeviceDesc="Apple Bluetooth Driver"
+DiskId1 = "Apple Bluetooth Installation Disk"
+BlueToothKicker.SvcDesc = "Apple Bluetooth Device Driver"
+

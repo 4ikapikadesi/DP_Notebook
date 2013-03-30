@@ -1,0 +1,94 @@
+; SonyImgF.inf
+;
+; Installation inf for the Disk Performance Monitor Filter driver [ DDK Sample ]
+;
+; Copyright (c) Microsoft Corporation
+;
+
+[Version]
+Signature = "$Windows NT$"
+Class     = Image
+ClassGUID = {6bdd1fc6-810f-11d0-bec7-08002be2092f}
+Provider  = %msft%
+DriverVer = 03/06/2006,1.0.06.03060
+CatalogFile = SonyImgF.cat
+
+DriverPackageType = ClassFilter
+DriverPackageDisplayName = %DESC%
+
+; Win2000
+
+[SourceDisksNames]
+;1 = %diskid1%,,,\i386
+1 = %diskid1%,,,
+
+; WinXP and later
+
+[SourceDisksNames.x86]
+;1 = %diskid1%,,,\i386
+1 = %diskid1%,,,
+
+[SourceDisksNames.ia64]
+1 = %diskid1%,,,\ia64
+
+[SourceDisksNames.amd64]
+1 = %diskid1%,,,\amd64
+
+[SourceDisksFiles]
+SonyImgF.sys=1
+
+[DestinationDirs]
+SonyImgF.DriverFiles = 12
+DefaultDestDir = 12
+
+;
+; General installation section
+;
+
+[DefaultInstall.NT]
+CopyFiles = SonyImgF.DriverFiles
+Addreg    = SonyImgF.AddReg
+
+[DefaultUninstall.NT]
+DelFiles = SonyImgF.DriverFiles
+Delreg    = SonyImgF.DelReg
+
+[SonyImgF.DriverFiles]
+SonyImgF.sys
+
+
+[SonyImgF.AddReg]
+HKLM, System\CurrentControlSet\Control\Class\{6bdd1fc6-810f-11d0-bec7-08002be2092f}, UpperFilters, 0x00010008, SonyImgF
+
+[SonyImgF.DelReg]
+HKLM, System\CurrentControlSet\Control\Class\{6bdd1fc6-810f-11d0-bec7-08002be2092f}, UpperFilters, 0x00018002, SonyImgF
+
+
+;
+; Service installation section
+;
+
+[DefaultInstall.NT.Services]
+AddService = SonyImgF, , SonyImgF.Service.Install
+
+[SonyImgF.Service.Install]
+DisplayName    = %service_desc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %12%\SonyImgF.sys
+
+[DefaultUninstall.NT.Services]
+DelService = SonyImgF, 0x200
+
+;
+; Localizable Strings
+;
+
+[Strings]
+
+msft         = "Sony Corporation"
+service_desc = "Sony Image Conversion Filter Driver"
+diskid1      = "Sony Corp. Installation Disk #1 (SonyImgF)"
+
+DESC = "Sony Image Convertion Filter(Driver)"

@@ -1,0 +1,154 @@
+; Installation inf for the Apple Bluetooth Driver
+;
+; Copyright © 2006-2009 Apple Inc. All Rights Reserved.
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Bluetooth
+ClassGuid={e0cbf06c-cd8b-4647-bb8a-263b43f0f974}
+Provider=%AAPL%
+DriverVer=03/01/2010, 3.0.0.5
+CatalogFile=AppleBT.CAT
+ 
+[ControlFlags]
+ExcludeFromSelect = *
+
+[DestinationDirs]
+DefaultDestDir = 12
+applebt_CoInstaller_CopyFiles = 11
+
+[Manufacturer]
+%MfgName%=Apple, NTx86, NT.5.1,NT.6.0,NT.6.1
+
+; Default section - Don't install through this INF file.
+[Apple]
+
+[Apple.NTx86]
+
+; This section is for XP only
+[Apple.NT.5.1]
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8203
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8204
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8205
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8206
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8207
+%AppleBuildInBt%=AppleBtMsXP, USB\VID_05ac&PID_820f
+%AppleBuildInBt%=AppleBtMsXP, USB\VID_05ac&PID_8210
+%AppleBuildInBt%=AppleBtMsXP, USB\VID_05ac&PID_8216
+%AppleBuildInBt%=AppleBtMsXP, USB\VID_05ac&PID_8217
+Apple Built-in BluetoothDFU=AppleBt, USB\VID_05ac&PID_ffff
+
+; This section is for Vista only
+[Apple.NT.6.0]
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8203
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8204
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8205
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8206
+%AppleBuildInBt%=AppleBt, USB\VID_05ac&PID_8207
+Apple Built-in BluetoothDFU=AppleBt, USB\VID_05ac&PID_ffff
+
+; This section is for Windows 7 only
+[Apple.NT.6.1]
+; No action
+; OS will load in-box driver.
+
+[ControlFlags]
+; We don't want our device to be installable via the non-PnP hardware dialogs
+ExcludeFromSelect  = *
+
+[AppleBtMsXP.NT]
+Include=Bth.inf
+Needs=BthUsb.NT
+
+[AppleBtMsXP.NT.HW]
+Needs=BthUsb.NT.HW
+
+[AppleBtMsXP.NT.Services]
+needs=BthUsb.NT.Services
+                    
+[AppleBt.NT]
+Include=Bth.inf
+Needs=BthUsb.NT
+CopyFiles = AppleBt.NT.Copy
+
+[AppleBt.NT.Copy]
+applebt.sys
+
+[AppleBt.NT.HW]
+Include=Bth.inf
+Needs=BthUsb.NT.HW
+AddReg=AppleBtAddReg.NT.HW.AddReg
+
+[AppleBtAddReg.NT.HW.AddReg]
+HKR,,"LowerFilters",0x00010000,"applebt"
+
+[AppleBt.NT.Services]
+Include=Bth.inf
+needs=BthUsb.NT.Services
+AddService = applebt, , applebt_Service_Inst
+
+[applebt_Service_Inst]
+DisplayName    = %AppleBuildInBt%
+ServiceType    = %SERVICE_KERNEL_DRIVER% 
+StartType      = %SERVICE_DEMAND_START% 
+ErrorControl   = %SERVICE_ERROR_IGNORE% 
+ServiceBinary  = %12%\applebt.sys 
+;LoadOrderGroup = PNP Filter
+
+[applebt.NT.CoInstallers]
+AddReg=applebt_CoInstaller_AddReg
+CopyFiles=applebt_CoInstaller_CopyFiles
+
+[applebt_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01005.dll,WdfCoInstaller"
+
+[applebt_CoInstaller_CopyFiles]
+WdfCoInstaller01005.dll
+
+[applebt.NT.Wdf]
+KmdfService = applebt, applebt_wdfsect
+
+[applebt_wdfsect]
+KmdfLibraryVersion = 1.5
+
+[SourceDisksFiles]
+wdfcoinstaller01005.dll=1
+
+
+; Source Media Section
+; ---------------------------------------------------------
+
+[SourceDisksFiles]
+applebt.sys = 1
+
+[SourceDisksNames]
+1 = %DISK_NAME%,,,
+
+[Strings]
+;  *******Localizable Strings******* 
+AAPL           = "Apple Inc."
+MfgName        = "Apple Inc."
+AppleBuildInBt = "Apple Built-in Bluetooth"
+DISK_NAME      = "Apple Built-in Bluetooth Disk"
+
+
+;  *******Non Localizable Strings******* 
+
+SERVICE_BOOT_START     = 0x0 
+SERVICE_SYSTEM_START   = 0x1 
+SERVICE_AUTO_START     = 0x2 
+SERVICE_DEMAND_START   = 0x3 
+SERVICE_DISABLED       = 0x4 
+
+SERVICE_KERNEL_DRIVER  = 0x1 
+SERVICE_ERROR_IGNORE   = 0x0 
+SERVICE_ERROR_NORMAL   = 0x1 
+SERVICE_ERROR_SEVERE   = 0x2 
+SERVICE_ERROR_CRITICAL = 0x3 
+
+REG_EXPAND_SZ          = 0x00020000 
+REG_DWORD              = 0x00010001 
+REG_MULTI_SZ           = 0x00010000
+REG_BINARY             = 0x00000001
+REG_SZ                 = 0x00000000

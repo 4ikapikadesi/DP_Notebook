@@ -1,0 +1,165 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Fidmous.inf
+;
+; Installation file (.inf) for the Fujitsu Touch Panel device.
+;
+; (c) Copyright 2006-2007 Fujitsu Component Ltd. 
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Version]
+Signature   = "$Windows NT$"
+Provider    = %FT%
+ClassGUID   = {4D36E96F-E325-11CE-BFC1-08002BE10318}
+Class       = Mouse
+CatalogFile = Fidmous.cat
+DriverVer   = 09/11/2007,1.0.0.2
+
+;--------------------------------------------------------------
+[DestinationDirs]
+DefaultDestDir   = 12
+FIDMOUS.CopySys  = 12
+FIDMOUS.CopyDel  = 11
+FIDMOUS.CopyExe  = 11
+
+;--------------------------------------------------------------
+; Driver information
+;
+[Manufacturer]
+%FT%   = FT.Mfg
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[FT.Mfg]
+%FT.DeviceDesc0% = FIDMOUS, SERENUM\FJC5000
+%FT.DeviceDesc0% = FIDMOUS, SERENUM\FJC5001
+
+;--------------------------------------------------------------
+; General installation section
+;
+[FIDMOUS]
+AddReg     = FIDMOUS.AddReg
+CopyFiles  = FIDMOUS.CopySys, FIDMOUS.CopyDel, FIDMOUS.CopyExe
+
+[FIDMOUS.AddReg]
+HKCU, %SOFTWAREROOT%, Option,          0x00010001, 0x11420000
+HKCU, %SOFTWAREROOT%, Function,        0x00010001, 0x00000000
+HKCU, %SOFTWAREROOT%, Freq,            0x00010001, 0x000003e8
+HKCU, %SOFTWAREROOT%, Duration,        0x00010001, 0x00000032
+HKCU, %SOFTWAREROOT%, StdFreq,         0x00010001, 0x000003e8
+HKCU, %SOFTWAREROOT%, StdDuration,     0x00010001, 0x00000032
+HKCU, %SOFTWAREROOT%, DHeight,         0x00010001, 0x00000022
+HKCU, %SOFTWAREROOT%, DWidth,          0x00010001, 0x00000022
+HKCU, %SOFTWAREROOT%, SetRate,         0x00010001, 0x00000005
+HKCU, %SOFTWAREROOT%, SpinTop,         0x00010001, 0x00000000
+HKCU, %SOFTWAREROOT%, SetWork,         0x00010001, 0x00000000
+HKCU, %SOFTWAREROOT%, ResolutionX,     0x00010001, 0x03200320
+HKCU, %SOFTWAREROOT%, ResolutionY,     0x00010001, 0x02580258
+HKCU, %SOFTWAREROOT%, COMM,            0x00010001, 0x40002000
+
+HKLM, %SERVICEROOT%,  Option,          0x00010001, 0x11420000
+HKLM, %SERVICEROOT%,  Function,        0x00010001, 0x00000000
+HKLM, %SERVICEROOT%,  Freq,            0x00010001, 0x000003e8
+HKLM, %SERVICEROOT%,  Duration,        0x00010001, 0x00000032
+HKLM, %SERVICEROOT%,  StdFreq,         0x00010001, 0x000003e8
+HKLM, %SERVICEROOT%,  StdDuration,     0x00010001, 0x00000032
+HKLM, %SERVICEROOT%,  DHeight,         0x00010001, 0x00000022
+HKLM, %SERVICEROOT%,  DWidth,          0x00010001, 0x00000022
+HKLM, %SERVICEROOT%,  SetRate,         0x00010001, 0x00000005
+HKLM, %SERVICEROOT%,  NoWork,          0x00010001, 0x00000000
+HKLM, %SERVICEROOT%,  Origin,          0x00010001, 0x00000000
+HKLM, %SERVICEROOT%,  Version,         0x00000000, "V1.0L02"
+HKLM, %SERVICEROOT%,  Language,        0x00010001, 0x00000000
+HKLM, %SERVICEROOT%,  Status,          0x00000000, "Normal"
+HKLM, %SERVICEROOT%,  SpinTop,         0x00010001, 0x00000000
+HKLM, %SERVICEROOT%,  SetFifo,         0x00010001, 0x00000000
+HKLM, %SERVICEROOT%,  SetWork,         0x00010001, 0x00000000
+HKLM, %SERVICEROOT%,  ResolutionX,     0x00010001, 0x03200320
+HKLM, %SERVICEROOT%,  ResolutionY,     0x00010001, 0x02580258
+HKLM, %SERVICEROOT%,  COMM,            0x00010001, 0x40002000
+HKLM, %RUNENTRY%,     FIDMSFLT,        0x00000000, "%11%\Fidmsflt.exe"
+HKLM, %RUNONCE%,      FIDSET,          0x00000000, "%11%\Fidset.exe Fidmsflt.exe"
+HKLM, %UNINST%,       DisplayName,     0x00000000, %FT.DeviceDesc0%
+HKLM, %UNINST%,       UninstallString, 0x00000000, "%11%\FidUinst.exe -uninst"
+
+;--------------------------------------------------------------
+; File sections
+;
+[FIDMOUS.CopySys]
+Fidmous.sys,,,0x00000004
+
+[FIDMOUS.CopyDel]
+Fidmous.del,,,0x00000004
+
+[FIDMOUS.CopyExe]
+Calwin.exe,,,0x00000004
+Fidset.exe,,,0x00000004
+Fidmsflt.exe,,,0x00000004
+FidUinst.exe,,,0x00000004
+Fidmous.cpl,,,0x00000004
+RButton.exe,,,0x00000004
+Ftimv.dll,,,0x00000004
+Panel.bmp,,,0x00000004
+fphook.dll,,,0x00000004
+Event.exe,,,0x00000004
+Dvrlist.txt,,,0x00000004
+FidTAPI.dll,,,0x00000004
+
+;--------------------------------------------------------------
+; Service Installation
+;
+[FIDMOUS.Services]
+AddService = FIDMOUS, 0x00000002 , FIDMOUS_Service_Inst, FIDMOUS_EventLog_Inst
+Include    = msmouse.inf
+Needs      = MouClass.Services
+
+[FIDMOUS_Service_Inst]
+DisplayName    = %FIDMOUS.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_SYSTEM_START
+ErrorControl   = 0x1                ; SERVICE_ERROR_NORMAL
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\Fidmous.sys
+
+[FIDMOUS_EventLog_Inst]
+AddReg = FIDMOUS_EventLog_AddReg
+
+[FIDMOUS_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\Fidmous.sys"
+HKR,,TypesSupported,0x00010001,7
+
+;--------------------------------------------------------------
+; Source file information
+;
+[SourceDisksNames.x86]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+; Files for disk Fujitsu Component Ltd. Installation Disk #1 (Mouse)
+Fidmous.sys   = 1,,
+Fidmous.del   = 1,,
+Calwin.exe    = 1,,
+Fidset.exe    = 1,,
+Fidmsflt.exe  = 1,,
+FidUinst.exe  = 1,,
+Fidmous.cpl   = 1,,
+RButton.exe   = 1,,
+Ftimv.dll     = 1,,
+Panel.bmp     = 1,,
+Dvrlist.txt   = 1,,
+fphook.dll    = 1,,
+Event.exe     = 1,,
+FidTAPI.dll   = 1,,
+
+[Strings]
+FT.DeviceDesc0   = "Fujitsu Touch Panel driver (Windows Vista)"
+DiskId1          = "Fujitsu Component Ltd. Installation Disk #1 (Mouse)"
+FT               = "Fujitsu Component Ltd."
+FIDMOUS.SvcDesc  = "Fujitsu Touch Panel"
+SERVICEROOT      = "System\CurrentControlSet\Services\FIDMOUS\Parameters"
+SOFTWAREROOT     = "Software\Fujitsu Component\FIDMOUS"
+RUNENTRY         = "SOFTWARE\Microsoft\Windows\CurrentVersion\run"
+RUNONCE          = "SOFTWARE\Microsoft\Windows\CurrentVersion\runonce"
+UNINST           = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\FIDMOUS"

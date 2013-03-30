@@ -1,0 +1,71 @@
+;Copyright (c) 2005-2008, MiTAC Corporation
+
+[version]
+CatalogFile=RMC.cat
+Signature="$CHICAGO$"
+Class=System
+ClassGUID={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider=%MTC%
+DriverVer=08/17/2005, 5.1.2195.1002
+
+[SourceDisksNames]
+1 = "RMC",,,
+
+[SourceDisksFiles]
+RMC.sys = 1
+RMC.exe = 1
+HookKey.dll=1
+UnRMC.exe=1
+UnRMC.bat=1
+
+[Manufacturer]
+%MTC%=MTC_RMC
+
+[MTC_RMC]
+%*MTC0001.DeviceDesc% = RMC,*MTC0001
+
+
+
+[RMC.NT]
+CopyFiles=RMC_CopySysNT
+AddReg=RMC_AddRegNT
+Reboot
+
+
+
+[RMC_CopySysNT]
+RMC.sys,,,2
+RMC.exe,,,2
+HookKey.dll,,,2
+UnRMC.exe,,,2
+UnRMC.bat,,,2
+
+[DestinationDirs]
+DefaultDestDir=10,system32\drivers
+RMC_CopySysNT=10,system32\drivers
+
+
+
+[RMC_AddRegNT]
+HKR,,DevLoader,,"*ntkern"
+HKR,,Driver,,"RMC.sys"
+HKR,,NTMPDriver,,"RMC.sys"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\RMC,DisplayName,,"%*MTC0001.DeviceDesc%"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\RMC,UninstallString,,"%10%\system32\drivers\UnRMC.exe"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Run,RMC,,"%10%\system32\drivers\RMC.exe"
+
+[RMC.NT.Services]
+AddService = MTC0001_RMC,%SPSVCINST_ASSOCSERVICE%,MTC_Service_Inst
+
+[MTC_Service_Inst]
+DisplayName     = %SvcDesc%
+ServiceType     = 1                  ; SERVICE_KERNEL_DRIVER
+StartType       = 2                  ; SERVICE_AUTO_START
+ErrorControl    = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary   = %10%\system32\drivers\RMC.sys
+
+[Strings]
+MTC			= "   "
+*MTC0001.DeviceDesc     = "Remove Control Device V1.0.0.2"
+SvcDesc         	= "Remove Control Device"
+SPSVCINST_ASSOCSERVICE	= 0x00000002

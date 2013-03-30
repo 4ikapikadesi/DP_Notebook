@@ -1,0 +1,94 @@
+; Amddfltr.inf
+;
+; Copyright (c) 2007-2009 Advanced Micro Devices
+;
+
+[Version]
+Signature = "$Windows NT$"
+Class     = DiskDrive
+ClassGUID = {4d36e967-e325-11ce-bfc1-08002be10318}
+Provider  = %AMD%
+DriverPackageType=ClassFilter
+DriverPackageDisplayName="AMD Driver Support for HP 3D DriveGuard"
+
+CatalogFile=Amddfltr.cat
+DriverVer = 12/07/2007,5.1.0000.00
+
+;
+; General installation section
+;
+
+[DefaultInstall]
+CopyFiles = @Amddfltr.sys
+Addreg    = Amddfltr.AddReg
+
+
+[DefaultInstall.NT]
+CopyFiles = @Amddfltr.sys
+Addreg    = Amddfltr.AddReg
+
+[DefaultInstall.NTAMD64]
+CopyFiles = @Amddfltr64.sys
+Addreg    = Amddfltr64.AddReg
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+
+[Amddfltr.AddReg]
+HKLM, System\CurrentControlSet\Control\Class\{4d36e967-e325-11ce-bfc1-08002be10318}, LowerFilters, 0x00010008, Amddfltr
+HKLM, System\CurrentControlSet\Services\hpdskflt\Parameters, ForceIdleCmdSupport, %REG_DWORD%,1
+
+
+[Amddfltr64.AddReg]
+HKLM, System\CurrentControlSet\Control\Class\{4d36e967-e325-11ce-bfc1-08002be10318}, LowerFilters, 0x00010008, Amddfltr64
+HKLM, System\CurrentControlSet\Services\hpdskflt\Parameters, ForceIdleCmdSupport, %REG_DWORD%,1
+
+
+;
+; Service installation section
+;
+
+[DefaultInstall.Services]
+AddService = Amddfltr, , Amddfltr.Service.Install
+
+[DefaultInstall.NT.Services]
+AddService = Amddfltr, , Amddfltr.Service.Install
+
+[DefaultInstall.NTAMD64.Services]
+AddService = Amddfltr64, , Amddfltr.Service.NTAMD64.Install
+
+[Amddfltr.Service.Install]
+DisplayName    = %service_desc%
+ServiceType    = 1
+StartType      = 0
+ErrorControl   = 1
+ServiceBinary  = %12%\Amddfltr.sys
+LoadOrderGroup = "PnP Filter"
+
+[Amddfltr.Service.NTAMD64.Install]
+DisplayName    = %service_desc%
+ServiceType    = 1
+StartType      = 0
+ErrorControl   = 1
+ServiceBinary  = %12%\Amddfltr64.sys
+LoadOrderGroup = "PnP Filter"
+
+[SourceDisksNames]
+1=%DiskId%
+
+[SourceDisksFiles]
+Amddfltr.sys = 1
+Amddfltr64.sys = 1
+
+;
+; Localizable Strings
+;
+
+[Strings]
+
+AMD         = "Advanced Micro Devices"
+service_desc = "Amd Disk Lower Filter Driver"
+DiskId = "Amd Disk Filter Driver Install disk (1)"
+
+REG_DWORD              = 0x00010001

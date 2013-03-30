@@ -1,0 +1,89 @@
+;==============================================================================
+; [FUJ02E1.INF]
+;  Fujitsu FUJ02E1 Device Driver INF File
+;------------------------------------------------------------------------------
+; All Rights Reserved, Copyright (C) FUJITSU LIMITED. 2001-2003.
+;==============================================================================
+
+
+[Version]
+Signature="$Chicago$"
+Class=System
+CLASSGUID={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%FJMCD%
+DriverVer=10/18/2004,1.0.0.3
+CatalogFile=FUJ02E1.cat
+
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%FUJ02E1.Manufacture% = FJMCD
+
+[FJMCD]
+%FUJ02E1.DeviceDesc%=FUJ02E1.Install, ,ACPI\FUJ02E1
+
+[DestinationDirs]
+FUJ02E1.Files.Driver=10,System32\Drivers
+FUJ02E1.Files.Driver.NTx86=10,System32\Drivers
+
+[SourceDisksNames]
+1=%FUJ02E1.DiskName%,,,
+
+
+[SourceDisksFiles]
+fuj02e1.sys=1
+
+[SourceDisksFiles.x86]
+fuj02e1.sys=1
+
+;=============================================================================
+; Windows 98
+;-----------------------------------------------------------------------------
+[FUJ02E1.Install]
+CopyFiles=FUJ02E1.Files.Driver
+AddReg=FUJ02E1.AddReg
+
+[FUJ02E1.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,FUJ02E1.sys
+
+[FUJ02E1.Files.Driver]
+FUJ02E1.sys
+
+;=============================================================================
+; Windows 2000
+;-----------------------------------------------------------------------------
+[FUJ02E1.Install.NTx86]
+CopyFiles=FUJ02E1.Files.Driver.NTx86
+
+[FUJ02E1.Files.Driver.NTx86]
+FUJ02E1.sys
+
+[FUJ02E1.Install.NTx86.Services]
+AddService = FUJ02E1, %SPSVCINST_ASSOCSERVICE%, FUJ02E1.Service
+
+[FUJ02E1.Service]
+DisplayName    = %FUJ02E1.ServiceName%
+ServiceType    = %SERVICE_KERNEL_DRIVER%
+StartType      = %SERVICE_DEMAND_START%
+ErrorControl   = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %10%\System32\Drivers\FUJ02E1.sys
+
+
+;==============================================================================
+; Strings
+;------------------------------------------------------------------------------
+[Strings]
+FJMCD="FUJITSU"
+FUJ02E1.Manufacture="Fujitsu Limited"
+FUJ02E1.DeviceDesc="Fujitsu FUJ02E1 Device Driver"
+FUJ02E1.DiskName="Fujitsu Drivers Disk"
+FUJ02E1.ServiceName=%FUJ02E1.DeviceDesc%
+SPSVCINST_ASSOCSERVICE=0x00000002
+SERVICE_KERNEL_DRIVER=1
+SERVICE_AUTO_START=2
+SERVICE_DEMAND_START=3
+SERVICE_ERROR_NORMAL=1
+

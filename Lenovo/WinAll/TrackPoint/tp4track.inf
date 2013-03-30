@@ -1,0 +1,402 @@
+;==============================================================================
+; TP4TRACK.INF
+; Copyright (c) IBM Corporation 1999, 2005.
+; Copyright (c) Lenovo 2005-2011.
+;==============================================================================
+;
+; The Win2000 TrackPoint software can be installed by selecting this
+; INF file from the Control Panel/System Properties/Hardware/Device
+; Manager, Mouse, MouseDevice, Driver, Change Driver selection.
+;
+;==============================================================================
+; Version, class and catalog information
+;==============================================================================
+[Version]
+signature="$Windows NT$"
+Class=Mouse
+ClassGUID={4D36E96F-E325-11CE-BFC1-08002BE10318}
+Provider=%FilterProvider%
+CatalogFile=tp4track.cat
+DriverVer=10/28/2011,4.73.1
+
+;==============================================================================
+; Control flags for installation.
+;==============================================================================
+[ControlFlags]
+ExcludeFromSelect=*
+
+;==============================================================================
+; List of installation sections for manufacturers. In this INF file
+; "Lenovo" has a single mouse type "PS/2 TrackPoint"
+; that will run the INF section TrackPoint_Install(64/32) to install the
+; TrackPoint driver.
+;==============================================================================
+[Manufacturer]
+%FilterProvider%=Filter_Mouse,NTAMD64,NTx86.6.0
+
+
+; For 32-bit Windows XP
+[Filter_Mouse]
+%TrackPointMouse%=TrackPoint_InstallXP32,*IBM3780
+
+
+; For 64-bit Vista
+[Filter_Mouse.NTAMD64]
+%TrackPointMouse%=TrackPoint_InstallVista,*IBM3780
+
+; For 32-bit Vista
+[Filter_Mouse.NTx86.6.0]
+%TrackPointMouse%=TrackPoint_InstallVista,*IBM3780
+
+;==============================================================================
+; Main installation section
+; All mouse IDs (except unknown) map to the same driver
+;==============================================================================
+[TrackPoint_InstallVista]
+DelReg    = TrackPoint.DelPrevReg
+CopyFiles = TrackPoint.CopyFiles,TrackPoint.UsrCopy,TrackPoint.UsrCopyDK,TrackPoint.UsrCopyFI,TrackPoint.UsrCopyFR,TrackPoint.UsrCopyGR,TrackPoint.UsrCopyIT,TrackPoint.UsrCopyJP,TrackPoint.UsrCopyNE,TrackPoint.UsrCopyNO,TrackPoint.UsrCopySP,TrackPoint.UsrCopySV,TrackPoint.UsrCopyUS
+AddReg    = TrackPoint.AddReg,TrackPoint.AddUnInstallReg,TrackPoint.MouseExtAddReg
+
+[TrackPoint_InstallXP32]
+DelReg    = TrackPoint.DelPrevReg
+CopyFiles = TrackPoint.CopyFiles,TrackPoint.UsrCopy,TrackPoint.UsrCopyDK,TrackPoint.UsrCopyFI,TrackPoint.UsrCopyFR,TrackPoint.UsrCopyGR,TrackPoint.UsrCopyIT,TrackPoint.UsrCopyJP,TrackPoint.UsrCopyNE,TrackPoint.UsrCopyNO,TrackPoint.UsrCopySP,TrackPoint.UsrCopySV,TrackPoint.UsrCopyUS
+AddReg    = TrackPoint.AddReg,TrackPoint.AddUnInstallReg,TrackPoint.MouseExtAddReg
+
+[TrackPoint_InstallVista.CoInstallers]
+AddReg    = TrackPoint.CoInst_AddReg
+CopyFiles = TrackPoint.CoInstallerCopyFiles
+
+
+[TrackPoint_InstallXP32.CoInstallers]
+AddReg    = TrackPoint.CoInst_AddReg
+CopyFiles = TrackPoint.CoInstallerCopyFiles
+
+[TrackPoint_InstallVista.Wdf]
+KmdfService = Tp4Track, Tp4Track_wdfsect
+
+[TrackPoint_InstallXP32.Wdf]
+KmdfService = Tp4Track, Tp4Track_wdfsect
+
+[Tp4Track_wdfsect]
+KmdfLibraryVersion = 1.1
+
+[TrackPoint_CoInstaller_Info]
+SourceDir=%1%
+
+;==============================================================================
+; Delete any registry entries for previous TrackPoint driver. It is
+; especially important to delete any mouse control panel stuff installed
+; by the Microsoft TrackPoint driver on the Win 2000 cdrom.
+;==============================================================================
+[TrackPoint.DelPrevReg]
+HKCR,"CLSID\{A8BD5E40-B686-11D0-BD54-0004AC25B162}","",0x00000002,"Mouse CPL TrackPoint Extension"
+HKCR,"CLSID\{A8BD5E40-B686-11D0-BD54-0004AC25B162}\InProcServer32","",0x00000002,"tp4.dll"
+HKCR,"CLSID\{A8BD5E40-B686-11D0-BD54-0004AC25B162}\InProcServer32","ThreadingModel",0x00000002,"Apartment"
+HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Controls Folder\Mouse\shellex\PropertySheetHandlers\Mouse CPL TrackPoint Extension","",0x00000002,"{A8BD5E40-B686-11D0-BD54-0004AC25B162}"
+
+;=====================================================================
+; Media Descriptions
+;=====================================================================
+[SourceDisksNames]
+1=%Media%
+
+
+;=====================================================================
+; Digital signature stuff
+;=====================================================================
+[SourceDisksFiles]
+tp4track.sys=1
+tp4serv.exe=1
+tp4ui.dll=1
+tp4table.dat=1
+tp4unins.exe=1
+tp4-mg.gif=1
+tp4-note.gif=1
+tp4-sc.gif=1
+tp4scrol.css=1
+tp4coin3.dll=1
+wdfcoinstaller01009.dll=1
+
+tp4scrolDK.htm=1,\DK
+tp4uiresDK.dll=1,\DK
+tp4helpDK.chm=1,\DK
+
+tp4scrolFI.htm=1,\FI
+tp4uiresFI.dll=1,\FI
+tp4helpFI.chm=1,\FI
+
+tp4scrolFR.htm=1,\FR
+tp4uiresFR.dll=1,\FR
+tp4helpFR.chm=1,\FR
+
+tp4scrolGR.htm=1,\GR
+tp4uiresGR.dll=1,\GR
+tp4helpGR.chm=1,\GR
+
+tp4scrolIT.htm=1,\IT
+tp4uiresIT.dll=1,\IT
+tp4helpIT.chm=1,\IT
+
+tp4scrolJP.htm=1,\JP
+tp4uiresJP.dll=1,\JP
+tp4helpJP.chm=1,\JP
+
+tp4scrolNE.htm=1,\NE
+tp4uiresNE.dll=1,\NE
+tp4helpNE.chm=1,\NE
+
+tp4scrolNO.htm=1,\NO
+tp4uiresNO.dll=1,\NO
+tp4helpNO.chm=1,\NO
+
+tp4scrolSP.htm=1,\SP
+tp4uiresSP.dll=1,\SP
+tp4helpSP.chm=1,\SP
+
+tp4scrolSV.htm=1,\SV
+tp4uiresSV.dll=1,\SV
+tp4helpSV.chm=1,\SV
+
+tp4scrolUS.htm=1,\US
+tp4uiresUS.dll=1,\US
+tp4helpUS.chm=1,\US
+
+;==============================================================================
+; Copy TrackPoint device driver files.
+;==============================================================================
+[TrackPoint.CopyFiles]
+tp4track.sys,,,%FORCE_COPY%
+
+;==============================================================================
+; Copy the user-mode files to the system SYSTEM32 directory
+;==============================================================================
+[TrackPoint.UsrCopy]
+tp4serv.exe,,,%FORCE_COPY%
+tp4ui.dll,,,%FORCE_COPY%
+tp4table.dat,,,%FORCE_COPY%
+tp4unins.exe,,,%FORCE_COPY%
+tp4-mg.gif,,,%FORCE_COPY%
+tp4-note.gif,,,%FORCE_COPY%
+tp4-sc.gif,,,%FORCE_COPY%
+tp4scrol.css,,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyDK]
+tp4scrol.htm,tp4scrolDK.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresDK.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpDK.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyFI]
+tp4scrol.htm,tp4scrolFI.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresFI.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpFI.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyFR]
+tp4scrol.htm,tp4scrolFR.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresFR.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpFR.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyGR]
+tp4scrol.htm,tp4scrolGR.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresGR.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpGR.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyIT]
+tp4scrol.htm,tp4scrolIT.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresIT.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpIT.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyJP]
+tp4scrol.htm,tp4scrolJP.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresJP.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpJP.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyNE]
+tp4scrol.htm,tp4scrolNE.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresNE.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpNE.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyNO]
+tp4scrol.htm,tp4scrolNO.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresNO.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpNO.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopySP]
+tp4scrol.htm,tp4scrolSP.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresSP.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpSP.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopySV]
+tp4scrol.htm,tp4scrolSV.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresSV.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpSV.chm,,%FORCE_COPY%
+
+[TrackPoint.UsrCopyUS]
+tp4scrol.htm,tp4scrolUS.htm,,%FORCE_COPY%
+tp4uires.dll,tp4uiresUS.dll,,%FORCE_COPY%
+tp4help.chm,tp4helpUS.chm,,%FORCE_COPY%
+
+;==============================================================================
+; Copy the user-mode files to the system SYSWOW64 directory
+;==============================================================================
+[TrackPoint.UsrCopy_onSysWow64]
+tp4-mg.gif,,,%FORCE_COPY%
+tp4-note.gif,,,%FORCE_COPY%
+tp4-sc.gif,,,%FORCE_COPY%
+tp4scrol.css,,,%FORCE_COPY%
+
+;==============================================================================
+; Copy the coinstaller to the system SYSTEM32 directory
+;==============================================================================
+[TrackPoint.CoInstallerCopyFiles]
+tp4coin3.dll,,,0x00000001
+wdfcoinstaller01009.dll,,,0x00000001
+
+;==============================================================================
+; Add registry entry to start the TrackPoint server process and other
+; basic registry entries.
+;==============================================================================
+[TrackPoint.AddReg]
+HKLM,Software\Microsoft\Windows\CurrentVersion\Run,TrackPointSrv,0x00020000,"%ProgramFiles%\%COMPANYKEY%\%TP4PRODKEY%\tp4serv.exe"
+HKLM,Software\%COMPANYKEY%\%TP4PRODKEY%,"MOUSE_CPL_EXT",65537,01,00,00,00
+HKLM,Software\%COMPANYKEY%\%TP4PRODKEY%,"TAP_FILTER",65537,00,00,00,00
+HKLM,Software\%COMPANYKEY%\%TP4PRODKEY%,"SAMPLE_RATE",65537,28,00,00,00
+HKLM,Software\%COMPANYKEY%\"%TP4PRODKEY%","EXT_MOUSE_DETECTION",65537,03,00,00,00
+HKLM,Software\%COMPANYKEY%\%TP4PRODKEY%,"OPTIONS_3E",0x00010001,0x00001703
+HKLM,Software\%COMPANYKEY%\%TP4PRODKEY%,"OPTIONS_3B",0x00010001,0x00001703
+HKLM,Software\%COMPANYKEY%\%TP4PRODKEY%,"OPTIONS_3A",0x00010001,0x00000400
+
+;==============================================================================
+; Add registry entries to support the integration of TrackPoint with mouse CPL
+;==============================================================================
+[TrackPoint.MouseExtAddReg]
+HKCR,"CLSID\{A8BD5E40-B686-11D0-BD54-0004AC25B162}","",0x00000002,"Mouse CPL TrackPoint Extension"
+HKCR,"CLSID\{A8BD5E40-B686-11D0-BD54-0004AC25B162}\InProcServer32","",0x00020000,"%ProgramFiles%\%COMPANYKEY%\%TP4PRODKEY%\tp4ui.dll"
+HKCR,"CLSID\{A8BD5E40-B686-11D0-BD54-0004AC25B162}\InProcServer32","ThreadingModel",0x00000002,"Apartment"
+HKLM,"SOFTWARE\Microsoft\Windows\CurrentVersion\Controls Folder\Mouse\shellex\PropertySheetHandlers\Mouse CPL TrackPoint Extension","",0x00000002,"{A8BD5E40-B686-11D0-BD54-0004AC25B162}"
+
+;==============================================================================
+; Add registry enrty to do uninstall the TrackPoint software.
+; The add/remove program uses this entry.
+;==============================================================================
+[TrackPoint.AddUnInstallReg]
+
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\%TP4PRODKEY%,"DisplayName",0,%TP4DISPNAME%
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\"%TP4PRODKEY%","DisplayIcon",0x00020000,"%ProgramFiles%\%COMPANYKEY%\%TP4PRODKEY%\tp4serv.exe"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\"%TP4PRODKEY%","InstallLocation",0,"%ProgramFiles%\%COMPANYKEY%\%TP4PRODKEY%"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\%TP4PRODKEY%,"UninstallString",0x00020000,"%ProgramFiles%\%COMPANYKEY%\%TP4PRODKEY%\tp4unins.exe"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\%TP4PRODKEY%,"DisplayVersion",0,"4.73.1.0"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\"%TP4PRODKEY%","Publisher",0,%COMPANYKEY%
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\"%TP4PRODKEY%","MajorVersion",0,"4"
+HKLM,Software\Microsoft\Windows\CurrentVersion\Uninstall\"%TP4PRODKEY%","MinorVersion",0,"73.1"
+
+;==============================================================================
+; Add registry entry for the coinstaller
+;==============================================================================
+[TrackPoint.CoInst_AddReg]
+HKR,,CoInstallers32,0x00010000,"tp4coin3.dll,TrackPointCoInstaller", "wdfcoinstaller01009.dll,WdfCoInstaller"
+
+;==============================================================================
+; Add device driver entries. For each driver (port, filter and class)
+; there is a service entry and an event logging entry.
+;==============================================================================
+[TrackPoint_InstallVista.Services]
+; Add Service for Filter Driver
+AddService = Tp4Track,, Tp4Track_Service_Inst, Tp4Track_EventLog_Inst
+DelService = %TP4_SVCNAME%,SPSVCINST_STOPSERVICE
+DelService = %TP4_SVCDISPNAME%,SPSVCINST_STOPSERVICE
+
+
+[TrackPoint_InstallXP32.Services]
+; Add Service for Filter Driver
+AddService = Tp4Track,, Tp4Track_Service_Inst, Tp4Track_EventLog_Inst
+
+;==============================================================================
+; Delete previous version of TrackPoint Interactive service in windows XP
+;==============================================================================
+DelService = %TP4_SVCNAME%,SPSVCINST_STOPSERVICE
+DelService = %TP4_SVCDISPNAME%,SPSVCINST_STOPSERVICE
+
+
+;==============================================================================
+; Add service entry and event log entry for TrackPoint system driver
+;==============================================================================
+[Tp4Track_Service_Inst]
+DisplayName    = %Tp4Track.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\tp4track.sys
+LoadOrderGroup = Keyboard Port
+
+[Tp4Track_EventLog_Inst]
+AddReg = Tp4Track_EventLog_AddReg
+
+[Tp4Track_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,%11%\IoLogMsg.dll;%11%\drivers\tp4track.sys
+HKR,,TypesSupported,0x00010001,7
+
+;==============================================================================
+; Add device level registry entries for TrackPoint device
+;==============================================================================
+[TrackPoint_InstallVista.HW]
+AddReg = TrackPoint_AddReg.HW
+
+[TrackPoint_InstallXP32.HW]
+AddReg = TrackPoint_AddReg.HW
+
+[TrackPoint_AddReg.HW]
+HKR,,"UpperFilters",0x00010000,"Tp4Track"
+
+;=====================================================================
+; Directory destinations for file copy operations
+;=====================================================================
+[DestinationDirs]
+DefaultDestDir     = 12
+;TrackPoint.UsrCopy = 11
+TrackPoint.UsrCopy = 16422, %COMPANYKEY%\%TP4PRODKEY%
+;TrackPoint.UsrCopy_onSysWow64 = 10, SysWow64
+TrackPoint.CoInstallerCopyFiles = 11
+;TrackPoint.CoInstallerCopyFiles = 16422, %COMPANYKEY%\%TP4PRODKEY%
+TrackPoint.UsrCopyDK = 16422, %COMPANYKEY%\%TP4PRODKEY%\DK
+TrackPoint.UsrCopyFI = 16422, %COMPANYKEY%\%TP4PRODKEY%\FI
+TrackPoint.UsrCopyFR = 16422, %COMPANYKEY%\%TP4PRODKEY%\FR
+TrackPoint.UsrCopyGR = 16422, %COMPANYKEY%\%TP4PRODKEY%\GR
+TrackPoint.UsrCopyIT = 16422, %COMPANYKEY%\%TP4PRODKEY%\IT
+TrackPoint.UsrCopyJP = 16422, %COMPANYKEY%\%TP4PRODKEY%\JP
+TrackPoint.UsrCopyNE = 16422, %COMPANYKEY%\%TP4PRODKEY%\NE
+TrackPoint.UsrCopyNO = 16422, %COMPANYKEY%\%TP4PRODKEY%\NO
+TrackPoint.UsrCopySP = 16422, %COMPANYKEY%\%TP4PRODKEY%\SP
+TrackPoint.UsrCopySV = 16422, %COMPANYKEY%\%TP4PRODKEY%\SV
+TrackPoint.UsrCopyUS = 16422, %COMPANYKEY%\%TP4PRODKEY%\US
+
+;=====================================================================
+; String definitions
+;=====================================================================
+[Strings]
+;Service Display Name
+TP4_SVCDISPNAME = "TrackPoint Service"
+
+;Tp4 daemon service name
+TP4_SVCNAME = "tp4serv"
+
+; Registry key name
+TP4PRODKEY="TrackPoint"
+
+; Name displayed in Add/Remove programs
+TP4DISPNAME="ThinkPad TrackPoint Driver"
+
+; Media Description
+Media="PS/2 TrackPoint Driver"
+
+; Manufacturers
+COMPANYKEY="Lenovo"
+FilterProvider="Lenovo"
+
+Tp4Track.SvcDesc="PS/2 TrackPoint Driver"
+TrackPointMouse="PS/2 TrackPoint"
+
+;=====================================================================
+; Setup installation constants
+;=====================================================================
+FORCE_COPY                    = 12
+

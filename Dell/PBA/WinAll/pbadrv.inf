@@ -1,0 +1,122 @@
+;
+; PBADRV Driver 
+; Copyright 2006-2007 Dell Inc.  All Rights Reserved.
+;
+
+[Version]
+Signature	= "$WINDOWS NT$"
+Class 		= System
+ClassGuid 	= {4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider	= %Dell%
+CatalogFile	= pbadrv.cat
+DriverVer	= 09/11/2009,1.0.1.6
+DriverPackageType = ClassFilter
+
+
+[PBADRV_EventLog_Inst] 
+AddReg = PBADRV_EventLog_Inst.AddReg 
+ 
+[PBADRV_EventLog_Inst.AddReg] 
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll" 
+HKR,,TypesSupported,%REG_DWORD%,7
+
+[DestinationDirs] 
+DefaultDestDir = 12			; this is the %windir%\system32\drivers directory
+PBADRV.Files.x86_11 = 11 		; this is the %windir%\system32 directory
+PBADRV.Files.amd64_11 = 11
+PBADRV.Files.x86_12 = 12 		; this is the %windir%\system32\drivers directory
+PBADRV.Files.amd64_12 = 12
+PBADRV.Files.amd64_SysWow = 10,SysWOW64	; this is the %windir%\SysWOW64 folder for 32bit dlls on 64bit O/S
+
+
+;------------------------------------------------------------------------------
+;  Windows 32 bit (x86) Sections
+;------------------------------------------------------------------------------
+
+[DefaultInstall.nt]
+CopyFiles = PBADRV.Files.x86_11, PBADRV.Files.x86_12 
+
+[DefaultInstall.NT.Services]
+AddService = PBADRV,0x00000002,PBADRV_Service_Instx86, PBADRV_EventLog_Inst
+
+[PBADRV.Files.x86_11] 
+pbadrvdll.dll
+
+[PBADRV.Files.x86_12] 
+PBADRV.sys
+
+[SourceDisksNames.x86]
+0=%Desc_x860%
+
+[SourceDisksFiles.x86]
+PBADRV.sys=0
+pbadrvdll.dll=0
+
+[PBADRV_Service_Instx86] 
+DisplayName = %PBADRVDesc%
+Description = %PBADRVDesc%
+ServiceType = %SERVICE_KERNEL_DRIVER% 
+StartType = %SERVICE_BOOT_START% 
+ErrorControl = %SERVICE_ERROR_NORMAL% 
+ServiceBinary = %12%\PBADRV.sys 
+
+;------------------------------------------------------------------------------
+;  Windows 64 bit (amd64) Sections
+;------------------------------------------------------------------------------
+
+[DefaultInstall.ntamd64]
+CopyFiles = PBADRV.Files.amd64_11, PBADRV.Files.amd64_SysWow, PBADRV.Files.amd64_12 
+
+[DefaultInstall.ntamd64.Services]
+AddService = PBADRV,0x00000002,PBADRV_Service_Amd64, PBADRV_EventLog_Inst
+
+[PBADRV.Files.amd64_11]
+pbadrvdll.dll,pbadrvdll64.dll
+
+[PBADRV.Files.amd64_SysWow] 
+pbadrvdll.dll
+
+[PBADRV.Files.amd64_12]
+PBADRV.SYS,PBADRV64.sys
+
+[SourceDisksNames.amd64]
+0=%Desc_x860%
+
+[SourceDisksFiles.amd64]
+PBADRV.sys=0
+pbadrvdll.dll=0
+PBADRV64.sys=0
+pbadrvdll64.dll=0
+
+[PBADRV_Service_Amd64] 
+DisplayName = %PBADRVDesc%
+Description = %PBADRVDesc%
+ServiceType = %SERVICE_KERNEL_DRIVER% 
+StartType = %SERVICE_BOOT_START% 
+ErrorControl = %SERVICE_ERROR_NORMAL% 
+ServiceBinary = %12%\PBADRV.sys 
+
+;------------------------------------------------------------------------------
+
+
+
+[Strings] 
+
+Dell= "Dell Inc." 
+Desc_x860= "Dell Inc. System Drivers" 
+PBADRVDesc= "PBADRV" 
+
+SERVICE_BOOT_START = 0x0 
+SERVICE_SYSTEM_START = 0x1 
+SERVICE_AUTO_START = 0x2 
+SERVICE_DEMAND_START = 0x3 
+SERVICE_DISABLED = 0x4 
+
+SERVICE_KERNEL_DRIVER = 0x1 
+SERVICE_ERROR_IGNORE = 0x0 
+SERVICE_ERROR_NORMAL = 0x1 
+SERVICE_ERROR_SEVERE = 0x2 
+SERVICE_ERROR_CRITICAL = 0x3 
+
+REG_EXPAND_SZ = 0x00020000 
+REG_DWORD = 0x00010001 

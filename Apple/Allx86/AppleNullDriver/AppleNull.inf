@@ -1,0 +1,59 @@
+; Installation inf for null device drivers
+;
+; Copyright © 2006-2011 Apple Inc. All Rights Reserved.
+;
+
+[Version]
+Signature=$Windows NT$
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider=%MFGNAME%
+DriverPackageDisplayName="Apple System Device"
+CatalogFile=AppleNull.cat
+DriverVer=10/07/2011,4.0.1.0
+
+[Manufacturer]
+%MFGNAME%=Company.NT.5.1
+
+[Company.NT.5.1]
+%SMC_DESCRIPTION%           = NullDeviceInstall,ACPI\APP0001
+%BACKLIGHT_DESCRIPTION%     = NullDeviceInstall,ACPI\APP0002
+%MCE_GPE_DESCRIPTION%       = NullDeviceInstall,ACPI\APP0006
+%GRAPHICS_MUX_DESCRIPTION%  = NullDeviceInstall,ACPI\APP000B
+%SMBHC_DESCRIPTION%         = NullDeviceInstall,ACPI\ACPI0001
+%TPM_DESCRIPTION%           = NullDeviceInstall,ACPI\IFX0101
+%DMA_DESCRIPTION%           = NullDeviceInstall,PCI\VEN_8086&DEV_1A38
+%PERF_COUNTERS_DESCRIPTION% = NullDeviceInstall,PCI\VEN_8086&DEV_27A3
+%ISIGHT_DESCRIPTION%        = NullDeviceInstall,USB\VID_05AC&PID_8502&MI_02
+%ISIGHT_DESCRIPTION%        = NullDeviceInstall,USB\VID_05AC&PID_8505&MI_02
+%ISIGHT_DESCRIPTION%        = NullDeviceInstall,USB\VID_05AC&PID_8507&MI_02
+%ISIGHT_EXT_DESCRIPTION%    = NullDeviceInstall,USB\VID_05AC&PID_8508&MI_02
+%FACETIME_DESCRIPTION%      = NullDeviceInstall,USB\VID_05AC&PID_8509&MI_02
+%ISIGHT_EXT_DESCRIPTION%    = NullDeviceInstall,USB\VID_05AC&PID_850A&MI_02
+%FACETIME_DESCRIPTION%      = NullDeviceInstall,USB\VID_05AC&PID_850B&MI_02
+%FACETIME_DESCRIPTION%      = NullDeviceInstall,USB\VID_05AC&PID_8510&MI_02
+%FACETIME_DESCRIPTION%      = NullDeviceInstall,USB\VID_05AC&PID_1112&MI_02
+%THUNDERBOLT_DESCRIPTION%   = NullDeviceInstall,PCI\VEN_8086&DEV_1513&CC_0880
+%THUNDERBOLT_DESCRIPTION%   = NullDeviceInstall,PCI\VEN_8086&DEV_151A&CC_0880
+%THUNDERBOLT_DESCRIPTION%   = NullDeviceInstall,PCI\VEN_8086&DEV_1547&CC_0880
+
+[NullDeviceInstall.NT]
+; (null driver)
+
+[NullDeviceInstall.NT.Services]
+AddService = ,2    ; no value for the service name
+
+[Strings]
+MFGNAME="Apple Inc."
+SMC_DESCRIPTION="Apple SMC device"
+BACKLIGHT_DESCRIPTION="Apple panel backlight"
+GRAPHICS_MUX_DESCRIPTION="Apple graphics mux"
+MCE_GPE_DESCRIPTION="Apple memory controller GPE event"
+SMBHC_DESCRIPTION="Apple SMBus 1.0 Host controller"
+TPM_DESCRIPTION="Apple trusted platform module"
+DMA_DESCRIPTION="Apple 5000 Series Chipset DMA Engine"
+PERF_COUNTERS_DESCRIPTION="Apple performance counters"
+ISIGHT_DESCRIPTION="Apple Built-in iSight"
+ISIGHT_EXT_DESCRIPTION="Apple iSight"
+FACETIME_DESCRIPTION="FaceTime HD camera"
+THUNDERBOLT_DESCRIPTION="Thunderbolt"

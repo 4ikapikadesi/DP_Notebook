@@ -1,0 +1,146 @@
+; WDMirror.inf
+;
+; Installation inf for the WDMirror graphics adapter.
+;
+; Copyright (x) 2000-2005 Lenovo Corporation. All rights reserved
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Provider=%MSFT%
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171}
+Class=RMCT
+DriverVer=07/23/2009,2.0
+CatalogFile.nt=WDMirror.cat
+
+[DestinationDirs]
+DefaultDestDir   = 11
+mirror.Miniport  = 12  ; drivers
+mirror.Display   = 11  ; system32
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SampleClassReg     
+
+[SampleClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-7
+
+
+;
+; Driver information
+;
+
+[Manufacturer]
+%StdMfg%   = Mirror.Mfg
+
+[Mirror.Mfg]
+%Mirror% = mirror, root\wdmirror
+
+;
+; General installation section
+;
+
+[mirror]
+CopyFiles=mirror.Miniport, mirror.Display
+AddReg=mirror_AddReg_Instance
+
+[mirror_AddReg_Instance]
+HKR,"Settings","Device Description",%REG_SZ%,%Mirror%
+HKR,"Settings","InstalledDisplayDrivers",%REG_MULTI_SZ%,"WDMIRROR"
+HKR,"Settings","MirrorDriver",%REG_DWORD%,1
+HKR,"Settings","VgaCompatible",%REG_DWORD%,0
+HKR,"Settings","Attach.ToDesktop",%REG_DWORD%,0
+
+[mirror.HW]
+AddReg=mirror_AddReg_HW
+
+[mirror_AddReg_HW]
+HKR,,"VideoID", %REG_SZ%, %GUID_ID%
+
+;
+; File sections
+;
+
+[mirror.Miniport]
+WDMirror.sys,,,0x00000048
+
+[mirror.Display]
+WDMirror.dll,,,0x00000048
+
+;
+; Service Installation
+;
+
+[mirror.Services]
+AddService = wdmirror, %SPSVCINST_ASSOCSERVICE%, mirror_Service_Inst, mirror_EventLog_Inst
+
+[mirror_Service_Inst]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Video Save
+ServiceBinary  = %12%\WDMirror.sys
+AddReg = mirror_AddReg_Service
+
+[mirror_AddReg_Service]
+HKR,"Video","Service",%REG_SZ%,"WDMIRROR"
+HKR,"Device0","Device Description",%REG_SZ%,%Mirror%
+HKR,"Device0","InstalledDisplayDrivers",%REG_MULTI_SZ%,"WDMIRROR"
+HKR,"Device0","MirrorDriver",%REG_DWORD%,1
+HKR,"Device0","VgaCompatible",%REG_DWORD%,0
+HKR,"Device0","Attach.ToDesktop",%REG_DWORD%,0
+
+
+[mirror_EventLog_Inst]
+AddReg = mirror_EventLog_AddReg, mirror_Display_AddReg
+
+[mirror_EventLog_AddReg]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\WDMirror.sys"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+
+[mirror_Display_AddReg]
+;
+; Install the chained display driver
+;
+HKLM,"SYSTEM\CurrentControlSet\Control\Video\"%GUID_ID%"\Video","Service",%REG_SZ%,"WDMIRROR"
+HKLM,"SYSTEM\CurrentControlSet\Control\Video\"%GUID_ID%"\0000","Device Description",%REG_SZ%,%Mirror%
+HKLM,"SYSTEM\CurrentControlSet\Control\Video\"%GUID_ID%"\0000","InstalledDisplayDrivers",%REG_MULTI_SZ%,"WDMIRROR"
+HKLM,"SYSTEM\CurrentControlSet\Control\Video\"%GUID_ID%"\0000","MirrorDriver",%REG_DWORD%,1
+HKLM,"SYSTEM\CurrentControlSet\Control\Video\"%GUID_ID%"\0000","VgaCompatible",%REG_DWORD%,0
+HKLM,"SYSTEM\CurrentControlSet\Control\Video\"%GUID_ID%"\0000","Attach.ToDesktop",%REG_DWORD%,0
+
+;
+; Source file information
+;
+[SourceDisksNames.x86]
+1 = %DiskId%,,,""
+
+[SourceDisksFiles]
+WDMirror.sys  = 1
+WDMirror.dll = 1
+
+[Strings]
+
+;
+; Non-Localizable Strings
+;
+
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+SPSVCINST_ASSOCSERVICE= 0x00000002
+;
+; Localizable Strings
+;
+
+GUID_ID		= "{600834E5-610A-4D3D-A36D-8CF2E5047962}"
+DiskId       	= "Lenovo RMCT Installation Disk (VIDEO)"
+MSFT 		= "Lenovo"
+StdMfg 		= "Lenovo Group Ltd."
+Mirror    	= "Lenovo RMCT Display Driver"
+ClassName       = "Lenovo RMCT Device"

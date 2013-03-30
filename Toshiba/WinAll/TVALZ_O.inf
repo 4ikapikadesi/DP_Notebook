@@ -1,0 +1,64 @@
+; TVALZ_O.INF
+; 
+; TOSHIBA ACPI-Compliant Value Added Logical and General Purpose Device
+; install information file.
+;
+; (C) Copyright 2009 TOSHIBA Corporation
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider=%TOS%
+CatalogFile=TVALZ_O.cat
+DriverVer=07/14/2009,2.0.0.3
+
+[DestinationDirs]
+TVALZNT.CopyFiles = 12
+
+[Manufacturer]
+%TOS%=TOSHIBA,NTx86,NTai64,NTamd64
+
+[ControlFlags]
+ExcludeFromSelect = *TOS1900
+
+[TOSHIBA.NTx86]
+%*TOS1900.DeviceDescNTx86%=TVALZ,*TOS1900
+
+[TOSHIBA.NTai64]
+%*TOS1900.DeviceDescNTai64%=TVALZ,*TOS1900
+
+[TOSHIBA.NTamd64]
+%*TOS1900.DeviceDescNTamd64%=TVALZ,*TOS1900
+
+[SourceDisksNames]
+1=%TVALZ%
+
+[SourceDisksFiles]
+TVALZ_O.SYS = 1
+
+[TVALZ.NT]
+CopyFiles=TVALZNT.CopyFiles
+
+[TVALZ.NT.Services]
+AddService=TVALZ,2,TVALZ_Service_Inst
+
+[TVALZ_Service_Inst]
+DisplayName    = %TVALZ.SvcDesc%
+ServiceType    = 1
+StartType      = 0
+ErrorControl   = 1
+ServiceBinary  = %12%\TVALZ_O.SYS
+
+[TVALZNT.CopyFiles]
+TVALZ_O.SYS
+
+
+[strings]
+TOS                        = "TOSHIBA"
+TVALZ                      = "TVALZ"
+*TOS1900.DeviceDescNTx86   = "TOSHIBA x86 ACPI-Compliant Value Added Logical and General Purpose Device"
+*TOS1900.DeviceDescNTai64  = "TOSHIBA ai64 ACPI-Compliant Value Added Logical and General Purpose Device"
+*TOS1900.DeviceDescNTamd64 = "TOSHIBA x64 ACPI-Compliant Value Added Logical and General Purpose Device"
+TVALZ.SvcDesc              = "TOSHIBA ACPI-Based Value Added Logical and General Purpose Device Driver"

@@ -1,0 +1,81 @@
+; thpevm.inf
+; 
+; TOSHIBA HDD Protection - Shock Sensor Driver
+; install information file.
+;
+; (C) Copyright 2009 TOSHIBA Corporation
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%TOS%
+CatalogFile=thpevm.cat
+DriverVer=06/29/2009,2.0.0.4
+
+[DestinationDirs]
+Thpevm.CopyFiles = 10,system32\drivers
+ThpevmNT.CopyFiles = 12
+
+[Manufacturer]
+%TOS%=TOSHIBA,NTx86,NTamd64
+
+[ControlFlags]
+ExcludeFromSelect = *TOS620A
+
+[TOSHIBA.NTx86]
+%*TOS620A.DeviceDescNTx86% =Thpevm,*TOS620A
+
+[TOSHIBA.NTamd64]
+%*TOS620A.DeviceDescNTamd64%=Thpevm,*TOS620A
+
+[SourceDisksNames]
+1=%thpe%
+
+[SourceDisksFiles]
+Thpevm.SYS = 1
+
+[Thpevm]
+AddReg=Thpevm.AddReg
+CopyFiles=Thpevm.CopyFiles
+
+[Thpevm.HW]
+Addreg=ThpevmHW.AddReg
+
+[ThpevmHW.AddReg]
+HKR,,ConfigFlags,1,00,00,00,00
+
+[Thpevm.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,Thpevm.SYS
+HKR,,EnumPropPages,,"sysclass.dll,EnumPropPages"
+
+
+[Thpevm.NT]
+AddReg=Thpevm.AddReg
+CopyFiles=ThpevmNT.CopyFiles
+
+[Thpevm.NT.Services]
+AddService=Thpevm,2,Thpevm_Service_Inst
+
+[Thpevm_Service_Inst]
+DisplayName    = %Thpevm.SvcDesc%
+ServiceType    = 1
+StartType      = 0
+ErrorControl   = 1
+ServiceBinary  = %12%\Thpevm.SYS
+
+[Thpevm.CopyFiles]
+Thpevm.sys
+
+[ThpevmNT.CopyFiles]
+Thpevm.sys
+
+
+[strings]
+TOS             = "TOSHIBA"
+Thpevm.SvcDesc  = "TOSHIBA HDD Protection - Shock Sensor Driver"
+thpe            = "Thpevm"
+*TOS620A.DeviceDescNTx86   = "TOSHIBA HDD Protection - Shock Sensor Driver"
+*TOS620A.DeviceDescNTamd64 = "TOSHIBA HDD Protection - Shock Sensor Driver"

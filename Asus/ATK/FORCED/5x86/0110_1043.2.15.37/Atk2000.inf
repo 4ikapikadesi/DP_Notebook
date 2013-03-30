@@ -1,0 +1,91 @@
+;kkk
+[version]
+Signature="$Windows NT$"
+Provider=%ATK%
+ClassGUID={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Class=System
+CatalogFile=atk2000.cat
+LayoutFile = layout.inf
+DriverVer=08/13/2004, 1043.2.15.37
+
+[DestinationDirs]
+DefaultDestDir = 12		; load driver to system32\drivers
+Hcontrol.CopyFiles = 10,ATK0110
+
+[ControlFlags]
+ExcludeFromselect = *
+
+[ClassInstall32]
+AddReg = System_Class_Addreg
+
+[System_Class_Addreg]
+HKR,,,0,"System Class Drivers"
+
+[Manufacturer]
+%ATK%=ATK
+
+[ATK]
+%DeviceDesc1%=DriverInstall,ACPI\ATK0110
+
+[DriverInstall]
+CopyFiles=ASACPI.CopyFiles, Hcontrol.CopyFiles
+AddReg = Hcontrol.AddReg
+
+[ASACPI.CopyFiles]
+ASACPI.sys
+
+[Hcontrol.CopyFiles]
+;Hcontrol.exe
+;ATKOSD.exe
+;2000unin.exe
+;inter_f2.dll
+;radfn.dll
+;ATKWLIOC.DLL
+;ASNDIS3.VXD
+;ASNDIS4.sys
+;ASNDIS5.sys
+;ASUSNet.dll
+;ASW32N50.dll
+
+[DriverInstall.Services]
+AddService=MTsensor,2,MTsensorService
+
+[MTsensorService]
+DisplayName = %ASACPI.DisplayName%
+ServiceType=1           ; SERVICE_KERNEL_DRIVER
+StartType=3             ; SERVICE_DEMAND_START
+ErrorControl=1          ; SERVICE_ERROR_NORMAL
+ServiceBinary=%12%\ASACPI.sys
+
+[Hcontrol.AddReg]
+;HKLM, "Software\Microsoft\Windows\CurrentVersion\Run","Hcontrol",,"%10%\ATK0110\Hcontrol.exe"
+;HKLM,%UninstallReg%,"DisplayName",,"ATK0110 ACPI UTILITY"
+;HKLM,%UninstallReg%,"UninstallString",,"%10%\ATK0110\2000unin.exe"
+;flag :0x00010001 is meant REG_DWORD
+HKLM, "SOFTWARE\ASUS\ACPIDRV", "Version", 0x00010001, %Version%
+HKLM, "SOFTWARE\ASUS\ACPIDRV", "ReleaseTime", , "17:30:20 03/03/04"
+
+[SourceDisksNames]
+1 = %DiskID1%,,,,
+
+[SourceDisksFiles]
+ASACPI.SYS = 1
+;Hcontrol.exe = 1
+;ATKOSD.exe = 1
+;2000unin.exe = 1
+;inter_f2.dll = 1
+;radfn.dll = 1
+;ATKWLIOC.DLL = 1
+;ASNDIS3.VXD = 1
+;ASNDIS4.sys = 1
+;ASNDIS5.sys = 1
+;ASUSNet.dll = 1
+;ASW32N50.dll = 1
+
+[Strings]
+ATK="ATK"
+DeviceDesc1="ATK0110 ACPI UTILITY"
+ASACPI.DisplayName = "ATK0110 ACPI UTILITY"
+DiskId1 = "ATK0110 ACPI UTILITY"
+UninstallReg = "Software\Microsoft\Windows\CurrentVersion\Uninstall\Hcontrol"
+Version = "0x01010002"

@@ -1,0 +1,290 @@
+; Ibmpmdrv.inf
+;
+; Installation file for the "Lenovo PM Device"
+;
+; Copyright (C) Lenovo and IBM Corp. 2000,2012.
+;
+
+[Version]
+Signature="$CHICAGO$"
+Provider=%Mfg%
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+DriverVer=11/30/2012,1.66.00.22
+DriverPackageDisplayName=%PackageVersion%
+CatalogFile=ibmpmdrv.cat
+
+;
+; Source file information
+;
+[SourceDisksNames]
+1=%DiskId1%,,
+
+[SourceDisksFiles]
+IBMPMDRV.SYS=1,x86
+IBMPMSVC.EXE=1,x86
+tpinspm.dll=1,x86
+ibmpmctl.exe=1
+ibmpmdrv.inf=1
+
+[SourceDisksFiles.x86]
+IBMPMDRV.SYS=1,x86
+IBMPMSVC.EXE=1,x86
+tpinspm.dll=1,x86
+ibmpmctl.exe=1
+ibmpmdrv.inf=1
+
+[SourceDisksFiles.amd64]
+IBMPMDRV.SYS=1,x64
+IBMPMSVC.EXE=1,x64
+tpinspm.dll=1,x64
+ibmpmctl.exe=1
+ibmpmdrv.inf=1
+
+
+;
+;File list information for IBMPM driver and service
+;
+[ibmpm.drv]
+ibmpmdrv.sys,,,%FORCE_COPY%
+
+[ibmpm.svc]
+ibmpmsvc.exe,,,%FORCE_COPY%
+
+[tpins.dll]
+tpinspm.dll,,,%FORCE_COPY%
+
+[ibmpm.exe]
+ibmpmctl.exe,,,%FORCE_COPY%
+
+
+
+;
+[DestinationDirs]
+;DefaultDestDir   = 10
+ibmpm.drv = 10,system32\drivers
+ibmpm.svc = 11
+tpins.dll = 11
+ibmpm.exe = 11
+
+;
+; Driver information
+;
+[Manufacturer]
+%Mfg%   = ibm.Mfg,NTx86,NTamd64
+
+[ibm.Mfg]
+%ibm.DeviceDesc0% = ibmpm, ACPI\LEN0168
+%ibm.DeviceDesc0% = ibmpm, ACPI\LEN0068
+%ibm.DeviceDesc0% = ibmpm, ACPI\IBM0068
+%ibm.DeviceDesc0% = ibmpm, ACPI\IBM0055
+
+[ibm.Mfg.NTx86]
+%ibm.DeviceDesc0% = ibmpm, ACPI\LEN0168
+%ibm.DeviceDesc0% = ibmpm, ACPI\LEN0068
+%ibm.DeviceDesc0% = ibmpm, ACPI\IBM0068
+%ibm.DeviceDesc0% = ibmpm, ACPI\IBM0055
+
+[ibm.Mfg.NTamd64]
+%ibm.DeviceDesc0% = ibmpm, ACPI\LEN0168
+%ibm.DeviceDesc0% = ibmpm, ACPI\LEN0068
+%ibm.DeviceDesc0% = ibmpm, ACPI\IBM0068
+%ibm.DeviceDesc0% = ibmpm, ACPI\IBM0055
+
+;
+; General installation section
+;
+[ibmpm]
+CopyFiles = ibmpm.drv, ibmpm.svc, tpins.dll, ibmpm.exe
+AddReg = ibmpm_AddReg, ibmpm_UninstReg
+
+[ibmpm.nt]
+CopyFiles = ibmpm.drv, ibmpm.svc, tpins.dll, ibmpm.exe
+DelReg = ibmpmNT_DelReg
+AddReg = ibmpm_UninstReg
+
+[ibmpm.NTx86]
+CopyFiles = ibmpm.drv, ibmpm.svc, tpins.dll, ibmpm.exe
+DelReg = ibmpmNT_DelReg
+AddReg = ibmpm_UninstReg
+
+[ibmpm.NTamd64]
+CopyFiles = ibmpm.drv, ibmpm.svc, tpins.dll, ibmpm.exe
+DelReg = ibmpmNT_DelReg
+AddReg = ibmpm_UninstReg
+
+[ibmpm_AddReg]
+HKR,,NTMPDriver,,IBMPMDRV.SYS
+HKR,,DevLoader,,"*NTKERN"
+HKLM,"Software\Microsoft\Windows\CurrentVersion\RunServices","IBMPMSVC",,"IBMPMSVC.EXE -HELPER"
+
+[ibmpmNT_DelReg]
+HKLM,"Software\Microsoft\Windows\CurrentVersion\Run","IBMPMSVC"
+
+;
+; Service Installation
+;
+[ibmpm.NT.Services]
+AddService = IBMPMDRV, 0x00000002 , ibmpmdrv_Service_Inst, ibmpmdrv_EventLog_Inst
+AddService = IBMPMSVC, , ibmpmsvc_Service_Inst, ibmpmsvc_EventLog_Inst
+
+[ibmpm.NTx86.Services]
+AddService = IBMPMDRV, 0x00000002 , ibmpmdrv_Service_Inst, ibmpmdrv_EventLog_Inst
+AddService = IBMPMSVC, , ibmpmsvc_Service_Inst, ibmpmsvc_EventLog_Inst
+
+[ibmpm.NTamd64.Services]
+AddService = IBMPMDRV, 0x00000002 , ibmpmdrv_Service_Inst, ibmpmdrv_EventLog_Inst
+AddService = IBMPMSVC, , ibmpmsvc_Service_Inst, ibmpmsvc_EventLog_Inst
+
+[ibmpmdrv_Service_Inst]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %12%\ibmpmdrv.sys
+
+
+[ibmpmdrv_EventLog_Inst]
+AddReg = ibmpmdrv_EventLog_AddReg
+
+[ibmpmdrv_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\drivers\ibmpmdrv.sys"
+HKR,,TypesSupported,0x00010001,7
+
+[ibmpmsvc_Service_Inst]
+DisplayName = %ibm.svcDesc0%		
+ServiceType    = 0x110              ; SERVICE_WIN32_OWN_PROCESS|SERVICE_INTERACTIVE_PROCESS
+StartType      = 2                  ; SERVICE_AUTO_START
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Pointer Port
+ServiceBinary  = %11%\ibmpmsvc.exe
+
+
+[ibmpmsvc_EventLog_Inst]
+AddReg = ibmpmsvc_EventLog_AddReg
+
+[ibmpmsvc_EventLog_AddReg]
+HKR,,EventMessageFile,0x00020000,"%SystemRoot%\System32\IoLogMsg.dll;%SystemRoot%\System32\ibmpmsvc.exe"
+HKR,,TypesSupported,0x00010001,7
+
+
+;
+; uninstallation section
+;
+[ibmpm_UninstReg]
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%UninstKey%,
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%UninstKey%,"DisplayName",0,"%PackageName%"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%UninstKey%,"DisplayIcon",0,"%11%\Setupapi.dll,20"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%UninstKey%,"DisplayVersion",0,"%PackageVersion%"
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%UninstKey%,"UninstallString",0,"RunDll32.exe tpinspm.dll,Uninstall"
+
+[ibmpm_productreg]
+HKLM,SOFTWARE\IBM\IBMPM,,
+HKLM,SOFTWARE\Lenovo\ShortcutKey\AppLaunch\Ex_3B,,
+HKLM,SOFTWARE\Lenovo\ShortcutKey\AppLaunch\Ex_3C,,
+HKLM,SOFTWARE\Lenovo\ShortcutKey\AppLaunch\Ex_3E,,
+
+[ibmpm_critdevreg]
+HKLM,SYSTEM\CurrentControlSet\Control\CriticalDeviceDatabase\*len0168,,
+HKLM,SYSTEM\CurrentControlSet\Control\CriticalDeviceDatabase\*len0068,,
+HKLM,SYSTEM\CurrentControlSet\Control\CriticalDeviceDatabase\*ibm0068,,
+HKLM,SYSTEM\CurrentControlSet\Control\CriticalDeviceDatabase\*ibm0055,,
+
+[ibmpm_EventLog]
+HKLM,SYSTEM\CurrentControlSet\Services\Eventlog\System\IBMPMDRV,,
+HKLM,SYSTEM\CurrentControlSet\Services\Eventlog\System\IBMPMSVC,,
+
+[ibmpm_DevReg]
+ConfigFlags = 0x40,
+Driver = ,
+DeviceDesc = Unknown Device,
+Mfg = ,
+Class = Unknown,
+ClassGUID = {4d36e97e-e325-11ce-bfc1-08002be10318},
+
+[ibmpm_DevReg.nt]
+ConfigFlags = 0x40,
+Driver = ,
+DeviceDesc = ,
+Mfg = ,
+Service = ,
+Class = Unknown,
+ClassGUID = {4d36e97e-e325-11ce-bfc1-08002be10318},
+
+[ibmpm_DevReg.NTx86]
+ConfigFlags = 0x40,
+Driver = ,
+DeviceDesc = ,
+Mfg = ,
+Service = ,
+Class = Unknown,
+ClassGUID = {4d36e97e-e325-11ce-bfc1-08002be10318},
+
+[ibmpm_DevReg.NTamd64]
+ConfigFlags = 0x40,
+Driver = ,
+DeviceDesc = ,
+Mfg = ,
+Service = ,
+Class = Unknown,
+ClassGUID = {4d36e97e-e325-11ce-bfc1-08002be10318},
+
+[ibmpm.uninstall]
+DelDriver
+ModifyDevice = ibmpm_DevReg
+DelReg = ibmpm_AddReg, ibmpm_productreg, ibmpm_UninstReg
+
+[ibmpm.uninstall.nt]
+DelService = IBMPMDRV, 0x00000204, ,
+DelService = IBMPMSVC, 0x00000204, ,
+StopDevice
+DelDevice = LegacyDriver, Root\LEGACY_IBMPMSVC
+DelDriver
+ModifyDevice = ibmpm_DevReg.nt
+DelReg = ibmpm_productreg, ibmpm_critdevreg, ibmpm_EventLog, ibmpm_UninstReg
+StartDevice
+
+[ibmpm.uninstall.NTx86]
+DelService = IBMPMDRV, 0x00000204, ,
+DelService = IBMPMSVC, 0x00000204, ,
+StopDevice
+DelDevice = LegacyDriver, Root\LEGACY_IBMPMSVC
+DelDriver
+ModifyDevice = ibmpm_DevReg.nt
+DelReg = ibmpm_productreg, ibmpm_critdevreg, ibmpm_EventLog, ibmpm_UninstReg
+StartDevice
+
+[ibmpm.uninstall.NTamd64]
+DelService = IBMPMDRV, 0x00000204, ,
+DelService = IBMPMSVC, 0x00000204, ,
+StopDevice
+DelDevice = LegacyDriver, Root\LEGACY_IBMPMSVC
+DelDriver
+ModifyDevice = ibmpm_DevReg.nt
+DelReg = ibmpm_productreg, ibmpm_critdevreg, ibmpm_EventLog, ibmpm_UninstReg
+StartDevice
+
+
+[Strings]
+;
+; Non-Localizable Strings
+;
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+FORCE_COPY     = 12
+SERVICEROOT    = "System\CurrentControlSet\Services"
+UninstKey = "Power Management Driver"
+
+PackageVersion = "1.66.00.22"
+
+;
+; Localizable Strings
+;
+ibm.DeviceDesc0 = "Lenovo PM Device"
+ibm.svcDesc0 = "Lenovo PM Service"
+DiskId1 = "lenovo Installation Disk #1 (Other)"
+Mfg ="Lenovo"
+PackageName = "Lenovo Power Management Driver"

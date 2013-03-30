@@ -1,0 +1,138 @@
+;
+; HPHKBUTTN.INF
+;
+; Installation inf for the HP Hotkey Buttons keyboard driver
+;
+; © Copyright 2001-2011 Hewlett-Packard Development Company, L.P.
+;
+[Version] 
+Signature = "$Windows NT$" 
+Class=HIDClass
+ClassGUID={745a17a0-74d3-11d0-b6fe-00a0c90f57da} 
+Provider=%Company%
+CatalogFile.ntx86=hphkbx86.cat
+CatalogFile.NTamd64=hphkbamd64.cat
+DriverVer=07/26/2011,7.0.3.1
+
+;
+; Source file information
+;
+
+[SourceDisksNames.x86]
+1 = %DiskId1%,,,
+
+[SourceDisksNames.amd64]
+1 = %DiskId1%,,,
+
+[SourceDisksFiles.x86]
+CPQBttn.sys = 1,x86
+
+[SourceDisksFiles.amd64]
+CPQBttn64.sys = 1,amd64
+
+[DestinationDirs]
+Hphkbdrv.CopyFiles.NTx86=10,system32\drivers
+Hphkbdrv.CopyFiles.NTamd64=10,system32\drivers
+
+;
+; Driver information
+;
+
+[Manufacturer]
+%Mfg%=HP,NTx86,NTamd64
+
+[HP]
+%DeviceDesc%=Hphkbdrv_Inst,ACPI\HPQ0006,ACPI\HP_TabletPC_Buttons
+
+[HP.NTx86]
+%DeviceDesc%=Hphkbdrv_Inst.NTx86,ACPI\HPQ0006,ACPI\HP_TabletPC_Buttons
+
+[HP.NTamd64]
+%DeviceDesc%=Hphkbdrv_Inst.NTamd64,ACPI\HPQ0006
+
+;
+; General installation section
+;
+
+[Hphkbdrv_Inst.NTx86] 
+CopyFiles = Hphkbdrv.CopyFiles.NTx86 
+
+[Hphkbdrv_Inst.NTamd64] 
+CopyFiles = Hphkbdrv.CopyFiles.NTamd64
+
+;
+; File sections
+;
+
+[Hphkbdrv.CopyFiles.NTx86] 
+CPQBttn.sys
+
+[Hphkbdrv.CopyFiles.NTamd64] 
+CPQBttn.sys,CPQBttn64.sys
+
+;
+; Service Installation
+;
+[Hphkbdrv_Inst.NTx86.Services]
+AddService = HBtnKey,0x00000002,Hphkbdrv_Service_Install, Hphkbdrv_EventLog_Inst
+
+[Hphkbdrv_Inst.NTamd64.Services]
+AddService = HBtnKey,0x00000002,Hphkbdrv_Service_Install, Hphkbdrv_EventLog_Inst
+
+[Hphkbdrv_Service_Install] 
+DisplayName    = %Hphksdrv.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 0                  ; SERVICE_ERROR_IGNORE
+LoadOrderGroup = Extended Base
+ServiceBinary  = %12%\cpqbttn.sys 
+
+
+[Hphkbdrv_EventLog_Inst] 
+AddReg = Hphkbdrv_EventLog_Inst.AddReg 
+ 
+[Hphkbdrv_EventLog_Inst.AddReg] 
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll" 
+HKR,,TypesSupported,%REG_DWORD%,7
+
+[Hphkbdrv_Inst.NTx86.HW]  
+
+[Hphkbdrv_Inst.NTamd64.HW] 
+
+[Strings]
+
+;
+; Localizable Strings
+;
+Mfg="Hewlett-Packard"
+DeviceDesc="HP Hotkey Device"
+DiskId1="Hphkbdrv Driver Disk #1"
+HP="HP Hotkey Device"
+Hphksdrv.SvcDesc="HP Hotkey Device"
+Company="Hewlett-Packard Development Company, L.P."
+
+;
+;  *******Non Localizable Strings******* 
+;
+SERVICE_BOOT_START = 0x0 
+SERVICE_SYSTEM_START = 0x1 
+SERVICE_AUTO_START = 0x2 
+SERVICE_DEMAND_START = 0x3 
+SERVICE_DISABLED = 0x4 
+
+SERVICE_KERNEL_DRIVER = 0x1 
+SERVICE_ERROR_IGNORE = 0x0 
+SERVICE_ERROR_NORMAL = 0x1 
+SERVICE_ERROR_SEVERE = 0x2 
+SERVICE_ERROR_CRITICAL = 0x3 
+
+SPSVCINST_ASSOCSERVICE = 0x00000002
+
+REG_SZ                      = 0x00000000
+REG_SZ_NOCLOBBER            = 0x00000002
+REG_MULTI_SZ                = 0x00010000
+REG_EXPAND_SZ               = 0x00020000
+REG_MULTI_SZ_APPEND         = 0x00010008
+REG_DWORD                   = 0x00010001
+REG_DWORD_NOCLOBBER         = 0x00010003
+REG_BINARY                  = 0x00000001

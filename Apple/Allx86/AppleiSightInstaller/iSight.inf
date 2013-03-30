@@ -1,0 +1,164 @@
+; Installation file for the iSight camera
+;
+; Copyright © 2006-2007 Apple Inc. All Rights Reserved.
+
+[Version]
+signature="$CHICAGO$"
+Class=Image
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+Provider=%Apple%
+DriverPackageDisplayName="Apple Built-in iSight"
+DriverPackageType=PlugAndPlay
+CatalogFile=iSight.cat
+DriverVer=10/25/2007,2.0.1.0
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[SourceDisksNames]
+1 = %DiskId1%,,,
+
+[SourceDisksFiles]
+wdfcoinstaller01005.dll=1 ; make sure the number matches with SourceDisksNames
+iSightFT.sys=1
+iSightCI.dll=1
+iSightUP.sys=1
+
+[DestinationDirs]
+iSight.NT.CopyList = 10,system32\drivers
+iSightUpdate.NT.CopyList = 10,system32\drivers
+iSight_CoInstaller_CopyFiles = 11
+
+[Manufacturer]
+%Apple%=Apple
+
+[Apple]
+%iSight.DeviceDesc%=iSight,USB\VID_05AC&PID_8503&MI_00
+%iSightUpdate.DeviceDesc%=iSightUpdate,USB\VID_05AC&PID_8501&MI_00
+%iSightUpdate.DeviceDesc%=iSightUpdate,USB\VID_05AC&PID_8300
+%iSightUpdate.DeviceDesc%=iSightUpdate,USB\VID_05AC&PID_8501
+
+[iSight.NT]
+Include=usbvideo.inf,ks.inf, kscaptur.inf, dshowext.inf
+Needs=USBVideo.NT,KS.Registration, KSCAPTUR.Registration.NT, DSHOWEXT.Registration
+CopyFiles=iSight.NT.CopyList
+AddReg=iSight.NT.AddReg
+PreferDeviceInfo=1
+; WIA
+SubClass=StillImage
+DeviceType=3
+DeviceSubType=0x1
+Capabilities=0x00000031
+DeviceData=iSight.DeviceData
+ICMProfiles="sRGB Color Space Profile.icm"
+
+[iSight.NT.AddReg]
+HKR,,FriendlyName,,%iSight.DeviceDesc%
+
+[iSight.NT.HW]
+AddReg=iSight.NT.HW.AddReg
+
+[iSight.NT.HW.AddReg]
+HKR,,"LowerFilters",0x00010000,"DevUpper"
+
+[iSight.NT.Services]
+AddService = DevUpper,, iSight_Service_Inst
+Needs= USBVideo.NT.Services
+
+[iSight_Service_Inst]
+DisplayName    = %iSight.SvcDesc%                            
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\iSightFT.sys                            
+
+[iSight.NT.Interfaces]
+AddInterface=%KSCATEGORY_CAPTURE%,GLOBAL,iSight.Interface
+AddInterface=%KSCATEGORY_VIDEO%,GLOBAL,iSight.Interface
+
+[iSight.Interface]
+AddReg=iSight.Interface.AddReg
+
+[iSight.Interface.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%iSight.DeviceDesc%
+HKR,,RTCFlags,0x00010001,0x00000010
+
+[iSight.NT.CoInstallers]
+AddReg=iSight_CoInstaller_AddReg
+CopyFiles=iSight_CoInstaller_CopyFiles
+
+[iSight_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01005.dll,WdfCoInstaller"
+HKR,,CoInstallers32,0x00010000,"iSightCI.dll,iSightCI"
+
+[iSight_CoInstaller_CopyFiles]
+WdfCoInstaller01005.dll
+iSightCI.dll
+
+[iSight.NT.Wdf]
+KmdfService = iSight, iSight_wdfsect
+
+[iSight_wdfsect]
+KmdfLibraryVersion = 1.5
+
+[iSight.NT.CopyList]
+iSightFT.sys
+
+;=======================================================
+
+[iSightUpdate.NT]
+CopyFiles=iSightUpdate.NT.CopyList
+AddReg=iSightUpdate.NT.AddReg
+
+[iSightUpdate.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,iSightUP.sys
+
+[iSight.NT.HW]
+
+[iSight.NT.HW.AddReg]
+
+[iSightUpdate.NT.Services]
+AddService = iSightUpdate, 0x00000002, iSightUpdate_Service_Inst
+
+[iSightUpdate_Service_Inst]
+DisplayName    = %iSightUpdate.SvcDesc%                            
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\iSightUP.sys                            
+LoadOrderGroup = Base
+
+[iSightUpdate.NT.CoInstallers]
+AddReg=iSightUpdate_CoInstaller_AddReg
+CopyFiles=iSightUpdate_CoInstaller_CopyFiles
+
+[iSightUpdate_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01005.dll,WdfCoInstaller"
+
+[iSightUpdate_CoInstaller_CopyFiles]
+WdfCoInstaller01005.dll
+
+[iSightUpdate.NT.Wdf]
+KmdfService = iSight, iSight_wdfsect
+
+[iSightUpdate.NT.CopyList]
+iSightUP.sys
+
+[iSight.DeviceData]
+Server=local
+UI DLL=sti.dll
+UI Class ID={5d8ef5a3-ac13-11d2-a093-00c04f72dc3c}
+
+[Strings]
+ProxyVCap.CLSID="{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+KSCATEGORY_CAPTURE="{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_VIDEO="{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+
+Apple="Apple Inc."
+iSight.DeviceDesc="Apple Built-in iSight"
+DiskId1 = "iSight Installation Disk #1"
+iSight.SvcDesc = "iSight Filter Driver"
+iSightUpdate.DeviceDesc="Apple Built-in iSight - Unprogrammed"
+iSightUpdate.SvcDesc = "iSight Update Driver"

@@ -1,0 +1,67 @@
+[version]
+Signature="$Windows NT$"
+Provider=%ATK%
+ClassGUID={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Class=System
+CatalogFile=ATK0100.cat
+LayoutFile = layout.inf
+DriverVer=12/18/2008, 1043.2.15.73
+
+[DestinationDirs]
+DefaultDestDir = 12		; load driver to system32\drivers
+HControl.CopyFiles = 10,ATK0100
+
+[ControlFlags]
+ExcludeFromselect = *
+
+[ClassInstall32]
+AddReg = System_Class_Addreg
+
+[System_Class_Addreg]
+HKR,,,0,"System Class Drivers"
+
+[Manufacturer]
+%ATK%=ATK,NTamd64
+
+[ATK]
+%DeviceDesc1%=DriverInstall,ACPI\ATK0100
+
+[ATK.NTamd64]
+%DeviceDesc1%=DriverInstall,ACPI\ATK0100
+
+[DriverInstall]
+CopyFiles=ATKACPI.CopyFiles, HControl.CopyFiles
+AddReg = HControl.AddReg
+
+[ATKACPI.CopyFiles]
+ATK64AMD.sys
+
+[HControl.CopyFiles]
+
+[DriverInstall.Services]
+AddService=MTsensor,2,MTsensorService
+
+[MTsensorService]
+DisplayName = %ATKACPI.DisplayName%
+ServiceType=1           ; SERVICE_KERNEL_DRIVER
+StartType=3             ; SERVICE_DEMAND_START
+ErrorControl=1          ; SERVICE_ERROR_NORMAL
+ServiceBinary=%12%\ATK64AMD.sys
+
+[HControl.AddReg]
+HKLM, "SOFTWARE\ASUS\ACPIDRV", "Version", 0x00010001, %Version%
+HKLM, "SOFTWARE\ASUS\ACPIDRV", "ReleaseTime", , "20:16:00 12/18/08"
+
+[SourceDisksNames]
+1 = %DiskID1%,,,,
+
+[SourceDisksFiles]
+ATK64AMD.sys = 1
+
+[Strings]
+ATK="ATK"
+DeviceDesc1="ATK0100 ACPI UTILITY"
+ATKACPI.DisplayName = "ATK0100 ACPI UTILITY"
+DiskId1 = "ATK0100 ACPI UTILITY"
+UninstallReg = "Software\Microsoft\Windows\CurrentVersion\Uninstall\HControl"
+Version = "0x01000070"

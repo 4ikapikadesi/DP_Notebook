@@ -1,0 +1,84 @@
+; thpdrv.inf
+;
+; Installation inf for the TOSHIBA HDD Protection Driver
+; Copyright (c)2009 TOSHIBA Corporation
+;
+
+[Version]
+Signature = "$Windows NT$"
+Class     = DiskDrive
+ClassGUID = {4d36e967-e325-11ce-bfc1-08002be10318}
+Provider  = %tsb%
+CatalogFile=thpdrv.cat
+DriverVer = 06/29/2009, 2.0.2.4
+
+
+;
+; General installation section
+;
+
+[Manufacturer]
+%tsb%=TOSHIBA,NTx86,NTamd64
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+[TOSHIBA.NTx86]
+%thpdrv.DeviceDescNTx86%=Thpdrv,*
+
+[TOSHIBA.NTamd64]
+%thpdrv.DeviceDescNTamd64%=Thpdrv,*
+
+
+[DefaultInstall.NT]
+CopyFiles = @thpdrv.sys
+Addreg    = thpdrv.AddReg
+
+
+;
+; Service installation section
+;
+
+[DefaultInstall.NT.Services]
+AddService = Thpdrv, , thpdrv.Service.Install
+
+[SourceDisksNames]
+1 = %thpd%
+
+[SourceDisksFiles]
+Thpdrv.sys=1
+
+[thpdrv.NT]
+CopyFiles = thpdrv.CopyFiles
+Addreg    = thpdrv.AddReg
+
+[thpdrv.AddReg]
+HKLM, System\CurrentControlSet\Control\Class\{4d36e967-e325-11ce-bfc1-08002be10318}, LowerFilters, 0x00010008, thpdrv
+
+
+[thpdrv.NT.Services]
+AddService=Thpdrv, , thpdrv.Service.Install
+
+[thpdrv.Service.Install]
+DisplayName    = %thpdrv.SvcDesc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %12%\thpdrv.sys
+LoadOrderGroup = "PnP Filter"
+
+[thpdrv.CopyFiles]
+Thpdrv.SYS
+
+
+;
+; Localizable Strings
+;
+
+[Strings]
+
+tsb            = "TOSHIBA Corporation"
+thpdrv.SvcDesc = "TOSHIBA HDD Protection Driver"
+thpd           = "thpdrv"
+thpdrv.DeviceDescNTx86   ="TOSHIBA HDD Protection Driver"
+thpdrv.DeviceDescNTamd64 ="TOSHIBA HDD Protection Driver"

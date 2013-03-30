@@ -1,0 +1,81 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Fidmous.del
+;
+; Uninstall infomation file for the Fujitsu Touch Panel device.
+;
+; (c) Copyright 2007 Fujitsu Component Ltd. 
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Version]
+Signature   = "$CHICAGO$"
+ClassGUID   = {4D36E96F-E325-11CE-BFC1-08002BE10318}
+Class       = Mouse
+
+;--------------------------------------------------------------
+[DestinationDirs]
+FIDMOUS.DelSys  = 12
+FIDMOUS.DelInf  = 17
+FIDMOUS.DelDel  = 11
+FIDMOUS.DelExe  = 11
+
+;--------------------------------------------------------------
+; UNINSTALL section
+;
+[DefaultUninstall]
+;BeginPrompt        = Remove.BeginPrompt
+EndPrompt           = Remove.EndPrompt
+DelFiles            = FIDMOUS.DelSys, FIDMOUS.DelDel, FIDMOUS.DelExe
+AddReg              = FIDMOUS.DelAddReg
+DelReg              = FIDMOUS.DelReg
+Reboot              = 1
+
+[FIDMOUS.DelReg]
+HKLM, %SERVICEROOT%
+HKLM, %RUNENTRY%, FIDMSFLT
+HKLM, %RUNONCE%,  FIDMSFLT
+HKCU, %SOFTWAREROOT%
+HKLM, %UNINST%
+
+[FIDMOUS.DelAddReg]
+HKCU, Control Panel\Mouse,   DoubleClickHeight,   0x00000000, "4"
+HKCU, Control Panel\Mouse,   DoubleClickWidth ,   0x00000000, "4"
+HKCU, Control Panel\Desktop, DragHeight,          0x00000000, "4"
+HKCU, Control Panel\Desktop, DragWidth ,          0x00000000, "4"
+
+[FIDMOUS.DelSys]
+Fidmous.sys,,,1
+
+[FIDMOUS.DelInf]
+Fidmous.inf,,,1
+Fidmous.pnf,,,1
+
+[FIDMOUS.DelDel]
+Fidmous.del,,,1
+
+[FIDMOUS.DelExe]
+Calwin.exe,,,1
+Fidset.exe,,,1
+Fidmsflt.exe,,,1
+FidUinst.exe,,,1
+Fidmous.cpl,,,1
+Tprbtn.exe,,,1
+Ftimv.dll,,,1
+Panel.bmp,,,1
+Dvrlist.txt,,,1
+RButton.exe,,,1
+fphook.dll,,,1
+Event.exe,,,1
+FidTAPI.dll,,,1
+
+;--------------------------------------------------------------
+[Strings]
+FT.DeviceDesc0   = "Fujitsu Touch Panel"
+SERVICEROOT      = "System\CurrentControlSet\Services\FIDMOUS"
+SOFTWAREROOT     = "Software\Fujitsu Component\FIDMOUS"
+RUNENTRY         = "SOFTWARE\Microsoft\Windows\CurrentVersion\run"
+RUNONCE          = "SOFTWARE\Microsoft\Windows\CurrentVersion\runonce"
+UNINST           = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\FIDMOUS"
+FIDMOUS.SvcDesc   = "Fujitsu Touch Panel"
+

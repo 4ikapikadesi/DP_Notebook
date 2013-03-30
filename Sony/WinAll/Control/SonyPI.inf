@@ -1,0 +1,78 @@
+; Copyright 1997-2002, Sony Corp.
+;;
+;; SonyPI.inf
+;;  Sony Programmable I/O Control
+;;
+;;  
+;;  08/20/2002
+;;
+;;  Revision 2.04
+ 
+ 
+[Version] 
+Signature = "$Windows NT$" 
+Class=HIDCLASS
+ClassGUID={745a17a0-74d3-11d0-b6fe-00a0c90f57da} 
+Provider=%Sny% 
+CatalogFile=SonyPI.cat
+DriverVer=08/20/2002,7.0.3.820
+
+[DestinationDirs] 
+SonyPI.Files.x86_11 = 11 
+SonyPI.Files.x86_12 = 12 
+
+[SourceDisksNames.x86]
+0=%Desc_x860%
+
+[SourceDisksFiles.x86]
+SonyPI.sys=0,, 
+SonyPI.dll=0,, 
+
+[Manufacturer] 
+%Sny%=Sny
+
+[Sny]
+%SonyPIDesc%=SonyPI_Inst,*SNY6001
+
+[SonyPI_Inst.ntx86] 
+CopyFiles = SonyPI.Files.x86_11, SonyPI.Files.x86_12 
+
+[SonyPI_Inst.ntx86.Services] 
+AddService = SPI,0x00000002,SonyPI_Service_Instx86, 
+
+[SonyPI_Service_Instx86] 
+DisplayName    = %SonyPIDesc%
+ServiceType = %SERVICE_KERNEL_DRIVER% 
+StartType = %SERVICE_DEMAND_START% 
+ErrorControl = %SERVICE_ERROR_NORMAL% 
+ServiceBinary = %12%\SonyPI.sys 
+
+[SonyPI.Files.x86_11] 
+SonyPI.dll
+[SonyPI.Files.x86_12] 
+SonyPI.sys
+
+
+[Strings] 
+
+;  *******Localizable Strings******* 
+Sny= "Sony Corporation" 
+Desc_x860= "SonyPI Drivers" 
+SonyPIDesc= "Sony Programmable I/O Control Device" 
+
+;  *******Non Localizable Strings******* 
+
+SERVICE_BOOT_START = 0x0 
+SERVICE_SYSTEM_START = 0x1 
+SERVICE_AUTO_START = 0x2 
+SERVICE_DEMAND_START = 0x3 
+SERVICE_DISABLED = 0x4 
+
+SERVICE_KERNEL_DRIVER = 0x1 
+SERVICE_ERROR_IGNORE = 0x0 
+SERVICE_ERROR_NORMAL = 0x1 
+SERVICE_ERROR_SEVERE = 0x2 
+SERVICE_ERROR_CRITICAL = 0x3 
+
+REG_EXPAND_SZ = 0x00020000 
+REG_DWORD = 0x00010001 

@@ -1,0 +1,101 @@
+; wsvd.inf
+;
+; Copyright (c) 2008 Cyberlink Corporation.
+; Version 1.00
+;
+
+
+[Version]
+Signature					= "$WINDOWS NT$"
+Class=System
+ClassGUID={8A74FC5D-BA9F-4e40-947F-AB5169408677}
+CatalogFile					= WSVD.cat
+DriverPackageType			= KernelService			; WSVD is Kernel service driver.
+Provider=%CL%
+DriverVer					= 07/13/2009,5.6.0.0
+CatalogFile 				= wsvd.cat
+
+
+[DestinationDirs]
+WSVD.DriverFiles      		= 12           			; %WINDIR%\system32\drivers
+
+; 
+; Source file information
+;
+
+[SourceDisksNames]
+1 = %WsvdServiceDesc%
+
+[SourceDisksFiles]
+wsvd.sys	= 1
+
+;
+; Manufacturer information
+;
+[Manufacturer]
+%CL%=CL,ntamd64
+
+[CL]
+%WsvdServiceDesc%=DefaultInstall,000
+
+[CL.ntamd64]
+%WsvdServiceDesc%=DefaultInstall.ntamd64,000
+
+;
+; General installation section
+;
+
+[DefaultInstall]
+OptionDesc		= %WsvdServiceDesc%
+CopyFiles		= WSVD.DriverFiles
+
+[DefaultInstall.ntamd64]
+OptionDesc		= %WsvdServiceDesc%
+CopyFiles		= WSVD.DriverFiles
+
+[DefaultUninstall]
+DelFiles   		= WSVD.DriverFiles
+DelReg     		= WSVD.DelRegistry			
+
+[DefaultInstall.ntamd64]
+OptionDesc		= %WsvdServiceDesc%
+CopyFiles		= WSVD.DriverFiles
+
+; 
+; Service section
+; 
+
+[DefaultInstall.Services]
+AddService     	= %WsvdServiceName%,,WSVD.Service
+
+[DefaultUninstall.Services]
+DelService 		= %WsvdServiceName%,0x4	; Ensure service is stopped before deleting
+
+[WSVD.Service]
+DisplayName      	= %WsvdServiceName%	
+Description      	= %WsvdServiceDesc%	
+ServiceBinary    	= %12%\wsvd.sys			; %WINDIR%\system32\drivers\
+ServiceType      	= 1						; SERVICE_KERNEL_DRIVER
+StartType        	= 3						; SERVICE_DEMAND_START
+ErrorControl     	= 1						; SERVICE_ERROR_NORMAL
+
+; 
+; Add Registry section
+; 
+
+[WSVD.DelRegistry]
+HKLM,%WsvdServiceRegKey%
+
+; 
+; File section
+;
+
+[WSVD.DriverFiles]
+wsvd.sys
+
+
+[Strings]
+CL="CyberLink"
+WsvdServiceName		= "wsvd"
+WsvdServiceDesc		= "CyberLink Virtual Disk Driver"
+WsvdServiceRegKey	= "System\CurrentControlSet\Services\WSVD"

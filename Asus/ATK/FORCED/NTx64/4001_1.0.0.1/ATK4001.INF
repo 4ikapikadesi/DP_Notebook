@@ -1,0 +1,52 @@
+
+[Version]
+Signature="$Windows NT$"
+Class=System
+ClassGUID={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ATK%
+CatalogFile=ATK4001.cat
+DriverVer=06/01/2012, 1.0.0.1
+
+[Manufacturer]
+%ATK%=ATK,NTamd64
+
+[ATK]
+%DeviceDesc1%=DriverInstall,ACPI\ATK4001
+
+[ATK.NTamd64]
+%DeviceDesc1%=DriverInstall,ACPI\ATK4001
+
+[DriverInstall]
+CopyFiles=ASSW.CopyFiles
+
+[ASSW.CopyFiles]
+AsHIDSwitch64.sys
+
+[DriverInstall.Services]
+AddService= HIDSwitch,2,HIDSwitchServiceInst
+
+[HIDSwitchServiceInst]
+DisplayName = %ASSW.DisplayName%
+ServiceType=1           ; SERVICE_KERNEL_DRIVER
+StartType=3             ; SERVICE_DEMAND_START
+ErrorControl=1          ; SERVICE_ERROR_IGNORE
+ServiceBinary=%12%\AsHIDSwitch64.sys
+
+
+[DestinationDirs]
+DefaultDestDir = 12		; load driver to system32\drivers
+
+[ControlFlags]
+ExcludeFromselect = *
+
+[SourceDisksNames]
+1 = %DiskID1%,,,,
+
+[SourceDisksFiles]
+AsHIDSwitch64.sys = 1
+
+[Strings]
+ATK="ASUS"
+DeviceDesc1="ASUS Wireless Radio Control"
+ASSW.DisplayName = "ASUS Wireless Radio Control"
+DiskId1 = "ASUS Wireless Radio Control"
